@@ -32,7 +32,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .and()
                 .authorizeRequests()
-                .anyRequest().authenticated();
+                    .antMatchers("/user/**").authenticated()
+                    .anyRequest().permitAll();
     }
 
 
@@ -40,7 +41,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService)
                 .passwordEncoder(new BCryptPasswordEncoder());
-//        auth.inMemoryAuthentication().withUser("user").password("password");
     }
 
 }
