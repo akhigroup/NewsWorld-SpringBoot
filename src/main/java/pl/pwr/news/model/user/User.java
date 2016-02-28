@@ -4,22 +4,23 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Evelan-E6540 on 29/08/2015.
+ *
  */
 @Entity
 @Getter
 @Setter
 @Table(name = "users")
-public class User implements Serializable {
+public class User  implements Serializable, UserDetails {
 
     private static final long serialVersionUID = 2427238057150579366L;
 
@@ -64,9 +65,6 @@ public class User implements Serializable {
 
     private String hometown;
 
-    public User() {
-
-    }
 
     public boolean hasRoles(UserRole... roles) {
         for (UserRole role : roles) {
@@ -87,6 +85,35 @@ public class User implements Serializable {
 
     public boolean isAdmin() {
         return hasRoles(UserRole.ROLE_ADMIN);
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        HashSet<GrantedAuthority> authorities = new HashSet<>();
+        for(UserRole userRole: UserRole.values()){
+            authorities.add(new SimpleGrantedAuthority(userRole.name()));
+        }
+        return authorities;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return enabled; // nie jestem pewny czy z !//
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
 

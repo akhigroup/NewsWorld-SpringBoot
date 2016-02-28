@@ -8,7 +8,7 @@ import pl.pwr.news.model.user.User;
  * Created by Evelan-E6540 on 27.02.2016.
  */
 @Repository
-public interface UserRepo extends CrudRepository<User, Long> {
+public interface UserRepository extends CrudRepository<User, Long> {
     User findById(Long id);
 
     User findByUsername(String username);
