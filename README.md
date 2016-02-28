@@ -3,10 +3,10 @@
 server.port=46969
 
 ## Waffle.io
-https://waffle.io/w4-pwr/NewsWorldSpring
+[Tablica Kanban](https://waffle.io/w4-pwr/NewsWorldSpring)
 
 ##TeamCity
-http://37.187.52.160:8111/overview.html
+[Serwer CI](http://37.187.52.160:8111/overview.html)
 
 u: news
 
