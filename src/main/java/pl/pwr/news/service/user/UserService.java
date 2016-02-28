@@ -6,7 +6,7 @@ import pl.pwr.news.model.user.User;
 /**
  * Created by Rafal on 2016-02-28.
  */
-interface UserService extends UserDetailsService {
+interface UserService {
 
 
     User findById(Long id);

@@ -20,7 +20,7 @@ import java.util.*;
 @Getter
 @Setter
 @Table(name = "users")
-public class User  implements Serializable, UserDetails {
+public class User  implements Serializable {
 
     private static final long serialVersionUID = 2427238057150579366L;
 
@@ -55,20 +55,17 @@ public class User  implements Serializable, UserDetails {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @ElementCollection(targetClass = UserRole.class, fetch = FetchType.LAZY)
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
-            uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "role"}))
-    @Column(name = "role", columnDefinition = "TEXT")
-    @Enumerated(EnumType.STRING)
     @JsonIgnore
-    private Set<UserRole> userRole = new HashSet<>();
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
+    private Set<UserRole> userRoles = new HashSet<>();
 
     private String hometown;
 
-
+    //Te metody powinny być w serwisie raczej
     public boolean hasRoles(UserRole... roles) {
         for (UserRole role : roles) {
-            if (!this.getUserRole().contains(role)) {
+            if (!this.getUserRoles().contains(role)) {
                 return false;
             }
         }
@@ -76,44 +73,14 @@ public class User  implements Serializable, UserDetails {
     }
 
     public boolean addRole(UserRole... roles) {
-        return this.userRole.addAll(Arrays.asList(roles));
+        return this.userRoles.addAll(Arrays.asList(roles));
     }
 
     public boolean removeRole(UserRole... roles) {
-        return this.userRole.removeAll(Arrays.asList(roles));
+        return this.userRoles.removeAll(Arrays.asList(roles));
     }
 
-    public boolean isAdmin() {
-        return hasRoles(UserRole.ROLE_ADMIN);
-    }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        HashSet<GrantedAuthority> authorities = new HashSet<>();
-        for(UserRole userRole: UserRole.values()){
-            authorities.add(new SimpleGrantedAuthority(userRole.name()));
-        }
-        return authorities;
-    }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return enabled; // nie jestem pewny czy z !//
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }
 

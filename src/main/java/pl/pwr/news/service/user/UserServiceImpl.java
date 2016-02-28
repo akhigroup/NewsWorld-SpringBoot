@@ -1,15 +1,28 @@
 package pl.pwr.news.service.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Role;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import pl.pwr.news.model.user.CurrentUser;
 import pl.pwr.news.model.user.User;
+import pl.pwr.news.model.user.UserRole;
 import pl.pwr.news.repository.user.UserRepository;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Rafal on 2016-02-28.
  */
-public class UserServiceImpl implements UserService{
+@Service
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     UserRepository userRepository;
@@ -49,6 +62,10 @@ public class UserServiceImpl implements UserService{
             if (user  == null)
                 throw new UsernameNotFoundException(String.format("User %s does not exist!", username));
         }
-        return user;
+
+        return new CurrentUser(user);
+
     }
+
+
 }
