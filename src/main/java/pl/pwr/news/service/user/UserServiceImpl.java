@@ -2,8 +2,12 @@ package pl.pwr.news.service;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.pwr.news.model.user.CurrentUser;
 import pl.pwr.news.model.user.User;
 import pl.pwr.news.repository.user.UserRepository;
 import pl.pwr.news.service.user.UserService;
@@ -16,7 +20,7 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     UserRepository userRepository;
@@ -47,19 +51,19 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByToken(token);
     }
 
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//
-//        User user = userRepository.findByEmail(username);
-//        if (user == null) {
-//            user = userRepository.findByUsername(username);
-//            if (user == null)
-//                throw new UsernameNotFoundException(String.format("User %s does not exist!", username));
-//        }
-//
-//        return new CurrentUser(user);
-//
-//    }
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        User user = userRepository.findByEmail(username);
+        if (user == null) {
+            user = userRepository.findByUsername(username);
+            if (user == null)
+                throw new UsernameNotFoundException(String.format("User %s does not exist!", username));
+        }
+
+        return new CurrentUser(user);
+
+    }
 
     @Override
     public String generateActivateAccountUniqueHash(User user) {
