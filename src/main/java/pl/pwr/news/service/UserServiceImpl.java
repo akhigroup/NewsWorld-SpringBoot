@@ -1,28 +1,23 @@
-package pl.pwr.news.service.user;
+package pl.pwr.news.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Role;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.apache.commons.codec.digest.DigestUtils;
 import pl.pwr.news.model.user.CurrentUser;
 import pl.pwr.news.model.user.User;
-import pl.pwr.news.model.user.UserRole;
 import pl.pwr.news.repository.user.UserRepository;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.security.SecureRandom;
 
 /**
  * Created by Rafal on 2016-02-28.
  */
 @Service
-public class UserServiceImpl implements UserService, UserDetailsService {
+@Transactional
+public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
@@ -67,5 +62,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     }
 
+    @Override
+    public String generateActivateAccountUniqueHash(User user) {
+        String hash;
+        do {
+            SecureRandom random = new SecureRandom();
+            hash = DigestUtils.md5Hex(user.getEmail() + random + user.getId());
+
+        } while (findByActivationHash(hash) != null);
+
+        return hash;
+    }
+
+    @Override
+    public void save(User user) {
+        userRepository.save(user);
+    }
 
 }
