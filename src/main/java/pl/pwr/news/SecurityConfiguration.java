@@ -27,10 +27,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http
                 .formLogin()
-                .and()
+                .and().csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/user/**").authenticated()
-                    .anyRequest().permitAll();
+                .antMatchers("/user/**").authenticated()
+                .anyRequest().permitAll();
     }
 
 

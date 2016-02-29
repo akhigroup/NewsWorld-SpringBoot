@@ -25,10 +25,15 @@ public class Article implements Serializable {
     @Id
     private Long id;
 
-    private String link;
+    private String title;
 
     @Column(columnDefinition = "TEXT")
     private String text;
+
+    @Column(name = "image_url")
+    private String imageUrl;
+
+    private String link;
 
     private boolean visible = false;
 
