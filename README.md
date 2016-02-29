@@ -2,6 +2,9 @@
 # NewsWorldSpring
 server.port=46969
 
+## Swagger
+http://localhost:46969/swagger-ui.html
+
 ## Waffle.io
 [Tablica Kanban](https://waffle.io/w4-pwr/NewsWorldSpring)
 
