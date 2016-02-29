@@ -1,13 +1,15 @@
 package pl.pwr.news.service.user;
 
-import org.springframework.security.core.userdetails.UserDetailsService;
 import pl.pwr.news.model.user.User;
+
+import java.util.List;
 
 /**
  * Created by Rafal on 2016-02-28.
  */
-interface UserService {
+public interface UserService {
 
+    List<User> findAll();
 
     User findById(Long id);
 
