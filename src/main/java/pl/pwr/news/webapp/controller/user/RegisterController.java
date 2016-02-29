@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import pl.pwr.news.model.user.CurrentUser;
 import pl.pwr.news.model.user.User;
-import pl.pwr.news.service.MessageService;
-import pl.pwr.news.service.UserService;
+import pl.pwr.news.service.message.MessageService;
+import pl.pwr.news.service.user.UserService;
 import pl.pwr.news.webapp.form.UserForm;
 import pl.pwr.news.webapp.form.UserValidator;
 
@@ -38,9 +38,9 @@ public class RegisterController {
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String register(Model model, @AuthenticationPrincipal CurrentUser activeUser) {
-        if(activeUser != null){
+        if (activeUser != null) {
             return "redirect:/logout";
-        }else {
+        } else {
             model.addAttribute(new UserForm());
             return "register";
         }

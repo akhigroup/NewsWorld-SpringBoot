@@ -1,4 +1,4 @@
-package pl.pwr.news.service;
+package pl.pwr.news.service.mail;
 
 /**
  * Created by Rafal on 2016-02-29.

@@ -1,4 +1,4 @@
-package pl.pwr.news.service;
+package pl.pwr.news.service.message;
 
 public interface MessageService {
 	

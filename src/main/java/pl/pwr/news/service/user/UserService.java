@@ -9,6 +9,8 @@ import java.util.List;
  */
 public interface UserService {
 
+    void save(User user);
+
     List<User> findAll();
 
     User findById(Long id);
@@ -20,5 +22,7 @@ public interface UserService {
     User findByActivationHash(String activationHash);
 
     User findByToken(String token);
+
+    String generateActivateAccountUniqueHash(User user);
 
 }

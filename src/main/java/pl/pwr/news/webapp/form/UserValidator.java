@@ -4,9 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import pl.pwr.news.service.MessageService;
-import pl.pwr.news.service.UserService;
-import pl.pwr.news.service.UserServiceImpl;
+import pl.pwr.news.service.message.MessageService;
+import pl.pwr.news.service.user.UserService;
 
 /**
  * Created by Rafal on 2016-02-29.
@@ -15,12 +14,10 @@ import pl.pwr.news.service.UserServiceImpl;
 public class UserValidator implements Validator {
 
 
-
-    @Autowired
-    private MessageService messageService;
-
     @Autowired
     UserService userService;
+    @Autowired
+    private MessageService messageService;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -42,7 +39,7 @@ public class UserValidator implements Validator {
     }
 
     private void validateEmail(Errors errors, UserForm form) {
-        if (userService.findByEmail(form.getEmail())  != null ){
+        if (userService.findByEmail(form.getEmail()) != null) {
             errors.rejectValue("email", "email.exists", messageService.getMessage("register.error.emailExists"));
         }
     }

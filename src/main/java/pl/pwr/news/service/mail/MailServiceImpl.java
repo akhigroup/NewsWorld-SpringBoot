@@ -1,4 +1,4 @@
-package pl.pwr.news.service;
+package pl.pwr.news.service.mail;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;

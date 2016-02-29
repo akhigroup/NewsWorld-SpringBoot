@@ -1,4 +1,4 @@
-package pl.pwr.news.service;
+package pl.pwr.news.service.message;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;

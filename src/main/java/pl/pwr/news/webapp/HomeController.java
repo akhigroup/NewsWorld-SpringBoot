@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import pl.pwr.news.service.MailService;
+import pl.pwr.news.service.mail.MailService;
 
 /**
  * Created by Evelan-E6540 on 27.02.2016.
