@@ -5,7 +5,12 @@ import org.springframework.stereotype.Service;
 import pl.pwr.news.model.article.Article;
 import pl.pwr.news.repository.article.ArticleRepository;
 
+import java.util.Date;
 import java.util.List;
+
+import static org.springframework.data.jpa.domain.Specifications.where;
+import static pl.pwr.news.repository.article.ArticleSpecification.keywordInText;
+import static pl.pwr.news.repository.article.ArticleSpecification.keywordInTitle;
 
 /**
  * Created by jakub on 2/29/16.
@@ -18,6 +23,7 @@ public class ArticleSerivceImpl implements ArticleService {
 
     @Override
     public void save(Article entity) {
+        entity.setAddedDate(new Date().getTime());
         articleRepository.save(entity);
     }
 
@@ -35,5 +41,10 @@ public class ArticleSerivceImpl implements ArticleService {
     @Override
     public Article findById(Long id) {
         return articleRepository.findOne(id);
+    }
+
+    @Override
+    public List<Article> findAll(String keyword, String link) {
+        return articleRepository.findAll(where(keywordInTitle(keyword)).or(where(keywordInText(keyword))));
     }
 }

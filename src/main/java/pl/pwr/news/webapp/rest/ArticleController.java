@@ -1,16 +1,13 @@
 package pl.pwr.news.webapp.rest;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.pwr.news.model.article.Article;
 import pl.pwr.news.service.article.ArticleService;
 
 import java.util.List;
+
+import static org.elasticsearch.common.lang3.StringUtils.isNotBlank;
 
 /**
  * Created by jakub on 2/29/16.
@@ -22,17 +19,18 @@ public class ArticleController {
     @Autowired
     ArticleService articleService;
 
-    @JsonProperty(required = false)
-    @ApiModelProperty(notes = "Article list")
     @RequestMapping(value = "/article", method = RequestMethod.GET)
-    public List<Article> getArticles() {
-        return articleService.findAll();
+    public ResponseDTO<List<Article>> getArticles() {
+        return new ResponseDTO<>(articleService.findAll());
     }
 
-    @JsonProperty(required = false)
-    @ApiModelProperty(notes = "Create article")
+    @RequestMapping(value = "/article/{articleId}", method = RequestMethod.GET)
+    public ResponseDTO<Article> getArticle(@PathVariable("articleId") Long articleId) {
+        return new ResponseDTO<>(articleService.findById(articleId));
+    }
+
     @RequestMapping(value = "/article", method = RequestMethod.POST)
-    public void saveArticle(
+    public ResponseDTO<Article> saveArticle(
             @RequestParam("title") String title,
             @RequestParam(value = "text", required = false) String text,
             @RequestParam(value = "imageUrl", required = false) String imageUrl,
@@ -46,6 +44,49 @@ public class ArticleController {
         entity.setLink(link);
 
         articleService.save(entity);
+        return new ResponseDTO<>(entity);
+    }
+
+    @RequestMapping(value = "/article", method = RequestMethod.PUT)
+    public ResponseDTO<Article> updateArticle(
+            @RequestParam("id") Long id,
+            @RequestParam(value = "title", required = false) String title,
+            @RequestParam(value = "text", required = false) String text,
+            @RequestParam(value = "imageUrl", required = false) String imageUrl,
+            @RequestParam(value = "link", required = false) String link) {
+
+        Article article = articleService.findById(id);
+
+        if (article == null) {
+            return new ResponseDTO<>("-1", "No article with id: " + id + " to update", null);
+        }
+
+        if (isNotBlank(title)) {
+            article.setTitle(title);
+        }
+
+        if (isNotBlank(text)) {
+            article.setText(text);
+        }
+
+        if (isNotBlank(imageUrl)) {
+            article.setImageUrl(imageUrl);
+        }
+
+        if (isNotBlank(link)) {
+            article.setLink(link);
+        }
+
+        articleService.save(article);
+
+        return new ResponseDTO<>(article);
+    }
+
+    @RequestMapping(value = "/article/search", method = RequestMethod.GET)
+    public ResponseDTO<List<Article>> searchArticle(
+            @RequestParam(value = "keyword", required = false) String keyword) {
+        //TODO - dorobic cale filtrowanie
+        return new ResponseDTO<>(articleService.findAll(keyword, ""));
     }
 
 }

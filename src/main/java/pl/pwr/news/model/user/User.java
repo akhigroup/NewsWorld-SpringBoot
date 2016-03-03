@@ -4,23 +4,21 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Evelan-E6540 on 29/08/2015.
- *
  */
 @Entity
 @Getter
 @Setter
 @Table(name = "users")
-public class User  implements Serializable {
+public class User implements Serializable {
 
     private static final long serialVersionUID = 2427238057150579366L;
 
@@ -45,11 +43,14 @@ public class User  implements Serializable {
     @Column(unique = true)
     private String token;
 
+    @Column(columnDefinition = "TEXT")
+    private String deviceToken;
+
     @JsonIgnore
     private String activationHash;
 
-    private Date birth;
-    private Date registered;
+    private Long birth;
+    private Long registered;
     private Boolean enabled;
 
     @Enumerated(EnumType.STRING)
@@ -57,12 +58,13 @@ public class User  implements Serializable {
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
+    @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<UserRole> userRoles = new HashSet<>();
 
     private String hometown;
 
-    //Te metody powinny być w serwisie raczej
+    //TODO - Te metody powinny być w serwisie raczej
+    //daj spokój, ify w modelu yolo
     public boolean hasRoles(UserRole... roles) {
         for (UserRole role : roles) {
             if (!this.getUserRoles().contains(role)) {
@@ -79,7 +81,6 @@ public class User  implements Serializable {
     public boolean removeRole(UserRole... roles) {
         return this.userRoles.removeAll(Arrays.asList(roles));
     }
-
 
 
 }

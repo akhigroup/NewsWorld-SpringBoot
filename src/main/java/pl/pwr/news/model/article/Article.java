@@ -43,4 +43,5 @@ public class Article implements Serializable {
     @ManyToOne
     private Category category;
 
+    private Long addedDate;
 }

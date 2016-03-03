@@ -25,8 +25,8 @@ public class Application {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("pl.pwr.news.webapp.rest"))
-                .paths(PathSelectors.any())
+                .apis(RequestHandlerSelectors.basePackage("pl.pwr.news"))
+                .paths(PathSelectors.ant("/api/*/**"))
                 .build()
                 .pathMapping("/")
                 .apiInfo(apiInfo());
@@ -40,9 +40,8 @@ public class Application {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("NewsWorldAPI")
-                .description("NewsWorld.pl")
-                .version("1.0")
-                .contact("evelan3094@gmail.com")
+                .version("0.1")
+                .contact("jakub.pomykala@gmail.com")
                 .build();
     }
 
