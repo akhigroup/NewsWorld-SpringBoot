@@ -24,7 +24,7 @@ public class Article implements Serializable {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long id;
+    private Long id = -1L;
 
     private String title;
 
@@ -63,6 +63,6 @@ public class Article implements Serializable {
             return false;
         }
 
-        return ((Article)obj).title.equals(title);
+        return ((Article) obj).title.equals(title);
     }
 }

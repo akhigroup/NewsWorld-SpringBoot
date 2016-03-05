@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.apache.commons.lang.StringUtils.isBlank;
+import static org.elasticsearch.common.lang3.StringUtils.isNotBlank;
 import static org.springframework.data.jpa.domain.Specifications.where;
 import static pl.pwr.news.repository.article.ArticleSpecification.keywordInText;
 import static pl.pwr.news.repository.article.ArticleSpecification.keywordInTitle;
@@ -56,6 +57,37 @@ public class ArticleSerivceImpl implements ArticleService {
     @Override
     public Page<Article> findAll(Pageable pageable) {
         return articleRepository.findAll(pageable);
+    }
+
+    @Override
+    public void update(Article article) {
+        boolean articleNotExist = !articleRepository.exists(article.getId());
+
+        if (articleNotExist) {
+            log.error("Article not exist!");
+            return;
+        }
+
+        String title = article.getTitle();
+        if (isNotBlank(title)) {
+            article.setTitle(title);
+        }
+
+        String text = article.getText();
+        if (isNotBlank(text)) {
+            article.setText(text);
+        }
+
+        String imageUrl = article.getImageUrl();
+        if (isNotBlank(imageUrl)) {
+            article.setImageUrl(imageUrl);
+        }
+
+        String link = article.getLink();
+        if (isNotBlank(link)) {
+            article.setLink(link);
+        }
+        articleRepository.save(article);
     }
 
     @Override

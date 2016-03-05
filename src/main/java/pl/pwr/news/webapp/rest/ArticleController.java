@@ -9,8 +9,6 @@ import pl.pwr.news.service.article.ArticleService;
 
 import java.util.List;
 
-import static org.elasticsearch.common.lang3.StringUtils.isNotBlank;
-
 /**
  * Created by jakub on 2/29/16.
  */
@@ -69,24 +67,7 @@ public class ArticleController {
         if (article == null) {
             return new ResponseDTO<>("-1", "No article with id: " + id + " to update", null);
         }
-
-        if (isNotBlank(title)) {
-            article.setTitle(title);
-        }
-
-        if (isNotBlank(text)) {
-            article.setText(text);
-        }
-
-        if (isNotBlank(imageUrl)) {
-            article.setImageUrl(imageUrl);
-        }
-
-        if (isNotBlank(link)) {
-            article.setLink(link);
-        }
-
-        articleService.save(article);
+        articleService.update(article);
 
         return new ResponseDTO<>(article);
     }

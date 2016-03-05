@@ -18,4 +18,5 @@ public interface ArticleService extends CrudOperations<Article> {
 
     Page<Article> findAll(Pageable pageable);
 
+    void update(Article article);
 }
