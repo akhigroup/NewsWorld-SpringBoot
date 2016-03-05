@@ -3,6 +3,7 @@ package pl.pwr.news.model.article;
 import lombok.Getter;
 import lombok.Setter;
 import pl.pwr.news.model.category.Category;
+import pl.pwr.news.model.source.FeedSource;
 import pl.pwr.news.model.tag.Tag;
 
 import javax.persistence.*;
@@ -44,6 +45,9 @@ public class Article implements Serializable {
     private Category category;
 
     private Long addedDate;
+
+    @ManyToOne
+    private FeedSource source;
 
     @Override
     public int hashCode() {

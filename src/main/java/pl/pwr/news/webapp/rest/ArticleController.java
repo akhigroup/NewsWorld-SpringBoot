@@ -1,6 +1,8 @@
 package pl.pwr.news.webapp.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 import pl.pwr.news.model.article.Article;
 import pl.pwr.news.service.article.ArticleService;
@@ -20,9 +22,15 @@ public class ArticleController {
     ArticleService articleService;
 
     @RequestMapping(value = "/article", method = RequestMethod.GET)
-    public ResponseDTO<List<Article>> getArticles() {
-        // Na potrzeby testów 40 elementów, bo zamula.
-        return new ResponseDTO<>(articleService.findAll().subList(0, 40));
+    public ResponseDTO<Page<Article>> getArticles(
+            @RequestParam(value = "pageSize", required = false, defaultValue = "20") int pageSize,
+            @RequestParam(value = "page", required = false, defaultValue = "0") int page) {
+
+        if (pageSize > 100) {
+            pageSize = 100;
+        }
+
+        return new ResponseDTO<>(articleService.findAll(new PageRequest(page, pageSize)));
     }
 
     @RequestMapping(value = "/article/{articleId}", method = RequestMethod.GET)

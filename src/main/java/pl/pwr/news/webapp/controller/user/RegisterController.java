@@ -13,8 +13,8 @@ import pl.pwr.news.model.user.CurrentUser;
 import pl.pwr.news.model.user.User;
 import pl.pwr.news.service.message.MessageService;
 import pl.pwr.news.service.user.UserService;
-import pl.pwr.news.webapp.form.UserForm;
-import pl.pwr.news.webapp.form.UserValidator;
+import pl.pwr.news.webapp.controller.user.form.UserForm;
+import pl.pwr.news.webapp.controller.user.form.UserValidator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;

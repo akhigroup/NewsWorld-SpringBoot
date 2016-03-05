@@ -1,4 +1,4 @@
-package pl.pwr.news.webapp.form;
+package pl.pwr.news.webapp.controller.user.form;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -1,10 +1,8 @@
-package pl.pwr.news.webapp.form;
+package pl.pwr.news.webapp.controller.user.form;
 
 import lombok.Getter;
 import lombok.Setter;
-import pl.pwr.news.model.user.UserRole;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
