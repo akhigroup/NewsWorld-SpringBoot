@@ -21,7 +21,8 @@ public class ArticleController {
 
     @RequestMapping(value = "/article", method = RequestMethod.GET)
     public ResponseDTO<List<Article>> getArticles() {
-        return new ResponseDTO<>(articleService.findAll());
+        // Na potrzeby testów 40 elementów, bo zamula.
+        return new ResponseDTO<>(articleService.findAll().subList(0, 40));
     }
 
     @RequestMapping(value = "/article/{articleId}", method = RequestMethod.GET)

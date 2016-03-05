@@ -44,4 +44,21 @@ public class Article implements Serializable {
     private Category category;
 
     private Long addedDate;
+
+    @Override
+    public int hashCode() {
+        int hash = 17;
+        hash = hash * 31 + text.hashCode();
+        hash = hash * 31 + title.hashCode();
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof Article)) {
+            return false;
+        }
+
+        return ((Article)obj).title.equals(title);
+    }
 }
