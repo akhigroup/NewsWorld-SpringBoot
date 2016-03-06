@@ -34,25 +34,6 @@ public class RssFeed implements UpdatableArticlesSource {
         this.url = url;
     }
 
-    // Available after first update
-    public String getChannelTitle() {
-        return channelTitle;
-    }
-
-    // Available after first update
-    public String getChannelDescription() {
-        return channelDescription;
-    }
-
-    // Available after first update
-    public String getChannelLink() {
-        return channelLink;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
     private void extractChannelInfo(Element channel) {
         channelTitle = getTextFromElementByTagName(channel, TITLE);
         channelDescription = getTextFromElementByTagName(channel, DESCRIPTION);
@@ -64,9 +45,6 @@ public class RssFeed implements UpdatableArticlesSource {
         new Thread(() -> {
             try {
                 Document document = Jsoup.connect(url).get();
-
-                // Multiple channels in single rss.xml are not allowed:
-                // http://stackoverflow.com/a/3798880
                 Element channel = document.getElementsByTag(CHANNEL).first();
                 List<Article> newArticles = extractArticles(channel);
                 List<Article> uniqueArticles = newArticles.stream()
@@ -83,9 +61,9 @@ public class RssFeed implements UpdatableArticlesSource {
     }
 
     private List<Article> extractArticles(Element channel) {
-        if (channelTitle == null && channelDescription == null && channelLink == null)
+        if (channelTitle == null && channelDescription == null && channelLink == null) {
             extractChannelInfo(channel);
-
+        }
         ArrayList<Article> newArticles = new ArrayList<>();
         Elements items = channel.getElementsByTag(ITEM);
         for (Element item : items) {
@@ -119,6 +97,25 @@ public class RssFeed implements UpdatableArticlesSource {
             return null;
         }
         return elements.first().text();
+    }
+
+    // Available after first update
+    public String getChannelTitle() {
+        return channelTitle;
+    }
+
+    // Available after first update
+    public String getChannelDescription() {
+        return channelDescription;
+    }
+
+    // Available after first update
+    public String getChannelLink() {
+        return channelLink;
+    }
+
+    public String getUrl() {
+        return url;
     }
 
     @Override

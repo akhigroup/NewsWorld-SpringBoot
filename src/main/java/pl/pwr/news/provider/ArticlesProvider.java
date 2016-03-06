@@ -31,8 +31,8 @@ public class ArticlesProvider {
     }
 
     public interface UpdateListener {
-        void onUpdated(List<Article> articles);
 
+        void onUpdated(List<Article> articles);
         void onUpdateFailed();
     }
 }

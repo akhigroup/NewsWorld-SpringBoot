@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * Created by jf on 3/5/16.
@@ -33,7 +34,7 @@ public class UpdatableArticlesSourceComposite implements UpdatableArticlesSource
     }
 
     @Override
-    public CompletableFuture<List<Article>> update() {
+    public Future<List<Article>> update() {
         CompletableFuture<List<Article>> promise = new CompletableFuture<>();
         new Thread(() -> {
             List<Article> fromAllSources = new ArrayList<>();

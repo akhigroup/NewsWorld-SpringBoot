@@ -22,7 +22,7 @@ import static pl.pwr.news.repository.article.ArticleSpecification.keywordInTitle
  */
 @Service
 @Log4j
-public class ArticleSerivceImpl implements ArticleService {
+public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
     ArticleRepository articleRepository;

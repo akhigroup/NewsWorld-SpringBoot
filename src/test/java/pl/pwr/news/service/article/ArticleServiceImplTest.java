@@ -7,7 +7,7 @@ import org.junit.Test;
 /**
  * Created by Evelan-E6540 on 06.03.2016.
  */
-public class ArticleSerivceImplTest {
+public class ArticleServiceImplTest {
 
     @Before
     public void setUp() throws Exception {
