@@ -3,7 +3,6 @@ package pl.pwr.news.model.article;
 import lombok.Getter;
 import lombok.Setter;
 import pl.pwr.news.model.category.Category;
-import pl.pwr.news.model.source.FeedSource;
 import pl.pwr.news.model.tag.Tag;
 
 import javax.persistence.*;
@@ -24,7 +23,7 @@ public class Article implements Serializable {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long id = -1L;
+    private Long id;
 
     private String title;
 
@@ -46,23 +45,7 @@ public class Article implements Serializable {
 
     private Long addedDate;
 
-    @ManyToOne
-    private FeedSource source;
-
-    @Override
-    public int hashCode() {
-        int hash = 17;
-        hash = hash * 31 + text.hashCode();
-        hash = hash * 31 + title.hashCode();
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof Article)) {
-            return false;
-        }
-
-        return ((Article) obj).title.equals(title);
+    public void addTag(Tag tag) {
+        this.tags.add(tag);
     }
 }

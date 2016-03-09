@@ -9,6 +9,8 @@ import pl.pwr.news.service.article.ArticleService;
 
 import java.util.List;
 
+import static org.elasticsearch.common.lang3.StringUtils.isNotBlank;
+
 /**
  * Created by jakub on 2/29/16.
  */
@@ -20,63 +22,103 @@ public class ArticleController {
     ArticleService articleService;
 
     @RequestMapping(value = "/article", method = RequestMethod.GET)
-    public ResponseDTO<Page<Article>> getArticles(
-            @RequestParam(value = "pageSize", required = false, defaultValue = "20") int pageSize,
-            @RequestParam(value = "page", required = false, defaultValue = "0") int page) {
+    public Response<List<ArticleDTO>> getArticles(@RequestParam(required = false, defaultValue = "20") int pageSize,
+                                                  @RequestParam(required = false, defaultValue = "0") int page) {
 
         if (pageSize > 100) {
             pageSize = 100;
         }
 
-        return new ResponseDTO<>(articleService.findAll(new PageRequest(page, pageSize)));
+        Page<Article> databaseArticle = articleService.findAll(new PageRequest(page, pageSize));
+        List<ArticleDTO> articleDTOList = ArticleDTO.getList(databaseArticle.getContent());
+        return new Response<>(articleDTOList);
     }
 
     @RequestMapping(value = "/article/{articleId}", method = RequestMethod.GET)
-    public ResponseDTO<Article> getArticle(@PathVariable("articleId") Long articleId) {
-        return new ResponseDTO<>(articleService.findById(articleId));
+    public Response<Article> getArticle(@PathVariable("articleId") Long articleId) {
+        return new Response<>(articleService.findById(articleId));
     }
 
     @RequestMapping(value = "/article", method = RequestMethod.POST)
-    public ResponseDTO<Article> saveArticle(
+    public Response<Article> saveArticle(
             @RequestParam("title") String title,
             @RequestParam(value = "text", required = false) String text,
             @RequestParam(value = "imageUrl", required = false) String imageUrl,
-            @RequestParam(value = "link") String link) {
+            @RequestParam(value = "link") String link,
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Long[] tagIds) {
 
+        Article article = new Article();
+        article.setTitle(title);
+        article.setText(text);
+        article.setImageUrl(imageUrl);
+        article.setLink(link);
 
-        Article entity = new Article();
-        entity.setTitle(title);
-        entity.setText(text);
-        entity.setImageUrl(imageUrl);
-        entity.setLink(link);
+        article = articleService.createOrUpdate(article);
 
-        articleService.save(entity);
-        return new ResponseDTO<>(entity);
+        Long articleId = article.getId();
+        if (categoryId != null) {
+            articleService.setCategory(articleId, categoryId);
+        }
+
+        if (tagIds != null) {
+            articleService.addTag(articleId, tagIds);
+        }
+
+        return new Response<>(article);
     }
 
     @RequestMapping(value = "/article", method = RequestMethod.PUT)
-    public ResponseDTO<Article> updateArticle(
-            @RequestParam("id") Long id,
-            @RequestParam(value = "title", required = false) String title,
-            @RequestParam(value = "text", required = false) String text,
-            @RequestParam(value = "imageUrl", required = false) String imageUrl,
-            @RequestParam(value = "link", required = false) String link) {
+    public Response<Article> updateArticle(
+            @RequestParam Long articleId,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String text,
+            @RequestParam(required = false) String imageUrl,
+            @RequestParam(required = false) String link,
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Long[] tagIds) {
 
-        Article article = articleService.findById(id);
+        Article article = articleService.findById(articleId);
 
         if (article == null) {
-            return new ResponseDTO<>("-1", "No article with id: " + id + " to update", null);
+            return new Response<>("-1", "No article with id: " + articleId + " to update", null);
         }
-        articleService.update(article);
 
-        return new ResponseDTO<>(article);
+        if (isNotBlank(title)) {
+            article.setTitle(title);
+        }
+
+        if (isNotBlank(text)) {
+            article.setText(text);
+        }
+
+        if (isNotBlank(imageUrl)) {
+            article.setImageUrl(imageUrl);
+        }
+
+        if (isNotBlank(link)) {
+            article.setLink(link);
+        }
+
+        articleService.createOrUpdate(article);
+
+        if (categoryId != null) {
+            articleService.setCategory(articleId, categoryId);
+        }
+
+        if (tagIds != null) {
+            articleService.addTag(articleId, tagIds);
+        }
+
+        article = articleService.findById(articleId);
+        return new Response<>(article);
     }
 
     @RequestMapping(value = "/article/search", method = RequestMethod.GET)
-    public ResponseDTO<List<Article>> searchArticle(
+    public Response<List<Article>> searchArticle(
             @RequestParam(value = "keyword", required = false) String keyword) {
         //TODO - dorobic cale filtrowanie
-        return new ResponseDTO<>(articleService.findAll(keyword, ""));
+        return new Response<>(articleService.findAll(keyword, ""));
     }
 
 }

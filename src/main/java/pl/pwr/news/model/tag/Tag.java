@@ -1,6 +1,7 @@
 package pl.pwr.news.model.tag;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.pwr.news.model.article.Article;
 
@@ -14,6 +15,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 @Table(name = "tags")
 public class Tag {
 
@@ -28,5 +30,9 @@ public class Tag {
 
     @ManyToMany
     private Set<Article> articles = new HashSet<>();
+
+    public Tag(String name) {
+        this.name = name;
+    }
 
 }

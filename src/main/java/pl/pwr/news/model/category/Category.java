@@ -1,6 +1,7 @@
 package pl.pwr.news.model.category;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.pwr.news.model.article.Article;
 
@@ -15,6 +16,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "categories")
+@NoArgsConstructor
 public class Category {
 
     private static final long serialVersionUID = 2312343243243L;
@@ -31,5 +33,10 @@ public class Category {
 
     @OneToMany
     private Set<Article> articles = new HashSet<>();
+
+    public Category(String name) {
+        this.name = name;
+    }
+
 
 }

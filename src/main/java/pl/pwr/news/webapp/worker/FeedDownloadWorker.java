@@ -60,7 +60,7 @@ public class FeedDownloadWorker {
             @Override
             public void onUpdated(List<Article> articles) {
                 for (Article article : articles) {
-                    articleService.save(article);
+                    articleService.createOrUpdate(article);
                 }
             }
 
