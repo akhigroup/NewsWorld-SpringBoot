@@ -15,7 +15,7 @@ public interface ArticleService {
 
     List<Article> findAll(String keyword, String link);
 
-    void setCategory(Long articleId, Long categoryId);
+    void addCategory(Long articleId, Long... categoryId);
 
     void addTag(Long articleId, Long... tagId);
 
@@ -26,5 +26,7 @@ public interface ArticleService {
     Page<Article> findAll(Pageable pageable);
 
     Article findById(Long id);
+
+    List<Article> findByTag(String tag);
 
 }

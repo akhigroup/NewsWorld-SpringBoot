@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.pwr.news.model.article.Article;
+import pl.pwr.news.model.category.Category;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -30,6 +31,9 @@ public class Tag {
 
     @ManyToMany
     private Set<Article> articles = new HashSet<>();
+
+    @ManyToMany
+    private Set<Category> categories = new HashSet<>();
 
     public Tag(String name) {
         this.name = name;

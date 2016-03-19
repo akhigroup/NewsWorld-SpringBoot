@@ -22,7 +22,7 @@ public class ArticleDTO {
     private String imageUrl;
     private String link;
     private List<TagDTO> tags = new ArrayList<>();
-    private CategoryDTO category;
+    private List<CategoryDTO> categories = new ArrayList<>();
     private Long addedDate;
 
 
@@ -38,9 +38,10 @@ public class ArticleDTO {
             this.tags.add(tagDto);
         }
 
-        Category category = article.getCategory();
-        if (category != null) {
-            this.category = new CategoryDTO(article.getCategory());
+        Set<Category> categories = article.getCategories();
+        for (Category category: categories) {
+            CategoryDTO categoryDto = new CategoryDTO(category);
+            this.categories.add(categoryDto);
         }
         this.addedDate = article.getAddedDate();
     }
