@@ -2,7 +2,6 @@ package pl.pwr.news.webapp.worker;
 
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import pl.pwr.news.model.article.Article;
 import pl.pwr.news.model.source.FeedSource;
@@ -33,7 +32,7 @@ public class FeedDownloadWorker {
     /**
      * Starts with app
      */
-    @Scheduled(initialDelay = 10000, fixedRate = 3600 * 1000)
+//    @Scheduled(initialDelay = 10000, fixedRate = 3600 * 1000)
     public void reportCurrentTime() {
         log.info("Parser start" + dateFormat.format(new Date()));
         feedSourceService.add("TVN24", "http://www.tvn24.pl/najwazniejsze.xml");
