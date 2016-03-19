@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.pwr.news.model.article.Article;
 import pl.pwr.news.service.article.ArticleService;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 import static org.elasticsearch.common.lang3.StringUtils.isNotBlank;
@@ -23,7 +24,9 @@ public class ArticleController {
 
     @RequestMapping(value = "/article", method = RequestMethod.GET)
     public Response<List<ArticleDTO>> getArticles(@RequestParam(required = false, defaultValue = "20") int pageSize,
-                                                  @RequestParam(required = false, defaultValue = "0") int page) {
+                                                  @RequestParam(required = false, defaultValue = "0") int page,
+                                                  HttpServletResponse response) {
+        response.addHeader("Access-Control-Allow-Origin", "*");
 
         if (pageSize > 100) {
             pageSize = 100;
