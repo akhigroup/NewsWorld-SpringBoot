@@ -35,9 +35,6 @@ public class Category {
     @ManyToMany
     private Set<Article> articles = new HashSet<>();
 
-    @ManyToMany
-    private Set<Tag> tags = new HashSet<>();
-
     public Category(String name) {
         this.name = name;
     }
