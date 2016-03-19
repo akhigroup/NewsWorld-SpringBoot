@@ -39,13 +39,19 @@ public class ArticleController {
         return new Response<>(articleService.findById(articleId));
     }
 
+    @RequestMapping(value = "/article/search", method = RequestMethod.GET)
+    public Response<List<ArticleDTO>> searchArticles(@RequestParam(value = "tag") String tag) {
+        List<ArticleDTO> articleDTOList = ArticleDTO.getList(articleService.findByTag(tag));
+        return new Response<>(articleDTOList);
+    }
+
     @RequestMapping(value = "/article", method = RequestMethod.POST)
     public Response<Article> saveArticle(
             @RequestParam("title") String title,
             @RequestParam(value = "text", required = false) String text,
             @RequestParam(value = "imageUrl", required = false) String imageUrl,
             @RequestParam(value = "link") String link,
-            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Long[] categoryIds,
             @RequestParam(required = false) Long[] tagIds) {
 
         Article article = new Article();
@@ -57,8 +63,8 @@ public class ArticleController {
         article = articleService.createOrUpdate(article);
 
         Long articleId = article.getId();
-        if (categoryId != null) {
-            articleService.setCategory(articleId, categoryId);
+        if (categoryIds != null) {
+            articleService.addCategory(articleId, categoryIds);
         }
 
         if (tagIds != null) {
@@ -75,7 +81,7 @@ public class ArticleController {
             @RequestParam(required = false) String text,
             @RequestParam(required = false) String imageUrl,
             @RequestParam(required = false) String link,
-            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Long[] categoryIds,
             @RequestParam(required = false) Long[] tagIds) {
 
         Article article = articleService.findById(articleId);
@@ -102,8 +108,8 @@ public class ArticleController {
 
         articleService.createOrUpdate(article);
 
-        if (categoryId != null) {
-            articleService.setCategory(articleId, categoryId);
+        if (categoryIds != null) {
+            articleService.addCategory(articleId, categoryIds);
         }
 
         if (tagIds != null) {
@@ -114,11 +120,10 @@ public class ArticleController {
         return new Response<>(article);
     }
 
-    @RequestMapping(value = "/article/search", method = RequestMethod.GET)
+    @RequestMapping(value = "/article/search/", method = RequestMethod.GET)
     public Response<List<Article>> searchArticle(
             @RequestParam(value = "keyword", required = false) String keyword) {
         //TODO - dorobic cale filtrowanie
         return new Response<>(articleService.findAll(keyword, ""));
     }
-
 }

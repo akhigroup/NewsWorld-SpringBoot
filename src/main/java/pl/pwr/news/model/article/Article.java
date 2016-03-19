@@ -40,12 +40,16 @@ public class Article implements Serializable {
     @ManyToMany
     private Set<Tag> tags = new HashSet<>();
 
-    @ManyToOne
-    private Category category;
+    @ManyToMany
+    private Set<Category> categories = new HashSet<>();
 
     private Long addedDate;
 
     public void addTag(Tag tag) {
         this.tags.add(tag);
+    }
+
+    public void addCategory(Category category) {
+        this.categories.add(category);
     }
 }
