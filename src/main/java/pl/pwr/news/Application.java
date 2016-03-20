@@ -48,7 +48,7 @@ public class Application {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("NewsWorldAPI")
-                .version("0.4")
+                .version("0.4.1")
                 .build();
     }
 
