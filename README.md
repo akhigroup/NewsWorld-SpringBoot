@@ -3,7 +3,13 @@
 server.port=46969
 
 ## Swagger
-http://localhost:46969/swagger-ui.html
+http://localhost:9000/swagger-ui.html
+
+
+## Wykop API
+Twój klucz aplikacji to 8LF8hKISt1, a sekret to tJSETLuLRr. Zapisz te dane, żeby użyć ich w swojej aplikacji.
+
+[Dokumentacja wykop api] http://www.wykop.pl/dla-programistow/dokumentacja/
 
 ## Waffle.io
 [Tablica Kanban](https://waffle.io/w4-pwr/NewsWorldSpring)
