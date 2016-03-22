@@ -1,9 +1,10 @@
-package pl.pwr.news.webapp.rest;
+package pl.pwr.news.webapp.controller.tag;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.service.tag.TagService;
+import pl.pwr.news.webapp.controller.Response;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "/api", produces = "application/json;charset=UTF-8")
-public class TagController {
+public class TagApi {
 
     @Autowired
     TagService tagService;

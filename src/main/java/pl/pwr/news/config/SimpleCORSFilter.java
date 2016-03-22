@@ -1,4 +1,4 @@
-package pl.pwr.news.webapp;
+package pl.pwr.news.config;
 
 import org.springframework.stereotype.Component;
 

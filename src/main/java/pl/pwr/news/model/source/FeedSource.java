@@ -7,6 +7,7 @@ import pl.pwr.news.model.article.Article;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,8 +32,8 @@ public class FeedSource implements Serializable {
     private String link;
 
     private boolean enabled = true;
-    private Long addedDate;
-    private Long lastChecked;
+    private Date addedDate;
+    private Date lastChecked;
 
     @OneToMany
     private Set<Article> articles = new HashSet<>();

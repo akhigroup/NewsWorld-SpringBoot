@@ -38,7 +38,7 @@ public class FeedSourceServiceImpl implements FeedSourceService {
 
         if (linkIsUnique) {
             FeedSource feedSource = new FeedSource(title, link);
-            feedSource.setAddedDate(new Date().getTime());
+            feedSource.setAddedDate(new Date());
             sourceRepository.save(feedSource);
             log.info("FeedSource saved: " + title + " - " + link);
         }
@@ -68,7 +68,7 @@ public class FeedSourceServiceImpl implements FeedSourceService {
     public void setSourceChecked(FeedSource feedSource) {
         boolean feedSourceExist = feedSource.getId() != null;
         if (feedSourceExist) {
-            feedSource.setLastChecked(new Date().getTime());
+            feedSource.setLastChecked(new Date());
             sourceRepository.save(feedSource);
         }
     }

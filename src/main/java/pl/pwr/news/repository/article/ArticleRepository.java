@@ -1,7 +1,6 @@
 package pl.pwr.news.repository.article;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
@@ -15,5 +14,5 @@ import java.util.List;
 @Repository
 public interface ArticleRepository extends CrudRepository<Article, Long>, JpaSpecificationExecutor<Article>, PagingAndSortingRepository<Article, Long> {
 
-    public List<Article> findByTags_Name(String name);
+    List<Article> findByTags_Name(String name);
 }

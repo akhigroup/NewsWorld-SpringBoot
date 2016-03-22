@@ -19,4 +19,6 @@ public interface TagService {
 
     boolean exist(Long tagId);
 
+    Long countAll();
+
 }

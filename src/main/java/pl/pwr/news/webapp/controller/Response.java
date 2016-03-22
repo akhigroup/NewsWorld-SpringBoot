@@ -1,4 +1,4 @@
-package pl.pwr.news.webapp.rest;
+package pl.pwr.news.webapp.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

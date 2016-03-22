@@ -1,4 +1,4 @@
-package pl.pwr.news.webapp.rest;
+package pl.pwr.news.webapp.controller.article;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -6,6 +6,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 import pl.pwr.news.model.article.Article;
 import pl.pwr.news.service.article.ArticleService;
+import pl.pwr.news.webapp.controller.Response;
+import pl.pwr.news.webapp.controller.article.dto.ArticleDTO;
 
 import java.util.List;
 
@@ -16,7 +18,7 @@ import static org.elasticsearch.common.lang3.StringUtils.isNotBlank;
  */
 @RestController
 @RequestMapping(value = "/api", produces = "application/json;charset=UTF-8")
-public class ArticleController {
+public class ArticleApi {
 
     @Autowired
     ArticleService articleService;

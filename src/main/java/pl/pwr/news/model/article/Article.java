@@ -7,6 +7,7 @@ import pl.pwr.news.model.tag.Tag;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -43,7 +44,7 @@ public class Article implements Serializable {
     @ManyToMany
     private Set<Category> categories = new HashSet<>();
 
-    private Long addedDate;
+    private Date addedDate;
 
     public void addTag(Tag tag) {
         this.tags.add(tag);

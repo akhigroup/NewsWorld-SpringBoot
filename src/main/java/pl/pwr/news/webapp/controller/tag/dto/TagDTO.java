@@ -1,4 +1,4 @@
-package pl.pwr.news.webapp.rest;
+package pl.pwr.news.webapp.controller.tag.dto;
 
 import lombok.Getter;
 import lombok.Setter;

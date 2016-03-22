@@ -78,6 +78,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public Long countAll() {
+        return userRepository.count();
+    }
+
+    @Override
     public void save(User user) {
         userRepository.save(user);
     }

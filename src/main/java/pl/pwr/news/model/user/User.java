@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.Email;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -49,8 +50,8 @@ public class User implements Serializable {
     @JsonIgnore
     private String activationHash;
 
-    private Long birth;
-    private Long registered;
+    private Date birth;
+    private Date registered;
     private Boolean enabled;
 
     @Enumerated(EnumType.STRING)

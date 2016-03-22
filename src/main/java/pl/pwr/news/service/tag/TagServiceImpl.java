@@ -71,4 +71,9 @@ public class TagServiceImpl implements TagService {
     public boolean exist(Long tagId) {
         return tagRepository.exists(tagId);
     }
+
+    @Override
+    public Long countAll() {
+        return tagRepository.count();
+    }
 }

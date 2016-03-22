@@ -11,7 +11,6 @@ import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.repository.article.ArticleRepository;
 import pl.pwr.news.repository.category.CategoryRepository;
 import pl.pwr.news.repository.tag.TagRepository;
-import pl.pwr.news.service.category.CategoryServiceImpl;
 
 import java.util.Date;
 import java.util.List;
@@ -41,7 +40,7 @@ public class ArticleServiceImpl implements ArticleService {
         Optional<Long> articleId = Optional.ofNullable(entity.getId());
 
         if (!articleRepository.exists(articleId.orElse(-1L))) {
-            entity.setAddedDate(new Date().getTime());
+            entity.setAddedDate(new Date());
         }
 
         articleRepository.save(entity);
@@ -51,6 +50,11 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public List<Article> findAll() {
         return (List<Article>) articleRepository.findAll();
+    }
+
+    @Override
+    public Long countAll() {
+        return articleRepository.count();
     }
 
     @Override
@@ -71,10 +75,6 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public List<Article> findAll(String keyword, String link) {
         return articleRepository.findAll(where(keywordInTitle(keyword)).or(where(keywordInText(keyword))));
-    }
-
-    private interface AssignFunction<T> {
-        void assignTo(Article article, T value);
     }
 
     @Override
@@ -100,6 +100,10 @@ public class ArticleServiceImpl implements ArticleService {
             assignFunction.assignTo(article, entity);
         }
         articleRepository.save(article);
+    }
+
+    private interface AssignFunction<T> {
+        void assignTo(Article article, T value);
     }
     /*
      duplikacja kodu ssie. Takie rozwiązanie odpowiada?

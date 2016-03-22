@@ -18,4 +18,7 @@ public interface CategoryService {
     Category findById(Long id);
 
     boolean exist(Long categoryId);
+
+    Long countAll();
+
 }

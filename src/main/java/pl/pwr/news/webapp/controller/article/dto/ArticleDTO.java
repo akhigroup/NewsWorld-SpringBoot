@@ -1,12 +1,15 @@
-package pl.pwr.news.webapp.rest;
+package pl.pwr.news.webapp.controller.article.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 import pl.pwr.news.model.article.Article;
 import pl.pwr.news.model.category.Category;
 import pl.pwr.news.model.tag.Tag;
+import pl.pwr.news.webapp.controller.category.dto.CategoryDTO;
+import pl.pwr.news.webapp.controller.tag.dto.TagDTO;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -23,7 +26,7 @@ public class ArticleDTO {
     private String link;
     private List<TagDTO> tags = new ArrayList<>();
     private List<CategoryDTO> categories = new ArrayList<>();
-    private Long addedDate;
+    private Date addedDate;
 
 
     public ArticleDTO(Article article) {

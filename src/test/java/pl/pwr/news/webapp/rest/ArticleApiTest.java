@@ -9,6 +9,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import pl.pwr.news.model.article.Article;
 import pl.pwr.news.service.article.ArticleService;
+import pl.pwr.news.webapp.controller.article.ArticleApi;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
@@ -18,13 +19,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Created by Evelan-E6540 on 06.03.2016.
  */
-public class ArticleControllerTest {
+public class ArticleApiTest {
 
     private final static String REST_CONTENT_TYPE = "application/json;charset=UTF-8";
     @Mock
     ArticleService articleService;
     @InjectMocks
-    ArticleController articleController;
+    ArticleApi articleApi;
 
     @Before
     public void setUp() throws Exception {
@@ -45,7 +46,7 @@ public class ArticleControllerTest {
 
         when(articleService.findById(ARTICLE_ID)).thenReturn(article);
 
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(articleController).build();
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(articleApi).build();
         mockMvc.perform(get("/api/article/{articleId}", ARTICLE_ID))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(REST_CONTENT_TYPE))

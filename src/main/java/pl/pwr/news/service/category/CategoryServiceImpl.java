@@ -79,4 +79,9 @@ public class CategoryServiceImpl implements CategoryService {
     public boolean exist(Long categoryId) {
         return categoryRepository.exists(categoryId);
     }
+
+    @Override
+    public Long countAll() {
+        return categoryRepository.count();
+    }
 }

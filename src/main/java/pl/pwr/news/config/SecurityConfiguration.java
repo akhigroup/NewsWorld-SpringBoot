@@ -1,4 +1,4 @@
-package pl.pwr.news;
+package pl.pwr.news.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;

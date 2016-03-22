@@ -23,6 +23,8 @@ public interface ArticleService {
 
     List<Article> findAll();
 
+    Long countAll();
+
     Page<Article> findAll(Pageable pageable);
 
     Article findById(Long id);

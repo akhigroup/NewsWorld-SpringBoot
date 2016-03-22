@@ -1,9 +1,10 @@
-package pl.pwr.news.webapp.rest;
+package pl.pwr.news.webapp.controller.category;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.pwr.news.model.category.Category;
 import pl.pwr.news.service.category.CategoryService;
+import pl.pwr.news.webapp.controller.Response;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import static org.apache.commons.lang.StringUtils.isNotBlank;
  */
 @RestController
 @RequestMapping(value = "/api", produces = "application/json;charset=UTF-8")
-public class CategoryController {
+public class CategoryApi {
 
     @Autowired
     CategoryService categoryService;
