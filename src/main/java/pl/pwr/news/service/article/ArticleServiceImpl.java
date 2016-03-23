@@ -6,8 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import pl.pwr.news.model.article.Article;
-import pl.pwr.news.model.category.Category;
-import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.repository.article.ArticleRepository;
 import pl.pwr.news.repository.category.CategoryRepository;
 import pl.pwr.news.repository.tag.TagRepository;
@@ -79,12 +77,12 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public void addCategory(Long articleId, Long... categoriesId) {
-        assignArticleTo(articleId, categoryRepository, (Article article, Category category) -> article.addCategory(category), categoriesId);
+        assignArticleTo(articleId, categoryRepository, Article::addCategory, categoriesId);
     }
 
     @Override
     public void addTag(Long articleId, Long... tagsId) {
-        assignArticleTo(articleId, tagRepository, (Article article, Tag tag) -> article.addTag(tag), tagsId);
+        assignArticleTo(articleId, tagRepository, Article::addTag, tagsId);
     }
 
     private <T> void assignArticleTo(Long articleId, CrudRepository repository, AssignFunction<T> assignFunction, Long... entityIds) {
@@ -105,44 +103,4 @@ public class ArticleServiceImpl implements ArticleService {
     private interface AssignFunction<T> {
         void assignTo(Article article, T value);
     }
-    /*
-     duplikacja kodu ssie. Takie rozwiązanie odpowiada?
-     stare zostawiam zakomentowane, ze zmienionym addCategory pod ManyToMany, na wszelki wypadek
-    */
-
-//    @Override
-//    public void addCategory(Long articleId, Long... categoriesId) {
-//        if (!articleRepository.exists(articleId)) {
-//            return;
-//        }
-//
-//        Article article = articleRepository.findOne(articleId);
-//
-//        for (Long categoryId : categoriesId) {
-//            if (!categoryRepository.exists(categoryId)) {
-//                continue;
-//            }
-//            Category category = categoryRepository.findOne(categoryId);
-//            article.addCategory(category);
-//        }
-//        articleRepository.save(article);
-//    }
-//
-//    @Override
-//    public void addTag(Long articleId, Long... tagsId) {
-//        if (!articleRepository.exists(articleId)) {
-//            return;
-//        }
-//
-//        Article article = articleRepository.findOne(articleId);
-//
-//        for (Long tagId : tagsId) {
-//            if (!tagRepository.exists(tagId)) {
-//                continue;
-//            }
-//            Tag tag = tagRepository.findOne(tagId);
-//            article.addTag(tag);
-//        }
-//        articleRepository.save(article);
-//    }
 }
