@@ -1,4 +1,7 @@
 [![Stories in Ready](https://badge.waffle.io/w4-pwr/NewsWorldSpring.png?label=ready&title=Ready)](https://waffle.io/w4-pwr/NewsWorldSpring)
+
+[![Build Status](http://37.187.52.160:5002/job/NewsWorld/badge/icon)](http://37.187.52.160:5002/job/NewsWorld)
+
 # NewsWorldSpring
 http://localhost:9000/admin/
 
