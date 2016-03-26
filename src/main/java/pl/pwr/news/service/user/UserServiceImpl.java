@@ -1,18 +1,19 @@
-package pl.pwr.news.service;
+package pl.pwr.news.service.user;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.pwr.news.model.user.CurrentUser;
 import pl.pwr.news.model.user.User;
 import pl.pwr.news.repository.user.UserRepository;
-import pl.pwr.news.service.user.UserService;
+import pl.pwr.news.webapp.controller.user.form.RegisterRequestBody;
 
 import java.security.SecureRandom;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -61,7 +62,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 throw new UsernameNotFoundException(String.format("User %s does not exist!", username));
         }
 
-        return new CurrentUser(user);
+        return user;
 
     }
 
@@ -80,6 +81,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public Long countAll() {
         return userRepository.count();
+    }
+
+    @Override
+    public User createUserFromForm(RegisterRequestBody registerRequestBody) {
+        User user = new User();
+        user.setEmail(registerRequestBody.getMail());
+        user.setUsername(registerRequestBody.getUsername());
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        user.setPassword(encoder.encode(registerRequestBody.getPassword()));
+        user.setRegistered(new Date());
+        user.setEnabled(false);
+
+        return user;
     }
 
     @Override

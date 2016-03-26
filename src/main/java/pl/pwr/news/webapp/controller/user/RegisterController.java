@@ -1,81 +1,52 @@
 package pl.pwr.news.webapp.controller.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import pl.pwr.news.model.user.CurrentUser;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 import pl.pwr.news.model.user.User;
 import pl.pwr.news.service.message.MessageService;
 import pl.pwr.news.service.user.UserService;
-import pl.pwr.news.webapp.controller.user.form.UserForm;
-import pl.pwr.news.webapp.controller.user.form.UserValidator;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import pl.pwr.news.webapp.controller.user.form.RegisterRequestBody;
 
 /**
  * Created by Rafal on 2016-02-28.
  */
 
-@Controller
+@RestController
 public class RegisterController {
 
     @Autowired
     UserService userService;
 
     @Autowired
-    private UserValidator validator;
-
-    @Autowired
     private MessageService messageService;
 
 
-    @RequestMapping(value = "/register", method = RequestMethod.GET)
-    public String register(Model model, @AuthenticationPrincipal CurrentUser activeUser) {
-        if (activeUser != null) {
-            return "redirect:/logout";
-        } else {
-            model.addAttribute(new UserForm());
-            return "register";
-        }
-    }
+    @RequestMapping(value = "/register/", method = RequestMethod.POST, consumes = "application/json")
+    public ResponseEntity<Void> registerUser(@RequestBody RegisterRequestBody registerRequestBody){
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String submitRegister(@Valid @ModelAttribute("userForm") UserForm userForm,
-                                 BindingResult result,
-                                 Model model,
-                                 HttpServletRequest request) {
-
-        validator.validate(userForm, result);
-        if (result.hasErrors()) {
-            model.addAttribute(userForm);
-            return "register";
+        if (!registerRequestBody.getPassword().equals(registerRequestBody.getConfirmPassword())) {
+            return new ResponseEntity<Void>(HttpStatus.CONFLICT);
         }
 
-        User user = createUserFromFormData(userForm);
-        String hash = userService.generateActivateAccountUniqueHash(user);
-        user.setActivationHash(hash);
+        if (userService.findByEmail(registerRequestBody.getMail()) != null) {
+            return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+        }
+
+        if (userService.findByUsername(registerRequestBody.getUsername()) != null) {
+            return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+        }
+
+        User user = userService.createUserFromForm(registerRequestBody);
         userService.save(user);
-        //mailService.sendRegisterActivationMail(request.getServerName(),user.getEmail(), hash);
 
-        model.addAttribute("activationEmail", messageService.getMessage("register.activation.email"));
-
-        return "register";
+        return new ResponseEntity<Void>(HttpStatus.CREATED);
     }
 
-    private User createUserFromFormData(UserForm userForm) {
-        User user = new User();
-        user.setEmail(userForm.getEmail());
-        user.setUsername(userForm.getUsername());
-
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        user.setPassword(encoder.encode(userForm.getPassword()));
-        return user;
-    }
 }
