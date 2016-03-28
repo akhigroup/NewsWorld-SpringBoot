@@ -56,13 +56,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void updateCategory(Category category) {
         Long categoryId = category.getId();
-        boolean categoryNotExist = !categoryRepository.exists(categoryId);
 
-        if (categoryNotExist) {
+        if (!categoryRepository.exists(categoryId)) {
             return;
         }
-
-
     }
 
     @Override

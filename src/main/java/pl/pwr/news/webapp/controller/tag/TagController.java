@@ -1,4 +1,4 @@
-package pl.pwr.news.webapp.controller.category;
+package pl.pwr.news.webapp.controller.tag;
 
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,48 +8,48 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import pl.pwr.news.model.article.Article;
-import pl.pwr.news.model.category.Category;
+import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.service.article.ArticleService;
-import pl.pwr.news.service.category.CategoryService;
+import pl.pwr.news.service.tag.TagService;
 
 import java.util.List;
 
 /**
- * Created by jakub on 3/22/16.
+ * Created by jf on 3/27/16.
  */
 @Controller
-@RequestMapping(value = "/admin/category/")
+@RequestMapping(value = "/admin/tag/")
 @Log4j
-public class CategoryController {
+public class TagController {
 
     @Autowired
-    CategoryService categoryService;
+    TagService tagService;
 
     @Autowired
     ArticleService articleService;
 
     @RequestMapping(value = "/list")
-    public String listCategories(Model model) {
+    public String listTags(Model model) {
 
-        List<Category> categoryList = categoryService.findAll();
-        model.addAttribute("categoryList", categoryList);
+        List<Tag> tagList = tagService.findAll();
+        model.addAttribute("tagList", tagList);
 
-        return "category/list";
+        return "tag/list";
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public String createNewCategory(Model model) {
+    public String createNewTag(Model model) {
         List<Article> articleList = articleService.findAll();
         model.addAttribute("articleList", articleList);
-        model.addAttribute("newCategory", new Category());
-        return "category/add";
+        model.addAttribute("newTag", new Tag());
+        return "tag/add";
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String saveNewCategory(@ModelAttribute(value = "newCategory") Category category) {
+    public String saveNewTag(@ModelAttribute(value = "newTag") Tag tag) {
 
-        categoryService.createCategory(category.getName(), category.getImageUrl());
+        tagService.createTag(tag.getName());
 
-        return "redirect:/admin/category/add";
+        return "redirect:/admin/tag/add";
     }
 }
