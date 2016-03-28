@@ -30,7 +30,6 @@ public class CategoryController {
 
     @RequestMapping(value = "/list")
     public String listCategories(Model model) {
-
         List<Category> categoryList = categoryService.findAll();
         model.addAttribute("categoryList", categoryList);
 
@@ -39,15 +38,13 @@ public class CategoryController {
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String createNewCategory(Model model) {
-        List<Article> articleList = articleService.findAll();
-        model.addAttribute("articleList", articleList);
         model.addAttribute("newCategory", new Category());
+
         return "category/add";
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String saveNewCategory(@ModelAttribute(value = "newCategory") Category category) {
-
         categoryService.createCategory(category.getName(), category.getImageUrl());
 
         return "redirect:/admin/category/add";
