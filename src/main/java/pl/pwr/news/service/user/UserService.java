@@ -1,6 +1,7 @@
 package pl.pwr.news.service.user;
 
 import pl.pwr.news.model.user.User;
+import pl.pwr.news.webapp.controller.user.form.RegisterRequestBody;
 
 import java.util.List;
 
@@ -26,5 +27,6 @@ public interface UserService {
     String generateActivateAccountUniqueHash(User user);
 
     Long countAll();
-    
+
+    User createUserFromForm(RegisterRequestBody registerRequestBody);
 }

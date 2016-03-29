@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Evelan-E6540 on 29/08/2015.
@@ -19,7 +19,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name = "users")
-public class User implements Serializable {
+public class User implements UserDetails,Serializable {
 
     private static final long serialVersionUID = 2427238057150579366L;
 
@@ -38,7 +38,6 @@ public class User implements Serializable {
     @Email
     private String email;
 
-    @JsonIgnore
     private String password;
 
     @Column(unique = true)
@@ -52,37 +51,47 @@ public class User implements Serializable {
 
     private Date birth;
     private Date registered;
-    private Boolean enabled;
+    private boolean enabled;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "role_id")})
-    private Set<UserRole> userRoles = new HashSet<>();
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
     private String hometown;
 
-    //TODO - Te metody powinny być w serwisie raczej
-    //daj spokój, ify w modelu yolo
-    public boolean hasRoles(UserRole... roles) {
-        for (UserRole role : roles) {
-            if (!this.getUserRoles().contains(role)) {
-                return false;
-            }
-        }
+    @Override
+    public Collection<GrantedAuthority> getAuthorities() {
+        HashSet<GrantedAuthority> authorities = new HashSet<>();
+        authorities.add(new SimpleGrantedAuthority(role.getAuthority()));
+        return authorities;
+    }
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
         return true;
     }
 
-    public boolean addRole(UserRole... roles) {
-        return this.userRoles.addAll(Arrays.asList(roles));
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
-    public boolean removeRole(UserRole... roles) {
-        return this.userRoles.removeAll(Arrays.asList(roles));
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
 
 }
 

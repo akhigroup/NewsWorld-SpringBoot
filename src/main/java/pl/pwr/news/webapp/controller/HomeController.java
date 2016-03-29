@@ -2,9 +2,12 @@ package pl.pwr.news.webapp.controller;
 
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import pl.pwr.news.model.user.User;
+import pl.pwr.news.model.user.UserRole;
 import pl.pwr.news.service.article.ArticleService;
 import pl.pwr.news.service.category.CategoryService;
 import pl.pwr.news.service.tag.TagService;
@@ -43,6 +46,8 @@ public class HomeController {
 
         Long allUsers = userService.countAll();
         model.addAttribute("allUsers", allUsers);
+
+
 
         return "index";
     }

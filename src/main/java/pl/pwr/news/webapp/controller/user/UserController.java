@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * Created by jakub on 3/22/16.
+ *
  */
 @Controller
 @RequestMapping(value = "/admin/user/")
@@ -27,8 +28,8 @@ public class UserController {
         List<User> userList = userService.findAll();
         model.addAttribute("userList", userList);
 
-
         return "user/list";
     }
+
 
 }

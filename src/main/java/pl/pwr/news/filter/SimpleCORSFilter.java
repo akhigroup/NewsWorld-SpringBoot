@@ -1,4 +1,4 @@
-package pl.pwr.news.config;
+package pl.pwr.news.filter;
 
 import org.springframework.stereotype.Component;
 
@@ -10,7 +10,7 @@ import java.io.IOException;
  * Created by jakub on 3/19/16.
  */
 @Component
-public class SimpleCORSFilter implements Filter {
+public class SimpleCORSFilter  implements Filter {
 
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpServletResponse response = (HttpServletResponse) res;
