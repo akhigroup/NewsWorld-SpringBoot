@@ -85,6 +85,7 @@ public class ArticleServiceImpl implements ArticleService {
         assignArticleTo(articleId, tagRepository, Article::addTag, tagsId);
     }
 
+    @SuppressWarnings("unchecked")
     private <T> void assignArticleTo(Long articleId, CrudRepository repository, AssignFunction<T> assignFunction, Long... entityIds) {
         if (!articleRepository.exists(articleId)) {
             return;
