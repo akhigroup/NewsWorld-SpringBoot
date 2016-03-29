@@ -19,6 +19,7 @@ import pl.pwr.news.webapp.controller.user.form.RegisterRequestBody;
  */
 
 @RestController
+@RequestMapping(value = "/api")
 public class RegisterController {
 
     @Autowired
@@ -28,7 +29,7 @@ public class RegisterController {
     private MessageService messageService;
 
 
-    @RequestMapping(value = "/register/", method = RequestMethod.POST,
+    @RequestMapping(value = "/register", method = RequestMethod.POST,
             consumes = "application/json;charset=UTF-8",
             produces = "application/json;charset=UTF-8")
     public ResponseEntity<User> registerUser(@RequestBody RegisterRequestBody registerRequestBody) {
@@ -53,7 +54,7 @@ public class RegisterController {
 
 
     @RequestMapping("/rafal")
-        public void saveToKurwa(){
+    public void saveToKurwa() {
         User user = new User();
         user.setRole(UserRole.ADMIN);
         user.setEmail("user1@rafal.com");
