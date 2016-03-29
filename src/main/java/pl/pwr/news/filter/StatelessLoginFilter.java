@@ -53,6 +53,7 @@ public class StatelessLoginFilter extends UsernamePasswordAuthenticationFilter {
         SecurityContextHolder.getContext().setAuthentication(userAuthentication);
         chain.doFilter(request, response);
     }
+
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {

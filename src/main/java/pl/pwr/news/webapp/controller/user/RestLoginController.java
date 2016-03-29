@@ -13,16 +13,16 @@ import pl.pwr.news.service.user.UserService;
  */
 
 @RestController
-public class LoginController {
+public class RestLoginController {
 
     @Autowired
     private UserService userService;
 
     @Autowired
     TokenAuthenticationService tokenAuthenticationService;
-
-    @RequestMapping(value = "/login/", method = RequestMethod.POST)
-    public String login(){
-       return "SUCCESS";
-    }
+//narazie zakomentowane, bo nie wiem jak security + filtry sie robi
+//    @RequestMapping(value = "/login/", method = RequestMethod.POST)
+//    public String login(){
+//       return "SUCCESS";
+//    }
 }

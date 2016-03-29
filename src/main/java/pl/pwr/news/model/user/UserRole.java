@@ -13,22 +13,12 @@ import java.util.Set;
  * Created by Evelan-E6540 on 06/09/2015.
  */
 
-@Entity
-@Table(name = "user_roles")
-public class UserRole implements GrantedAuthority{
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+public enum  UserRole implements GrantedAuthority{
 
-    @NotEmpty
-    private String name;
-
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "userRoles")
-    private Set<User> users = new HashSet<>();
+    ADMIN,USER;
 
     @Override
     public String getAuthority() {
-        return name;
+        return name();
     }
 }

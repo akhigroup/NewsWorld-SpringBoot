@@ -10,13 +10,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
-import pl.pwr.news.filter.StatelessAuthenticationFilter;
-import pl.pwr.news.filter.StatelessLoginFilter;
+
+import javax.sql.DataSource;
 
 /**
  * Created by Rafal on 2016-02-28.
@@ -30,39 +27,76 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     UserDetailsService userDetailsService;
 
     @Autowired
-    private StatelessAuthenticationFilter statelessAuthenticationFilter;
+    DataSource dataSource;
 
-    @Autowired
-    private StatelessLoginFilter statelessLoginFilter;
+//    @Autowired
+//    private StatelessAuthenticationFilter statelessAuthenticationFilter;
+//
+//    @Autowired
+//    private StatelessLoginFilter statelessLoginFilter;
 
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
-        http    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-
-                .addFilterBefore(statelessLoginFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(statelessAuthenticationFilter, AbstractPreAuthenticatedProcessingFilter.class)
+        http
                 .authorizeRequests()
-                .antMatchers("/user/**").authenticated()
+                .antMatchers("/admin/**").authenticated()
                 .anyRequest().permitAll()
-                .and().exceptionHandling().accessDeniedPage("/auth/forbidden")
-                .and().csrf().disable();
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl("/admin/")
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .and()
+              //  .rememberMe()
+                //.rememberMeParameter("remember-me")
+             //   .tokenRepository(persistentTokenRepository())
+              //  .tokenValiditySeconds(86400)
+            //    .and()
+                .csrf().disable();
+
+//to jest zakomentowana wersja dla securtiy z filtrami
+//        http    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+//
+//                .addFilterBefore(statelessLoginFilter, UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(statelessAuthenticationFilter, AbstractPreAuthenticatedProcessingFilter.class)
+//                .authorizeRequests()
+//                .antMatchers("/user/**").authenticated()
+//                .anyRequest().permitAll()
+//                .and().exceptionHandling().accessDeniedPage("/auth/forbidden")
+//                .and().csrf().disable();
     }
+
 
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception{
         return super.authenticationManagerBean();
     }
+
+
     @Autowired
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
+
         auth.userDetailsService(userDetailsService)
                 .passwordEncoder(new BCryptPasswordEncoder());
     }
+    //
+//    @Bean
+//    public PersistentTokenRepository persistentTokenRepository() {
+//        JdbcTokenRepositoryImpl tokenRepositoryImpl = new JdbcTokenRepositoryImpl();
+//        tokenRepositoryImpl.setDataSource(dataSource);
+//        return tokenRepositoryImpl;
+//    }
 
-    @Override
-    protected UserDetailsService userDetailsService() {
-        return userDetailsService;
-    }
+
+
+//
+//    @Override
+//    protected UserDetailsService userDetailsService() {
+//        return userDetailsService;
+//    }
 
 }
