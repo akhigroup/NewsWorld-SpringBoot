@@ -19,6 +19,7 @@ import pl.pwr.news.webapp.controller.user.form.RegisterRequestBody;
  */
 
 @RestController
+@RequestMapping(value = "/api", produces = "application/json;charset=UTF-8",consumes = "application/json;charset=UTF-8")
 public class RegisterController {
 
     @Autowired
@@ -28,9 +29,8 @@ public class RegisterController {
     private MessageService messageService;
 
 
-    @RequestMapping(value = "/register/", method = RequestMethod.POST,
-            consumes = "application/json;charset=UTF-8",
-            produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+
     public ResponseEntity<User> registerUser(@RequestBody RegisterRequestBody registerRequestBody) {
 
         if (!registerRequestBody.getPassword().equals(registerRequestBody.getConfirmPassword())) {
@@ -49,18 +49,6 @@ public class RegisterController {
         userService.save(user);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
-
-    @RequestMapping("/rafal")
-        public void saveToKurwa(){
-        User user = new User();
-        user.setRole(UserRole.ADMIN);
-        user.setEmail("user1@rafal.com");
-        user.setUsername("user1");
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        user.setPassword(encoder.encode("password"));
-        userService.save(user);
     }
 
 }

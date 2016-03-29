@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.pwr.news.model.user.User;
+import pl.pwr.news.model.user.UserRole;
 import pl.pwr.news.repository.user.UserRepository;
 import pl.pwr.news.webapp.controller.user.form.RegisterRequestBody;
 
@@ -86,12 +87,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User createUserFromForm(RegisterRequestBody registerRequestBody) {
         User user = new User();
+        user.setRole(UserRole.USER);
         user.setEmail(registerRequestBody.getMail());
         user.setUsername(registerRequestBody.getUsername());
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         user.setPassword(encoder.encode(registerRequestBody.getPassword()));
         user.setRegistered(new Date());
-        user.setEnabled(false);
+        user.setEnabled(true);//TODO // activation mail
 
         return user;
     }
