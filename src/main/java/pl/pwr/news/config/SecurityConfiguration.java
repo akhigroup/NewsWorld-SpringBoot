@@ -10,13 +10,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
-import pl.pwr.news.filter.StatelessAuthenticationFilter;
-import pl.pwr.news.filter.StatelessLoginFilter;
 
 import javax.sql.DataSource;
 
@@ -34,45 +29,30 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     DataSource dataSource;
 
-    @Autowired
-    private StatelessAuthenticationFilter statelessAuthenticationFilter;
-
-    @Autowired
-    private StatelessLoginFilter statelessLoginFilter;
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeRequests()
-//                .antMatchers("/admin/**").authenticated()
-//                .anyRequest().permitAll()
-//                .and()
-//                .formLogin()
-//                .loginPage("/login")
-//                .defaultSuccessUrl("/admin/")
-//                .and()
-//                .logout()
-//                .logoutUrl("/logout")
-//                .logoutSuccessUrl("/")
-//                .and()
-//              //  .rememberMe()
-//                //.rememberMeParameter("remember-me")
-//             //   .tokenRepository(persistentTokenRepository())
-//              //  .tokenValiditySeconds(86400)
-//            //    .and()
-//                .csrf().disable();
-
-//to jest zakomentowana wersja dla securtiy z filtrami
-        http    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-
-                .addFilterBefore(statelessLoginFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(statelessAuthenticationFilter, AbstractPreAuthenticatedProcessingFilter.class)
+        http
                 .authorizeRequests()
-                .antMatchers("/user/**").authenticated()
+                .antMatchers("/admin/**").authenticated()
                 .anyRequest().permitAll()
-                .and().exceptionHandling().accessDeniedPage("/auth/forbidden")
-                .and().csrf().disable();
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl("/admin/")
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .and()
+              //  .rememberMe()
+                //.rememberMeParameter("remember-me")
+             //   .tokenRepository(persistentTokenRepository())
+              //  .tokenValiditySeconds(86400)
+            //    .and()
+                .csrf().disable();
+
+
     }
 
 
