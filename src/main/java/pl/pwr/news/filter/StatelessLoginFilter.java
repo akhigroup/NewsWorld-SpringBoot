@@ -48,7 +48,7 @@ public class StatelessLoginFilter extends UsernamePasswordAuthenticationFilter {
 
         final User authenticatedUser = (User) userService.loadUserByUsername(authResult.getName());
         final UserAuthentication userAuthentication = new UserAuthentication(authenticatedUser);
-
+        System.out.println("successfulAuthentication");
         tokenService.addAuthentication(response, userAuthentication);
         SecurityContextHolder.getContext().setAuthentication(userAuthentication);
         chain.doFilter(request, response);
@@ -58,7 +58,7 @@ public class StatelessLoginFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
             UserRequest user = new ObjectMapper().readValue(request.getInputStream(), UserRequest.class);
-            System.out.println(user.getUsername()+ " " + user.getPassword());
+            System.out.println("attemtAuthenctication" + user.getUsername()+ " " + user.getPassword());
             return  getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 
 //            User u = new ObjectMapper().readValue(request.getInputStream(), User.class);
