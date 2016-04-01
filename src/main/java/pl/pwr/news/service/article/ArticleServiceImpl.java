@@ -10,9 +10,7 @@ import pl.pwr.news.repository.article.ArticleRepository;
 import pl.pwr.news.repository.category.CategoryRepository;
 import pl.pwr.news.repository.tag.TagRepository;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
 import static pl.pwr.news.repository.article.ArticleSpecification.keywordInText;
@@ -34,15 +32,13 @@ public class ArticleServiceImpl implements ArticleService {
     TagRepository tagRepository;
 
     @Override
-    public Article createOrUpdate(Article entity) {
-        Optional<Long> articleId = Optional.ofNullable(entity.getId());
-
-        if (!articleRepository.exists(articleId.orElse(-1L))) {
-            entity.setAddedDate(new Date());
-        }
-
-        articleRepository.save(entity);
-        return entity;
+    public Article createOrUpdate(Article article) {
+//        Optional<Long> articleId = Optional.ofNullable(entity.getId());
+//
+//        if (!articleRepository.exists(articleId.orElse(-1L))) {
+//            entity.setAddedDate(new Date());
+//        }
+        return articleRepository.save(article);
     }
 
     @Override

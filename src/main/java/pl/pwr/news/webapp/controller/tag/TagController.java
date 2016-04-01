@@ -40,7 +40,7 @@ public class TagController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String saveNewTag(@ModelAttribute(value = "newTag") Tag tag) {
-        tagService.createTag(tag.getName());
+        tagService.createTag(tag);
 
         return "redirect:/admin/tag/add";
     }

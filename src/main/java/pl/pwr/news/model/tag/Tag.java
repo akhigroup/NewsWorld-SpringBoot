@@ -32,8 +32,15 @@ public class Tag {
     @ManyToMany
     private Set<Article> articles = new HashSet<>();
 
+    @ManyToMany
+    private Set<Category> categories = new HashSet<>();
+
     public Tag(String name) {
         this.name = name;
+    }
+
+    public void addCategory(Category category) {
+        this.categories.add(category);
     }
 
 }

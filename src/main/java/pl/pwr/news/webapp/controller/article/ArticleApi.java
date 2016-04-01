@@ -1,14 +1,20 @@
 package pl.pwr.news.webapp.controller.article;
-
+//TODO: zmiana na DTO, UPDATE
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 import pl.pwr.news.model.article.Article;
+import pl.pwr.news.model.category.Category;
+import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.service.article.ArticleService;
+import pl.pwr.news.service.category.CategoryService;
+import pl.pwr.news.service.tag.TagService;
 import pl.pwr.news.webapp.controller.Response;
 import pl.pwr.news.webapp.controller.article.dto.ArticleDTO;
 
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static org.elasticsearch.common.lang3.StringUtils.isNotBlank;
@@ -22,6 +28,12 @@ public class ArticleApi {
 
     @Autowired
     ArticleService articleService;
+
+    @Autowired
+    CategoryService categoryService;
+
+    @Autowired
+    TagService tagService;
 
     @RequestMapping(value = "/article", method = RequestMethod.GET)
     public Response<List<ArticleDTO>> getArticles(@RequestParam(required = false, defaultValue = "20") int pageSize,
@@ -52,25 +64,13 @@ public class ArticleApi {
             @RequestParam(value = "text", required = false) String text,
             @RequestParam(value = "imageUrl", required = false) String imageUrl,
             @RequestParam(value = "link") String link,
-            @RequestParam(required = false) Long[] categoryIds,
-            @RequestParam(required = false) Long[] tagIds) {
-
-        Article article = new Article();
-        article.setTitle(title);
-        article.setText(text);
-        article.setImageUrl(imageUrl);
-        article.setLink(link);
-
-        article = articleService.createOrUpdate(article);
-
-        Long articleId = article.getId();
-        if (categoryIds != null) {
-            articleService.addCategory(articleId, categoryIds);
-        }
-
-        if (tagIds != null) {
-            articleService.addTag(articleId, tagIds);
-        }
+            @RequestParam(required = false, defaultValue = "0") Long[] categoryIds,
+            @RequestParam(required = false, defaultValue = "0") Long[] tagIds) {
+        List<Category> categories = categoryService.findAll(Arrays.asList(categoryIds));
+        List<Tag> tags = tagService.findAll(Arrays.asList(tagIds));
+        Article article = Article.builder().title(title).text(text).imageUrl(imageUrl).
+                link(link).categories(categories).tags(tags).addedDate(new Date()).build();
+        articleService.createOrUpdate(article);
 
         return new Response<>(article);
     }

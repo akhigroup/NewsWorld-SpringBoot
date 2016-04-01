@@ -1,11 +1,15 @@
 package pl.pwr.news.webapp.controller.category;
-
+//TODO: zmiana na DTO, UPDATE
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import pl.pwr.news.factory.CategoryFactory;
 import pl.pwr.news.model.category.Category;
+import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.service.category.CategoryService;
+import pl.pwr.news.service.tag.TagService;
 import pl.pwr.news.webapp.controller.Response;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;
@@ -19,6 +23,12 @@ public class CategoryApi {
 
     @Autowired
     CategoryService categoryService;
+
+    @Autowired
+    TagService tagService;
+
+    @Autowired
+    CategoryFactory categoryFactory;
 
     @RequestMapping(value = "/category", method = RequestMethod.GET)
     public Response<List<Category>> getCategories() {
@@ -39,9 +49,11 @@ public class CategoryApi {
     @RequestMapping(value = "/category", method = RequestMethod.POST)
     public Response<Category> saveCategory(
             @RequestParam String name,
-            @RequestParam(required = false) String imageUrl) {
-
-        Category category = categoryService.createCategory(name, imageUrl);
+            @RequestParam(required = false) String imageUrl,
+            @RequestParam(required = false, defaultValue = "0") Long[] tagIds) {
+        List<Tag> tags = tagService.findAll(Arrays.asList(tagIds));
+        Category category = categoryFactory.getInstance(name, imageUrl, tags);
+        categoryService.createCategory(category);
         return new Response<>(category);
     }
 

@@ -3,13 +3,12 @@ package pl.pwr.news.service.tag;
 import com.google.common.base.CharMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.pwr.news.model.category.Category;
 import pl.pwr.news.model.tag.Tag;
+import pl.pwr.news.repository.category.CategoryRepository;
 import pl.pwr.news.repository.tag.TagRepository;
 
 import java.util.List;
-
-import static org.apache.commons.lang.StringUtils.deleteWhitespace;
-import static org.apache.commons.lang.StringUtils.isBlank;
 
 /**
  * Created by jakub on 3/9/16.
@@ -17,44 +16,32 @@ import static org.apache.commons.lang.StringUtils.isBlank;
 @Service
 public class TagServiceImpl implements TagService {
 
-
-    private static final CharMatcher ALNUM = CharMatcher.inRange('a', 'z')
-            .or(CharMatcher.ASCII)
-            .or(CharMatcher.inRange('A', 'Z'))
-            .or(CharMatcher.inRange('0', '9'))
-            .precomputed();
-
     @Autowired
     TagRepository tagRepository;
 
-    /**
-     * Create new tag
-     *
-     * @param name - tag name, should be unique
-     * @return - returns create tag, if name of tag is not unique returns existing tag
-     */
+    @Autowired
+    CategoryRepository categoryRepository;
+
     @Override
-    public Tag createTag(String name) {
+    public Tag createTag(Tag tag) {
+        return tagRepository.save(tag);
+    }
 
-        if (isBlank(name)) {
-            return null;
+    @Override
+    public void addCategory(Long tagId, Long... categoryIds) {
+        if (!tagRepository.exists(tagId)) {
+            return;
         }
+        Tag tag = tagRepository.findOne(tagId);
 
-        name = name.trim();
-        name = name.toLowerCase();
-        name = ALNUM.retainFrom(name);
-        name = deleteWhitespace(name);
-        //TODO - przydałyby się testy do tego
-
-        Tag tag = tagRepository.findByName(name);
-
-        if (tag != null) {
-            return tag;
+        for (Long categoryId : categoryIds) {
+            if (!categoryRepository.exists(categoryId)) {
+                continue;
+            }
+            Category category = categoryRepository.findOne(categoryId);
+            tag.addCategory(category);
         }
-
-        tag = new Tag(name);
         tagRepository.save(tag);
-        return tag;
     }
 
     @Override
@@ -63,8 +50,18 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    public List<Tag> findAll(Iterable<Long> tagIds) {
+        return (List<Tag>) tagRepository.findAll(tagIds);
+    }
+
+    @Override
     public Tag findById(Long id) {
         return tagRepository.findOne(id);
+    }
+
+    @Override
+    public Tag findByName(String name) {
+        return tagRepository.findByName(name);
     }
 
     @Override

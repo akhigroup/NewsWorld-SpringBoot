@@ -11,11 +11,17 @@ import java.util.List;
 @Service
 public interface TagService {
 
-    Tag createTag(String name);
+    Tag createTag(Tag tag);
+
+    void addCategory(Long tagId, Long... categoryId);
 
     List<Tag> findAll();
 
+    List<Tag> findAll(Iterable<Long> tagIds);
+
     Tag findById(Long id);
+
+    Tag findByName(String name);
 
     boolean exist(Long tagId);
 

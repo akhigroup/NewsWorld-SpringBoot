@@ -9,13 +9,19 @@ import java.util.List;
  */
 public interface CategoryService {
 
-    Category createCategory(String name, String imageUrl);
+    Category createCategory(Category category);
+
+    void addTag(Long categoryId, Long... tagId);
 
     void updateCategory(Category category);
 
     List<Category> findAll();
 
+    List<Category> findAll(Iterable<Long> categoryIds);
+
     Category findById(Long id);
+
+    Category findByName(String name);
 
     boolean exist(Long categoryId);
 

@@ -3,7 +3,9 @@ package pl.pwr.news.service.category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.pwr.news.model.category.Category;
+import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.repository.category.CategoryRepository;
+import pl.pwr.news.repository.tag.TagRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,37 +22,30 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     CategoryRepository categoryRepository;
 
-    /**
-     * Creates new category in database, if category is not unique returns existing entity in database with given name
-     * If you want update category use UpdateCategory
-     *
-     * @param name     - unique name
-     * @param imageUrl - category image
-     * @return created category, or already existing if name not unique
-     */
+    @Autowired
+    TagRepository tagRepository;
+
     @Override
-    public Category createCategory(String name, String imageUrl) {
+    public Category createCategory(Category category) {
+        return categoryRepository.save(category);
+    }
 
-        if (isBlank(name)) {
-            return null;
-        }
-        name = name.trim();
-
-        Optional<Category> categoryWithNotUniqueName = Optional.ofNullable(categoryRepository.findByName(name));
-        if (categoryWithNotUniqueName.isPresent()) {
-            return categoryWithNotUniqueName.get();
+    @Override
+    public void addTag(Long categoryId, Long... tagIds) {
+        if (!categoryRepository.exists(categoryId)) {
+            return;
         }
 
+        Category category = categoryRepository.findOne(categoryId);
 
-        Category category = new Category(name);
-
-        if (isNotBlank(imageUrl)) {
-            imageUrl = imageUrl.trim();
-            category.setImageUrl(imageUrl);
+        for (Long tagId: tagIds) {
+            if (!tagRepository.exists(tagId)) {
+                continue;
+            }
+            Tag tag = tagRepository.findOne(tagId);
+            category.addTag(tag);
         }
-
         categoryRepository.save(category);
-        return category;
     }
 
     @Override
@@ -60,6 +55,7 @@ public class CategoryServiceImpl implements CategoryService {
         if (!categoryRepository.exists(categoryId)) {
             return;
         }
+        //  ???
     }
 
     @Override
@@ -68,8 +64,18 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public List<Category> findAll(Iterable<Long> categoryIds) {
+        return (List<Category>) categoryRepository.findAll(categoryIds);
+    }
+
+    @Override
     public Category findById(Long id) {
         return categoryRepository.findOne(id);
+    }
+
+    @Override
+    public Category findByName(String name) {
+        return categoryRepository.findByName(name);
     }
 
     @Override

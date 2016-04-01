@@ -1,7 +1,6 @@
 package pl.pwr.news.model.article;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import pl.pwr.news.model.category.Category;
 import pl.pwr.news.model.tag.Tag;
 
@@ -14,9 +13,12 @@ import java.util.Set;
 /**
  * Created by jakub on 2/29/16.
  */
+@Builder
 @Getter
 @Setter
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "articles")
 public class Article implements Serializable {
 
@@ -38,9 +40,11 @@ public class Article implements Serializable {
 
     private boolean visible = false;
 
+    @Singular
     @ManyToMany
     private Set<Tag> tags = new HashSet<>();
 
+    @Singular
     @ManyToMany
     private Set<Category> categories = new HashSet<>();
 

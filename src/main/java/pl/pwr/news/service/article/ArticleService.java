@@ -19,7 +19,7 @@ public interface ArticleService {
 
     void addTag(Long articleId, Long... tagId);
 
-    Article createOrUpdate(Article entity);
+    Article createOrUpdate(Article article);
 
     List<Article> findAll();
 
@@ -30,5 +30,4 @@ public interface ArticleService {
     Article findById(Long id);
 
     List<Article> findByTag(String tag);
-
 }

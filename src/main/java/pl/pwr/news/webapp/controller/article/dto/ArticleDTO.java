@@ -28,33 +28,21 @@ public class ArticleDTO {
     private List<CategoryDTO> categories = new ArrayList<>();
     private Date addedDate;
 
-
     public ArticleDTO(Article article) {
         this.title = article.getTitle();
         this.text = article.getText();
         this.imageUrl = article.getImageUrl();
         this.link = article.getLink();
-
         Set<Tag> tags = article.getTags();
-        for (Tag tag : tags) {
-            TagDTO tagDto = new TagDTO(tag);
-            this.tags.add(tagDto);
-        }
-
+        tags.forEach(tag -> this.tags.add(new TagDTO(tag)));
         Set<Category> categories = article.getCategories();
-        for (Category category: categories) {
-            CategoryDTO categoryDto = new CategoryDTO(category);
-            this.categories.add(categoryDto);
-        }
+        categories.forEach(category -> this.categories.add(new CategoryDTO(category)));
         this.addedDate = article.getAddedDate();
     }
 
     public static List<ArticleDTO> getList(List<Article> articles) {
         List<ArticleDTO> articleDTOList = new ArrayList<>();
-        for (Article article : articles) {
-            ArticleDTO articleDTO = new ArticleDTO(article);
-            articleDTOList.add(articleDTO);
-        }
+        articles.forEach(article -> articleDTOList.add(new ArticleDTO(article)));
         return articleDTOList;
     }
 }

@@ -45,7 +45,7 @@ public class CategoryController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String saveNewCategory(@ModelAttribute(value = "newCategory") Category category) {
-        categoryService.createCategory(category.getName(), category.getImageUrl());
+        categoryService.createCategory(category);
 
         return "redirect:/admin/category/add";
     }
