@@ -7,9 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import pl.pwr.news.model.article.Article;
 import pl.pwr.news.model.category.Category;
-import pl.pwr.news.service.article.ArticleService;
 import pl.pwr.news.service.category.CategoryService;
 
 import java.util.List;
@@ -24,9 +22,6 @@ public class CategoryController {
 
     @Autowired
     CategoryService categoryService;
-
-    @Autowired
-    ArticleService articleService;
 
     @RequestMapping(value = "/list")
     public String listCategories(Model model) {

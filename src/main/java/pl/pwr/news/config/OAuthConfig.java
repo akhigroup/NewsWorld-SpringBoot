@@ -39,7 +39,7 @@ public class OAuthConfig  extends AuthorizationServerConfigurerAdapter {
         @Override
         public void configure(HttpSecurity http) throws Exception {
             http.requestMatcher(
-                    new OrRequestMatcher(new AntPathRequestMatcher("/api/**")))
+                    new OrRequestMatcher(new AntPathRequestMatcher("/user/**")))
                     .authorizeRequests().anyRequest()
                     .access("#oauth2.hasScope('read')");
         }

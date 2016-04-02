@@ -32,23 +32,6 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void addCategory(Long tagId, Long... categoryIds) {
-        if (!tagRepository.exists(tagId)) {
-            return;
-        }
-        Tag tag = tagRepository.findOne(tagId);
-
-        for (Long categoryId : categoryIds) {
-            if (!categoryRepository.exists(categoryId)) {
-                continue;
-            }
-            Category category = categoryRepository.findOne(categoryId);
-            tag.addCategory(category);
-        }
-        tagRepository.save(tag);
-    }
-
-    @Override
     public List<Tag> findAll() {
         return (List<Tag>) tagRepository.findAll();
     }

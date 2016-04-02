@@ -32,15 +32,10 @@ public class Tag {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Article> articles = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Category> categories = new HashSet<>();
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Category category;
 
     public Tag(String name) {
         this.name = name;
     }
-
-    public void addCategory(Category category) {
-        this.categories.add(category);
-    }
-
 }
