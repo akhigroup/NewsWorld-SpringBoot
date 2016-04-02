@@ -1,5 +1,4 @@
 package pl.pwr.news.webapp.controller.article;
-//TODO: zmiana na DTO, UPDATE
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -78,9 +77,10 @@ public class ArticleApi {
 
 
     @RequestMapping(value = "/article/{articleId}", method = RequestMethod.GET)
-    public Response<Article> getArticle(@PathVariable("articleId") Long articleId) {
+    public Response<ArticleDTO> getArticle(@PathVariable("articleId") Long articleId) {
         articleService.incrementViews(articleId);
-        return new Response<>(articleService.findById(articleId));
+        ArticleDTO articleDTO = new ArticleDTO(articleService.findById(articleId));
+        return new Response<>(articleDTO);
     }
 
     @RequestMapping(value = "/article/{articleId}/like", method = RequestMethod.GET)
@@ -149,12 +149,12 @@ public class ArticleApi {
             article.setLink(link);
         }
 
-        articleService.createOrUpdate(article);
-
         if (categoryId != null) {
             Category category = categoryService.findById(categoryId);
             article.setCategory(category);
         }
+
+        articleService.createOrUpdate(article);
 
         if (tagIds != null) {
             articleService.addTag(articleId, tagIds);
@@ -165,8 +165,12 @@ public class ArticleApi {
     }
 
     @RequestMapping(value = "/article/search/", method = RequestMethod.GET)
-    public Response<List<Article>> searchArticle(
+    public Response<List<ArticleDTO>> searchArticle(
             @RequestParam(value = "keyword", required = false) String keyword) {
-        return new Response<>(articleService.findAll(keyword, ""));
+
+        List<Article> articleList = articleService.findAll(keyword, "");
+        List<ArticleDTO> articleDTOList = ArticleDTO.getList(articleList);
+
+        return new Response<>(articleDTOList);
     }
 }

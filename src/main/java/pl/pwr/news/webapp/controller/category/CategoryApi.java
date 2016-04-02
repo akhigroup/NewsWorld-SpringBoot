@@ -1,15 +1,16 @@
 package pl.pwr.news.webapp.controller.category;
-//TODO: zmiana na DTO, UPDATE
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.pwr.news.factory.CategoryFactory;
+import pl.pwr.news.model.article.Article;
 import pl.pwr.news.model.category.Category;
-import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.service.category.CategoryService;
-import pl.pwr.news.service.tag.TagService;
 import pl.pwr.news.webapp.controller.Response;
+import pl.pwr.news.webapp.controller.article.dto.ArticleDTO;
+import pl.pwr.news.webapp.controller.category.dto.CategoryDTO;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;
@@ -28,19 +29,37 @@ public class CategoryApi {
     CategoryFactory categoryFactory;
 
     @RequestMapping(value = "/category", method = RequestMethod.GET)
-    public Response<List<Category>> getCategories() {
-        return new Response<>(categoryService.findAll());
+    public Response<List<CategoryDTO>> getCategories() {
+
+        List<Category> categoryList = categoryService.findAll();
+        List<CategoryDTO> categoryDTOList = CategoryDTO.getList(categoryList);
+
+        return new Response<>(categoryDTOList);
+    }
+
+
+    @RequestMapping(value = "/category/articles/{categoryId}", method = RequestMethod.GET)
+    public Response<List<ArticleDTO>> getArticlesFromCategory(@PathVariable("categoryId") Long categoryId) {
+
+        if (!categoryService.exist(categoryId)) {
+            return new Response<>("-1", "Category not found");
+        }
+        Category category = categoryService.findById(categoryId);
+        List<Article> articleList = new ArrayList<Article>(category.getArticles());
+        List<ArticleDTO> articleDTOList = ArticleDTO.getList(articleList);
+        return new Response<>(articleDTOList);
     }
 
     @RequestMapping(value = "/category/{categoryId}", method = RequestMethod.GET)
-    public Response<Category> getCategory(@PathVariable("categoryId") Long categoryId) {
+    public Response<CategoryDTO> getCategory(@PathVariable("categoryId") Long categoryId) {
 
-        boolean categoryNotExist = !categoryService.exist(categoryId);
-        if (categoryNotExist) {
+        if (!categoryService.exist(categoryId)) {
             return new Response<>("-1", "Category not found");
         }
 
-        return new Response<>(categoryService.findById(categoryId));
+        CategoryDTO categoryDTO = new CategoryDTO(categoryService.findById(categoryId));
+
+        return new Response<>(categoryDTO);
     }
 
     @RequestMapping(value = "/category", method = RequestMethod.POST)
