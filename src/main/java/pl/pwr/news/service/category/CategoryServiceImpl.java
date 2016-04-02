@@ -10,9 +10,6 @@ import pl.pwr.news.repository.tag.TagRepository;
 import java.util.List;
 import java.util.Optional;
 
-import static org.apache.commons.lang.StringUtils.isBlank;
-import static org.apache.commons.lang.StringUtils.isNotBlank;
-
 /**
  * Created by jakub on 3/9/16.
  */
@@ -27,6 +24,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category createCategory(Category category) {
+        Optional<Category> categoryWithNotUniqueName = Optional.ofNullable(categoryRepository.findByName(category.getName()));
+        if (categoryWithNotUniqueName.isPresent()) {
+            return categoryWithNotUniqueName.get();
+        }
         return categoryRepository.save(category);
     }
 
@@ -38,7 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         Category category = categoryRepository.findOne(categoryId);
 
-        for (Long tagId: tagIds) {
+        for (Long tagId : tagIds) {
             if (!tagRepository.exists(tagId)) {
                 continue;
             }

@@ -1,6 +1,5 @@
 package pl.pwr.news.service.tag;
 
-import com.google.common.base.CharMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.pwr.news.model.category.Category;
@@ -9,6 +8,7 @@ import pl.pwr.news.repository.category.CategoryRepository;
 import pl.pwr.news.repository.tag.TagRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by jakub on 3/9/16.
@@ -24,6 +24,10 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Tag createTag(Tag tag) {
+        Optional<Tag> tagWithNotUniqueName = Optional.ofNullable(tagRepository.findByName(tag.getName()));
+        if (tagWithNotUniqueName.isPresent()) {
+            return tagWithNotUniqueName.get();
+        }
         return tagRepository.save(tag);
     }
 
