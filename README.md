@@ -3,7 +3,7 @@
 [![Build Status](http://37.187.52.160:5002/job/NewsWorld/badge/icon)](http://37.187.52.160:5002/job/NewsWorld)
 
 #Model bazy
-![model bazy](http://i.imgur.com/j0zMuXS.png)
+![model bazy](http://i.imgur.com/owQewwX.png)
 
 #Architektura aplikacji
 ![baas](http://i.imgur.com/HjJxAxg.png)
