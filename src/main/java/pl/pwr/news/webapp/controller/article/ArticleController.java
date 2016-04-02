@@ -95,6 +95,12 @@ public class ArticleController {
                 articleService.addTag(articleId, createdTag.getId());
             }
         }
+
+        Long selectedCategoryId = addArticleForm.getCategoryId();
+        if (selectedCategoryId != null) {
+            articleService.addCategory(articleId, selectedCategoryId);
+        }
+
         return "redirect:/admin/article/list";
     }
 }
