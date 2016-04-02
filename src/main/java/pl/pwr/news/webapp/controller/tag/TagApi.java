@@ -23,9 +23,6 @@ public class TagApi {
     TagService tagService;
 
     @Autowired
-    CategoryService categoryService;
-
-    @Autowired
     TagFactory tagFactory;
 
     @RequestMapping(value = "/tag", method = RequestMethod.GET)
@@ -44,10 +41,8 @@ public class TagApi {
     }
 
     @RequestMapping(value = "/tag", method = RequestMethod.POST)
-    public Response<Tag> saveTag(@RequestParam String name,
-                                 @RequestParam(required = false, defaultValue = "0") Long[] categoryIds) {
-        List<Category> categories = categoryService.findAll(Arrays.asList(categoryIds));
-        Tag tag = tagFactory.getInstance(name, categories);
+    public Response<Tag> saveTag(@RequestParam String name) {
+        Tag tag = tagFactory.getInstance(name);
         tagService.createTag(tag);
         return new Response<>(tag);
     }

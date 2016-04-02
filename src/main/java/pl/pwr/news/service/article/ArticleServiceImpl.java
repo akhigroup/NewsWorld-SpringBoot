@@ -113,7 +113,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public void addCategory(Long articleId, Long... categoryIds) {
-        assignArticleTo(articleId, categoryRepository, Article::addCategory, categoryIds);
+        assignArticleTo(articleId, categoryRepository, Article::setCategory, categoryIds);
     }
 
     @Override
@@ -125,6 +125,7 @@ public class ArticleServiceImpl implements ArticleService {
     public void removeTag(Long articleId, Long... tagIds) {
         assignArticleTo(articleId, tagRepository, Article::removeTag, tagIds);
     }
+
 
     @SuppressWarnings("unchecked")
     private <T> void assignArticleTo(Long articleId, CrudRepository repository, AssignFunction<T> assignFunction, Long... entityIds) {

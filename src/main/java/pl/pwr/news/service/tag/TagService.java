@@ -13,8 +13,6 @@ public interface TagService {
 
     Tag createTag(Tag tag);
 
-    void addCategory(Long tagId, Long... categoryId);
-
     List<Tag> findAll();
 
     List<Tag> findAll(Iterable<Long> tagIds);

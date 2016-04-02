@@ -50,9 +50,8 @@ public class Article implements Serializable {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Tag> tags = new HashSet<>();
 
-    @Singular
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Category> categories = new HashSet<>();
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Category category;
 
     private Date addedDate;
 
@@ -62,10 +61,6 @@ public class Article implements Serializable {
 
     public void removeTag(Tag tag) {
         this.tags.remove(tag);
-    }
-
-    public void addCategory(Category category) {
-        this.categories.add(category);
     }
 
     public void incrementViews() {

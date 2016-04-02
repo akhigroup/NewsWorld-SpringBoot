@@ -26,12 +26,14 @@ public class CategoryDTO {
     private List<ArticleDTO> articles = new ArrayList<>();
 
     public CategoryDTO(Category category) {
-        this.id = category.getId();
-        this.imageUrl = category.getImageUrl();
-        this.name = category.getName();
-        Set<Tag> tags = category.getTags();
-        tags.forEach(tag -> this.tags.add(new TagDTO(tag)));
-        Set<Article> articles = category.getArticles();
-        articles.forEach(article -> this.articles.add(new ArticleDTO(article)));
+        if (category != null) {
+            this.id = category.getId();
+            this.imageUrl = category.getImageUrl();
+            this.name = category.getName();
+            Set<Tag> tags = category.getTags();
+            tags.forEach(tag -> this.tags.add(new TagDTO(tag)));
+            Set<Article> articles = category.getArticles();
+            articles.forEach(article -> this.articles.add(new ArticleDTO(article)));
+        }
     }
 }

@@ -18,14 +18,13 @@ public class CategoryFactory {
     @Autowired
     CategoryService categoryService;
 
-    public Category getInstance(String name, String imageUrl, List<Tag> tags) {
+    public Category getInstance(String name, String imageUrl) {
         Category existingCategory = categoryService.findByName(name);
         if (existingCategory != null) {
             return existingCategory;
         }
         Category newCategory = new Category(ValueConverter.convertCategoryName(name));
         newCategory.setImageUrl(imageUrl);
-        tags.forEach(tag -> newCategory.addTag(tag));
         return newCategory;
     }
 }
