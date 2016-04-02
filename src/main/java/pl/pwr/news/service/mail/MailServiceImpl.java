@@ -1,12 +1,12 @@
 package pl.pwr.news.service.mail;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.MailException;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 
 /**
  * Created by Rafal on 2016-02-29.
@@ -16,25 +16,38 @@ public class MailServiceImpl implements MailService {
 
 
     @Autowired
-    private JavaMailSenderImpl javaMailSender;
+    private JavaMailSender mailSender;
 
 
 
     @Override
     public void sendSimpleMessage() {
-        MimeMessage mail = javaMailSender.createMimeMessage();
-        try {
-            MimeMessageHelper helper = new MimeMessageHelper(mail, true);
-            helper.setTo("rkpieniazek@gmail.com");
-            helper.setFrom("noreply@news@world");
-            helper.setSubject("wiadomosc testowa");
-            helper.setText("wiadomosc testowa, tresc",true);
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        } finally {
+
+
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setTo("rkpieniazek@gmail.com");
+
+        msg.setText("wiadomosc testowa, tresc");
+        msg.setSubject("subject");
+        try{
+            this.mailSender.send(msg);
         }
-        javaMailSender.send(mail);
+        catch (MailException ex) {
+
+            System.err.println(ex.getMessage());
+        }
 
 
+//        MimeMessage mail = mailSender.createMimeMessage();
+//        try {
+//            MimeMessageHelper helper = new MimeMessageHelper(mail, true);
+//            helper.setTo("rkpieniazek@gmail.com");
+//            helper.setFrom("noreply@newsAtworld");
+//            helper.setSubject("wiadomosc testowa");
+//            helper.setText("wiadomosc testowa, tresc",false);
+//        } catch (MessagingException e) {
+//            e.printStackTrace();
+//        }
+//        mailSender.send(mail);
     }
 }

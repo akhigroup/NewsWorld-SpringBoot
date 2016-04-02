@@ -6,10 +6,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import pl.pwr.news.model.user.User;
 import pl.pwr.news.model.user.UserRole;
 import pl.pwr.news.service.article.ArticleService;
 import pl.pwr.news.service.category.CategoryService;
+import pl.pwr.news.service.mail.MailService;
 import pl.pwr.news.service.tag.TagService;
 import pl.pwr.news.service.user.UserService;
 
@@ -32,6 +34,9 @@ public class HomeController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    MailService mailService;
+
     @RequestMapping(value = "/admin")
     public String home(Model model) {
         Long allArticles = articleService.countAll();
@@ -48,6 +53,11 @@ public class HomeController {
 
 
         return "index";
+    }
+
+    @RequestMapping(value = "/sendSimpleMail",method = RequestMethod.GET)
+    public void sendMail(){
+        mailService.sendSimpleMessage();
     }
 
 }
