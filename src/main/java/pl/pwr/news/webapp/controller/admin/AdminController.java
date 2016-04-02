@@ -1,4 +1,4 @@
-package pl.pwr.news.webapp.controller.user;
+package pl.pwr.news.webapp.controller.admin;
 
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/admin/user/")
 @Log4j
-public class UserController {
+public class AdminController {
 
     @Autowired
     UserService userService;

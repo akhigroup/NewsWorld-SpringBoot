@@ -29,12 +29,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     DataSource dataSource;
 
-//    @Autowired
-//    private StatelessAuthenticationFilter statelessAuthenticationFilter;
-//
-//    @Autowired
-//    private StatelessLoginFilter statelessLoginFilter;
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -64,16 +58,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable();
 
-//to jest zakomentowana wersja dla securtiy z filtrami
-//        http    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-//
-//                .addFilterBefore(statelessLoginFilter, UsernamePasswordAuthenticationFilter.class)
-//                .addFilterBefore(statelessAuthenticationFilter, AbstractPreAuthenticatedProcessingFilter.class)
-//                .authorizeRequests()
-//                .antMatchers("/user/**").authenticated()
-//                .anyRequest().permitAll()
-//                .and().exceptionHandling().accessDeniedPage("/auth/forbidden")
-//                .and().csrf().disable();
+
     }
 
 
