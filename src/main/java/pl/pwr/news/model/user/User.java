@@ -19,16 +19,13 @@ import java.util.*;
 @Getter
 @Setter
 @Table(name = "users")
-public class User implements UserDetails,Serializable {
+public class User implements UserDetails, Serializable {
 
     private static final long serialVersionUID = 2427238057150579366L;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
-
-    @Column(unique = true)
-    private String username;
 
     private String firstname;
 
@@ -68,9 +65,10 @@ public class User implements UserDetails,Serializable {
         authorities.add(new SimpleGrantedAuthority(role.getAuthority()));
         return authorities;
     }
+
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     @Override

@@ -34,11 +34,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
-
-    @Override
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
@@ -55,14 +50,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
         User user = userRepository.findByEmail(username);
         if (user == null) {
-            user = userRepository.findByUsername(username);
-            if (user == null)
-                throw new UsernameNotFoundException(String.format("User %s does not exist!", username));
+            throw new UsernameNotFoundException(String.format("User %s does not exist!", username));
         }
-
         return user;
 
     }
@@ -89,7 +80,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = new User();
         user.setRole(UserRole.USER);
         user.setEmail(registerRequestBody.getMail());
-        user.setUsername(registerRequestBody.getUsername());
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         user.setPassword(encoder.encode(registerRequestBody.getPassword()));
         user.setRegistered(new Date());

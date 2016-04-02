@@ -19,7 +19,7 @@ import pl.pwr.news.webapp.controller.user.form.RegisterRequestBody;
  */
 
 @RestController
-@RequestMapping(produces = "application/json;charset=UTF-8",consumes = "application/json;charset=UTF-8")
+@RequestMapping(produces = "application/json;charset=UTF-8", consumes = "application/json;charset=UTF-8")
 public class RegisterController {
 
     @Autowired
@@ -38,10 +38,6 @@ public class RegisterController {
         }
 
         if (userService.findByEmail(registerRequestBody.getMail()) != null) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
-
-        if (userService.findByUsername(registerRequestBody.getUsername()) != null) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 

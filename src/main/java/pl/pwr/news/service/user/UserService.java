@@ -16,8 +16,6 @@ public interface UserService {
 
     User findById(Long id);
 
-    User findByUsername(String username);
-
     User findByEmail(String email);
 
     User findByActivationHash(String activationHash);

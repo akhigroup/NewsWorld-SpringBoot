@@ -11,8 +11,6 @@ import pl.pwr.news.model.user.User;
 public interface UserRepository extends CrudRepository<User, Long> {
     User findById(Long id);
 
-    User findByUsername(String username);
-
     User findByEmail(String email);
 
     User findByActivationHash(String activationHash);

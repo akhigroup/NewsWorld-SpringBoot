@@ -1,15 +1,14 @@
 package pl.pwr.news.webapp.controller.category;
 //TODO: zmiana na DTO, UPDATE
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.pwr.news.factory.CategoryFactory;
 import pl.pwr.news.model.category.Category;
-import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.service.category.CategoryService;
-import pl.pwr.news.service.tag.TagService;
 import pl.pwr.news.webapp.controller.Response;
+import pl.pwr.news.webapp.controller.category.dto.CategoryDTO;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;
@@ -29,7 +28,10 @@ public class CategoryApi {
 
     @RequestMapping(value = "/category", method = RequestMethod.GET)
     public Response<List<Category>> getCategories() {
-        return new Response<>(categoryService.findAll());
+
+        List<Category> categoryList = categoryService.findAll();
+
+        return new Response<>(categoryList);
     }
 
     @RequestMapping(value = "/category/{categoryId}", method = RequestMethod.GET)
