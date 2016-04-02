@@ -25,9 +25,6 @@ public class CategoryApi {
     CategoryService categoryService;
 
     @Autowired
-    TagService tagService;
-
-    @Autowired
     CategoryFactory categoryFactory;
 
     @RequestMapping(value = "/category", method = RequestMethod.GET)
@@ -49,10 +46,8 @@ public class CategoryApi {
     @RequestMapping(value = "/category", method = RequestMethod.POST)
     public Response<Category> saveCategory(
             @RequestParam String name,
-            @RequestParam(required = false) String imageUrl,
-            @RequestParam(required = false, defaultValue = "0") Long[] tagIds) {
-        List<Tag> tags = tagService.findAll(Arrays.asList(tagIds));
-        Category category = categoryFactory.getInstance(name, imageUrl, tags);
+            @RequestParam(required = false) String imageUrl) {
+        Category category = categoryFactory.getInstance(name, imageUrl);
         categoryService.createCategory(category);
         return new Response<>(category);
     }
@@ -63,8 +58,7 @@ public class CategoryApi {
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String imageUrl) {
 
-        boolean categoryNotExist = !categoryService.exist(categoryId);
-        if (categoryNotExist) {
+        if (!categoryService.exist(categoryId)) {
             return new Response<>("-1", "Category not found");
         }
 

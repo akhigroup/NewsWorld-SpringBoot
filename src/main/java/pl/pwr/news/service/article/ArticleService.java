@@ -38,6 +38,8 @@ public interface ArticleService {
 
     Long dislikeArticle(Long id);
 
+    Long incrementViews(Long id);
+
     Page<Article> findPopular(int page, int pageSize);
 
     Page<Article> findMostLiked(int page, int pageSize);

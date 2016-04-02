@@ -79,6 +79,7 @@ public class ArticleApi {
 
     @RequestMapping(value = "/article/{articleId}", method = RequestMethod.GET)
     public Response<Article> getArticle(@PathVariable("articleId") Long articleId) {
+        articleService.incrementViews(articleId);
         return new Response<>(articleService.findById(articleId));
     }
 
@@ -104,12 +105,12 @@ public class ArticleApi {
             @RequestParam(value = "text", required = false) String text,
             @RequestParam(value = "imageUrl", required = false) String imageUrl,
             @RequestParam(value = "link") String link,
-            @RequestParam Long[] categoryIds,
+            @RequestParam Long categoryId,
             @RequestParam Long[] tagIds) {
-        List<Category> categories = categoryService.findAll(Arrays.asList(categoryIds));
+        Category category = categoryService.findById(categoryId);
         List<Tag> tags = tagService.findAll(Arrays.asList(tagIds));
         Article article = Article.builder().title(title).text(text).imageUrl(imageUrl).
-                link(link).categories(categories).tags(tags).addedDate(new Date()).build();
+                link(link).category(category).tags(tags).addedDate(new Date()).build();
         articleService.createOrUpdate(article);
 
         return new Response<>(article);
@@ -123,7 +124,7 @@ public class ArticleApi {
             @RequestParam(required = false) String text,
             @RequestParam(required = false) String imageUrl,
             @RequestParam(required = false) String link,
-            @RequestParam(required = false) Long[] categoryIds,
+            @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) Long[] tagIds) {
 
         Article article = articleService.findById(articleId);
@@ -150,8 +151,9 @@ public class ArticleApi {
 
         articleService.createOrUpdate(article);
 
-        if (categoryIds != null) {
-            articleService.addCategory(articleId, categoryIds);
+        if (categoryId != null) {
+            Category category = categoryService.findById(categoryId);
+            article.setCategory(category);
         }
 
         if (tagIds != null) {

@@ -77,9 +77,6 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Article findById(Long id) {
-        Article article = articleRepository.findOne(id);
-        article.incrementViews();
-        articleRepository.save(article);
         return articleRepository.findOne(id);
     }
 
@@ -105,6 +102,14 @@ public class ArticleServiceImpl implements ArticleService {
         return article.getDislikes();
     }
 
+    @Override
+    public Long incrementViews(Long id) {
+        Article article = articleRepository.findOne(id);
+        article.incrementViews();
+        articleRepository.save(article);
+        return article.getViews();
+    }
+
 
     @Override
     public List<Article> findAll(String keyword, String link) {
@@ -113,7 +118,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public void addCategory(Long articleId, Long... categoryIds) {
-        assignArticleTo(articleId, categoryRepository, Article::addCategory, categoryIds);
+        assignArticleTo(articleId, categoryRepository, Article::setCategory, categoryIds);
     }
 
     @Override
@@ -125,6 +130,7 @@ public class ArticleServiceImpl implements ArticleService {
     public void removeTag(Long articleId, Long... tagIds) {
         assignArticleTo(articleId, tagRepository, Article::removeTag, tagIds);
     }
+
 
     @SuppressWarnings("unchecked")
     private <T> void assignArticleTo(Long articleId, CrudRepository repository, AssignFunction<T> assignFunction, Long... entityIds) {
