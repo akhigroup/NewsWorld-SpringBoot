@@ -40,12 +40,18 @@ public class Article implements Serializable {
 
     private boolean visible = false;
 
+    private Long views = 0L;
+
+    private Long likes = 0L;
+
+    private Long dislikes = 0L;
+
     @Singular
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Tag> tags = new HashSet<>();
 
     @Singular
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Category> categories = new HashSet<>();
 
     private Date addedDate;
@@ -56,5 +62,17 @@ public class Article implements Serializable {
 
     public void addCategory(Category category) {
         this.categories.add(category);
+    }
+
+    public void incrementViews() {
+        this.views++;
+    }
+
+    public void incrementLikes() {
+        this.likes++;
+    }
+
+    public void incrementDislikes() {
+        this.dislikes++;
     }
 }

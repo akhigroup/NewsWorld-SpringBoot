@@ -1,6 +1,7 @@
 package pl.pwr.news.service.article;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.pwr.news.model.article.Article;
@@ -15,7 +16,7 @@ public interface ArticleService {
 
     List<Article> findAll(String keyword, String link);
 
-    void addCategory(Long articleId, Long... categoryId);
+    void addCategory(Long articleId, Long... categoryIds);
 
     void addTag(Long articleId, Long... tagId);
 
@@ -30,4 +31,10 @@ public interface ArticleService {
     Article findById(Long id);
 
     List<Article> findByTag(String tag);
+
+    Long likeArticle(Long id);
+
+    Long dislikeArticle(Long id);
+
+    Page<Article> findPopular(int page, int pageSize);
 }

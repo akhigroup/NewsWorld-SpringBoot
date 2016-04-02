@@ -18,7 +18,6 @@ import pl.pwr.news.service.user.UserService;
  */
 @Controller
 @Log4j
-@RequestMapping(value = "/admin/")
 public class HomeController {
 
     @Autowired
@@ -33,7 +32,7 @@ public class HomeController {
     @Autowired
     UserService userService;
 
-    @RequestMapping(value = "/")
+    @RequestMapping(value = "/admin")
     public String home(Model model) {
         Long allArticles = articleService.countAll();
         model.addAttribute("allArticles", allArticles);
@@ -46,7 +45,6 @@ public class HomeController {
 
         Long allUsers = userService.countAll();
         model.addAttribute("allUsers", allUsers);
-
 
 
         return "index";

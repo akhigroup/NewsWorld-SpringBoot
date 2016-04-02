@@ -1,5 +1,6 @@
 package pl.pwr.news.webapp.controller.article;
 //TODO: zmiana na DTO, UPDATE
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +27,8 @@ import static org.elasticsearch.common.lang3.StringUtils.isNotBlank;
 @RequestMapping(value = "/api", produces = "application/json;charset=UTF-8")
 public class ArticleApi {
 
+    private final int MAX_PAGE_SIZE = 100;
+
     @Autowired
     ArticleService articleService;
 
@@ -38,8 +41,8 @@ public class ArticleApi {
     @RequestMapping(value = "/article", method = RequestMethod.GET)
     public Response<List<ArticleDTO>> getArticles(@RequestParam(required = false, defaultValue = "20") int pageSize,
                                                   @RequestParam(required = false, defaultValue = "0") int page) {
-        if (pageSize > 100) {
-            pageSize = 100;
+        if (pageSize > MAX_PAGE_SIZE) {
+            pageSize = MAX_PAGE_SIZE;
         }
 
         Page<Article> databaseArticle = articleService.findAll(new PageRequest(page, pageSize));
@@ -47,9 +50,32 @@ public class ArticleApi {
         return new Response<>(articleDTOList);
     }
 
+
+    @RequestMapping(value = "/article/popular", method = RequestMethod.GET)
+    public Response<List<ArticleDTO>> getPopularArticles(@RequestParam(required = false, defaultValue = "20") int pageSize,
+                                                         @RequestParam(required = false, defaultValue = "0") int page) {
+        if (pageSize > MAX_PAGE_SIZE) {
+            pageSize = MAX_PAGE_SIZE;
+        }
+
+        Page<Article> databaseArticle = articleService.findPopular(page, pageSize);
+        List<ArticleDTO> articleDTOList = ArticleDTO.getList(databaseArticle.getContent());
+        return new Response<>(articleDTOList);
+    }
+
     @RequestMapping(value = "/article/{articleId}", method = RequestMethod.GET)
     public Response<Article> getArticle(@PathVariable("articleId") Long articleId) {
         return new Response<>(articleService.findById(articleId));
+    }
+
+    @RequestMapping(value = "/article/{articleId}/like", method = RequestMethod.GET)
+    public Response<Long> likeArticle(@PathVariable("articleId") Long articleId) {
+        return new Response<>(articleService.likeArticle(articleId));
+    }
+
+    @RequestMapping(value = "/article/{articleId}/dislike", method = RequestMethod.GET)
+    public Response<Long> dislikeArticle(@PathVariable("articleId") Long articleId) {
+        return new Response<>(articleService.dislikeArticle(articleId));
     }
 
     @RequestMapping(value = "/article/search", method = RequestMethod.GET)
@@ -64,8 +90,8 @@ public class ArticleApi {
             @RequestParam(value = "text", required = false) String text,
             @RequestParam(value = "imageUrl", required = false) String imageUrl,
             @RequestParam(value = "link") String link,
-            @RequestParam(required = false, defaultValue = "0") Long[] categoryIds,
-            @RequestParam(required = false, defaultValue = "0") Long[] tagIds) {
+            @RequestParam Long[] categoryIds,
+            @RequestParam Long[] tagIds) {
         List<Category> categories = categoryService.findAll(Arrays.asList(categoryIds));
         List<Tag> tags = tagService.findAll(Arrays.asList(tagIds));
         Article article = Article.builder().title(title).text(text).imageUrl(imageUrl).
@@ -74,6 +100,7 @@ public class ArticleApi {
 
         return new Response<>(article);
     }
+
 
     @RequestMapping(value = "/article", method = RequestMethod.PUT)
     public Response<Article> updateArticle(
@@ -124,7 +151,6 @@ public class ArticleApi {
     @RequestMapping(value = "/article/search/", method = RequestMethod.GET)
     public Response<List<Article>> searchArticle(
             @RequestParam(value = "keyword", required = false) String keyword) {
-        //TODO - dorobic cale filtrowanie
         return new Response<>(articleService.findAll(keyword, ""));
     }
 }

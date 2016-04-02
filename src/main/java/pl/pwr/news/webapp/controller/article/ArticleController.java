@@ -35,11 +35,8 @@ public class ArticleController {
 
     @RequestMapping(value = "/list")
     public String listArticles(Model model) {
-
         List<Article> articleList = articleService.findAll();
         model.addAttribute("articleList", articleList);
-
-
         return "article/list";
     }
 

@@ -38,25 +38,31 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                .antMatchers("/admin/**").authenticated()
-                .anyRequest().permitAll()
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/admin/")
-                .and()
-                .logout()
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/")
-                .and()
-              //  .rememberMe()
-                //.rememberMeParameter("remember-me")
-             //   .tokenRepository(persistentTokenRepository())
-              //  .tokenValiditySeconds(86400)
-            //    .and()
-                .csrf().disable();
+
+        //TODO - nie da się przez to korzystać z aplikacji, wymaga ciągłego logowania
+//        http
+//                .authorizeRequests()
+//                .antMatchers("/admin/**").authenticated()
+//                .anyRequest().permitAll()
+//                .and()
+//                .formLogin()
+//                .loginPage("/login")
+//                .defaultSuccessUrl("/admin/")
+//                .and()
+//                .logout()
+//                .logoutUrl("/logout")
+//                .logoutSuccessUrl("/")
+//                .and()
+
+
+        //  .rememberMe()
+        //.rememberMeParameter("remember-me")
+        //   .tokenRepository(persistentTokenRepository())
+        //  .tokenValiditySeconds(86400)
+        //    .and()
+
+
+        http.csrf().disable();
 
 //to jest zakomentowana wersja dla securtiy z filtrami
 //        http    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
@@ -72,7 +78,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
     @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception{
+    public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
@@ -90,7 +96,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //        tokenRepositoryImpl.setDataSource(dataSource);
 //        return tokenRepositoryImpl;
 //    }
-
 
 
 //

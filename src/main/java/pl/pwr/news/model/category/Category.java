@@ -32,10 +32,10 @@ public class Category {
     @Column(unique = true)
     private String name;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Article> articles = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Tag> tags = new HashSet<>();
 
     public Category(String name) {

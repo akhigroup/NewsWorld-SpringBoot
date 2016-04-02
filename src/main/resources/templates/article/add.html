@@ -55,13 +55,13 @@
                                     <label for="exampleInputEmail1">Tytuł</label>
                                     <input type="text" class="form-control" id="exampleInputEmail1"
                                            th:field="${newArticle.title}"
-                                           placeholder="Tytuł artykułu"/>
+                                           placeholder="Tytuł artykułu" required="required"/>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">Link</label>
                                     <input type="url" class="form-control" id="exampleInputPassword1"
                                            th:field="${newArticle.link}"
-                                           placeholder="Link do artykułu"/>
+                                           placeholder="Link do artykułu" required="required"/>
                                 </div>
 
                                 <div class="form-group">
@@ -79,7 +79,7 @@
 
                                 <div class="form-group">
                                     <label>Kategoria</label>
-                                    <select class="form-control select2" style="width: 100%;">
+                                    <select class="form-control select2" style="width: 100%;" required="required">
                                         <option th:each="category : ${categoryList}"
                                                 th:text="${category.name}"></option>
                                     </select>
@@ -87,7 +87,7 @@
 
                                 <div class="form-group">
                                     <label>Tagi</label>
-                                    <select class="form-control select2" multiple="multiple"
+                                    <select class="form-control select2" multiple="multiple" required="required"
                                             data-placeholder="Wybierz najlepsze tagi" style="width: 100%;">
                                         <option th:each="tag : ${tagList}" th:text="${tag.name}"></option>
                                     </select>
@@ -132,8 +132,9 @@
 <script src="/plugins/select2/select2.full.min.js"></script>
 <script>
     $(function () {
-        //Initialize Select2 Elements
-        $(".select2").select2();
+        $(".select2").select2({
+            tags: true
+        })
     });
 </script>
 
