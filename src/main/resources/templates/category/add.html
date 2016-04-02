@@ -55,7 +55,8 @@
                                     <label for="exampleInputName">Nazwa</label>
                                     <input type="text" class="form-control" id="exampleInputName"
                                            th:field="${newCategory.name}"
-                                           placeholder="Nazwa kategorii"/>
+                                           placeholder="Nazwa kategorii"
+                                           required="required"/>
                                 </div>
 
                                 <div class="form-group">
@@ -64,6 +65,24 @@
                                            th:field="${newCategory.imageUrl}"
                                            placeholder="Bezpośredni link do obrazka"/>
                                 </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Tagi</label>
+                                <select class="form-control select2" multiple="multiple"
+                                        data-placeholder="Wybierz najlepsze tagi" style="width: 100%;">
+                                    <option th:each="tag : ${tagList}"
+                                            th:text="${tag.name}"></option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Artykuły</label>
+                                <select class="form-control select2" multiple="multiple"
+                                        data-placeholder="Wybierz najlepsze artykuły" style="width: 100%;">
+                                    <option th:each="article : ${articleList}"
+                                            th:text="${article.title}"></option>
+                                </select>
                             </div>
                             <!-- /.box-body -->
 
@@ -101,5 +120,12 @@
 <!-- AdminLTE for demo purposes -->
 <script src="/dist/js/demo.js"></script>
 <script src="/plugins/select2/select2.full.min.js"></script>
+<script>
+    $(function () {
+        $(".select2").select2({
+            tags: true
+        })
+    });
+</script>
 </body>
 </html>

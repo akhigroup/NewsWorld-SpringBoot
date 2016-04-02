@@ -44,10 +44,10 @@ public class ArticleController {
     public String createNewArticle(Model model) {
         List<Tag> tagList = tagService.findAll();
         List<Category> categoryList = categoryService.findAll();
-
         model.addAttribute("tagList", tagList);
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("newArticle", new Article());
+
         return "article/add";
     }
 

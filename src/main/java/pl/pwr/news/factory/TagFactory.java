@@ -25,7 +25,7 @@ public class TagFactory {
         }
         name = ValueConverter.convertTagName(name);
         Tag newTag = new Tag(name);
-        categories.forEach(tag -> newTag.addCategory(tag));
+        categories.forEach(category -> newTag.addCategory(category));
         return newTag;
     }
 }
