@@ -33,30 +33,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        //TODO - nie da się przez to korzystać z aplikacji, wymaga ciągłego logowania
-//        http
-//                .authorizeRequests()
-//                .antMatchers("/admin/**").authenticated()
-//                .anyRequest().permitAll()
-//                .and()
-//                .formLogin()
-//                .loginPage("/login")
-//                .defaultSuccessUrl("/admin/")
-//                .and()
-//                .logout()
-//                .logoutUrl("/logout")
-//                .logoutSuccessUrl("/")
-//                .and()
-
-
-        //  .rememberMe()
-        //.rememberMeParameter("remember-me")
-        //   .tokenRepository(persistentTokenRepository())
-        //  .tokenValiditySeconds(86400)
-        //    .and()
-
-
-        http.csrf().disable();
+        http
+                .authorizeRequests()
+                .antMatchers("/admin/**").authenticated()
+                .anyRequest().permitAll()
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl("/admin/")
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .and().csrf().disable();
+//
+//          .rememberMe()
+//        .rememberMeParameter("remember-me")
+//           .tokenRepository(persistentTokenRepository())
+//          .tokenValiditySeconds(86400)
 
 
     }

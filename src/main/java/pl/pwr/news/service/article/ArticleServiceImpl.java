@@ -117,8 +117,13 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void addTag(Long articleId, Long... tagsId) {
-        assignArticleTo(articleId, tagRepository, Article::addTag, tagsId);
+    public void addTag(Long articleId, Long... tagIds) {
+        assignArticleTo(articleId, tagRepository, Article::addTag, tagIds);
+    }
+
+    @Override
+    public void removeTag(Long articleId, Long... tagIds) {
+        assignArticleTo(articleId, tagRepository, Article::removeTag, tagIds);
     }
 
     @SuppressWarnings("unchecked")

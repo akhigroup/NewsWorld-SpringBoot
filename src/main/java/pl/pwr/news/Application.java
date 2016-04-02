@@ -34,7 +34,8 @@ public class Application {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("pl.pwr.news"))
-                .paths(PathSelectors.ant("/api/*/**"))
+                .paths(PathSelectors.ant("/api/*/**"))//todo dodac register
+
                 .build()
                 .pathMapping("/")
                 .apiInfo(apiInfo());

@@ -60,6 +60,10 @@ public class Article implements Serializable {
         this.tags.add(tag);
     }
 
+    public void removeTag(Tag tag) {
+        this.tags.remove(tag);
+    }
+
     public void addCategory(Category category) {
         this.categories.add(category);
     }

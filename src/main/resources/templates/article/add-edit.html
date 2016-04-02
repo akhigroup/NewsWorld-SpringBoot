@@ -49,49 +49,55 @@
                         </div>
                         <!-- /.box-header -->
                         <!-- form start -->
-                        <form role="form" th:object="${newArticle}" method="post" th:action="@{/admin/article/add}">
+                        <form role="form" th:object="${addArticleForm}" method="post"
+                              th:action="@{/admin/article/process}">
+                            <input type="hidden" th:field="*{article.id}"/>
                             <div class="box-body">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Tytuł</label>
                                     <input type="text" class="form-control" id="exampleInputEmail1"
-                                           th:field="${newArticle.title}"
+                                           th:field="*{article.title}"
                                            placeholder="Tytuł artykułu" required="required"/>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">Link</label>
                                     <input type="url" class="form-control" id="exampleInputPassword1"
-                                           th:field="${newArticle.link}"
+                                           th:field="*{article.link}"
                                            placeholder="Link do artykułu" required="required"/>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">Treść</label>
-                                    <textarea class="form-control" rows="3" th:field="${newArticle.text}"
+                                    <textarea class="form-control" rows="3" th:field="*{article.text}"
                                               placeholder="Skrót treści..."></textarea>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">Link do zdjęcia</label>
                                     <input type="url" class="form-control" id="exampleInputPassword1"
-                                           th:field="${newArticle.imageUrl}"
+                                           th:field="*{article.imageUrl}"
                                            placeholder="Bezpośredni link do obrazka"/>
                                 </div>
 
                                 <div class="form-group">
                                     <label>Kategoria</label>
-                                    <select class="form-control select2" style="width: 100%;"
-                                            multiple="multiple" required="required">
-                                        <option th:each="category : ${categoryList}"
+                                    <select class="form-control select2" style="width: 100%;" required="required"
+                                            name="categoriesInString">
+                                        <option th:each="category : ${categoryList}" th:value="${category.name}"
                                                 th:text="${category.name}"></option>
                                     </select>
                                 </div>
 
                                 <div class="form-group">
                                     <label>Tagi</label>
-                                    <select class="form-control select2" style="width: 100%;"
-                                            multiple="multiple" required="required"
-                                            data-placeholder="Wybierz najlepsze tagi">
-                                        <option th:each="tag : ${tagList}" th:text="${tag.name}"></option>
+                                    <select class="form-control select2" multiple="multiple" required="required"
+                                            data-placeholder="Wybierz najlepsze tagi" style="width: 100%;"
+                                            name="tagsInString">
+                                        <option th:selected="true" th:each="checkedTag : ${checkedTags}"
+                                                th:value="${checkedTag.name}"
+                                                th:text="${checkedTag.name}"></option>
+                                        <option th:each="tag : ${tagList}" th:value="${tag.name}"
+                                                th:text="${tag.name}"></option>
                                     </select>
                                 </div>
 
