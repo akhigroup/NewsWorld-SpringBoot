@@ -77,9 +77,6 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Article findById(Long id) {
-        Article article = articleRepository.findOne(id);
-        article.incrementViews();
-        articleRepository.save(article);
         return articleRepository.findOne(id);
     }
 
@@ -103,6 +100,14 @@ public class ArticleServiceImpl implements ArticleService {
         article.incrementDislikes();
         articleRepository.save(article);
         return article.getDislikes();
+    }
+
+    @Override
+    public Long incrementViews(Long id) {
+        Article article = articleRepository.findOne(id);
+        article.incrementViews();
+        articleRepository.save(article);
+        return article.getViews();
     }
 
 

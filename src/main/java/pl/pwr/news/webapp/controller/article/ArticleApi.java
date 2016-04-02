@@ -79,6 +79,7 @@ public class ArticleApi {
 
     @RequestMapping(value = "/article/{articleId}", method = RequestMethod.GET)
     public Response<Article> getArticle(@PathVariable("articleId") Long articleId) {
+        articleService.incrementViews(articleId);
         return new Response<>(articleService.findById(articleId));
     }
 
