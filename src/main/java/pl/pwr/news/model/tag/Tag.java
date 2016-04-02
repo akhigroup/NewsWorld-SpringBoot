@@ -29,7 +29,7 @@ public class Tag {
     @Column(unique = true)
     private String name;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "tags")
     private Set<Article> articles = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)

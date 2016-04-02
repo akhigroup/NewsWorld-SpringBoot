@@ -6,6 +6,8 @@ import pl.pwr.news.model.article.Article;
 import pl.pwr.news.model.category.Category;
 import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.webapp.controller.article.dto.ArticleDTO;
+import pl.pwr.news.webapp.controller.article.dto.ListedArticleDTO;
+import pl.pwr.news.webapp.controller.tag.dto.ListedTagDTO;
 import pl.pwr.news.webapp.controller.tag.dto.TagDTO;
 
 import java.util.ArrayList;
@@ -22,8 +24,8 @@ public class CategoryDTO {
     private Long id;
     private String imageUrl;
     private String name;
-    private List<TagDTO> tags = new ArrayList<>();
-    private List<ArticleDTO> articles = new ArrayList<>();
+    private List<ListedTagDTO> tags = new ArrayList<>();
+    private List<ListedArticleDTO> articles = new ArrayList<>();
 
     public CategoryDTO(Category category) {
         if (category != null) {
@@ -31,9 +33,17 @@ public class CategoryDTO {
             this.imageUrl = category.getImageUrl();
             this.name = category.getName();
             Set<Tag> tags = category.getTags();
-            tags.forEach(tag -> this.tags.add(new TagDTO(tag)));
+            tags.forEach(tag -> this.tags.add(new ListedTagDTO(tag)));
             Set<Article> articles = category.getArticles();
-            articles.forEach(article -> this.articles.add(new ArticleDTO(article)));
+            articles.forEach(article -> this.articles.add(new ListedArticleDTO(article)));
         }
     }
+
+    public static List<CategoryDTO> getList(List<Category> categories) {
+        List<CategoryDTO> categoryDTOList = new ArrayList<>();
+        categories.forEach(category -> categoryDTOList.add(new CategoryDTO(category)));
+
+        return categoryDTOList;
+    }
 }
+

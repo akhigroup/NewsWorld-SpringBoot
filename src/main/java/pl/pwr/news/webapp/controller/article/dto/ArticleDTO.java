@@ -6,6 +6,8 @@ import pl.pwr.news.model.article.Article;
 import pl.pwr.news.model.category.Category;
 import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.webapp.controller.category.dto.CategoryDTO;
+import pl.pwr.news.webapp.controller.category.dto.ListedCategoryDTO;
+import pl.pwr.news.webapp.controller.tag.dto.ListedTagDTO;
 import pl.pwr.news.webapp.controller.tag.dto.TagDTO;
 
 import java.util.ArrayList;
@@ -20,30 +22,29 @@ import java.util.Set;
 @Setter
 public class ArticleDTO {
 
+    private Long id;
     private String title;
     private String text;
     private String imageUrl;
     private String link;
-    private List<TagDTO> tags = new ArrayList<>();
-    private CategoryDTO category;
+    private List<ListedTagDTO> tags = new ArrayList<>();
+    private ListedCategoryDTO category;
     private Date addedDate;
 
     public ArticleDTO(Article article) {
         if (article != null) {
+            this.id = article.getId();
             this.title = article.getTitle();
             this.text = article.getText();
             this.imageUrl = article.getImageUrl();
             this.link = article.getLink();
             Set<Tag> tags = article.getTags();
-            if (!tags.equals(null) && !tags.isEmpty()) {
-                tags.forEach(tag -> this.tags.add(new TagDTO(tag)));
-            }
+            tags.forEach(tag -> this.tags.add(new ListedTagDTO(tag)));
             Category category = article.getCategory();
-            this.category = new CategoryDTO(category);
+            this.category = new ListedCategoryDTO(category);
             if ( this.category.getId() == null) {
                 this.category = null;
             }
-
             this.addedDate = article.getAddedDate();
         }
     }
@@ -55,6 +56,4 @@ public class ArticleDTO {
         return articleDTOList;
     }
 }
-//KOPALNIA IFÓW, NIKT MNIE NIE WIDZI. DZIAŁA TO DZIAŁA NA CHUJ DRĄŻYĆ.
-
-// potem poprawie.
+//TODO: porządek, interfejs na getList (?)
