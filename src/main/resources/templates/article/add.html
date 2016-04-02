@@ -79,7 +79,8 @@
 
                                 <div class="form-group">
                                     <label>Kategoria</label>
-                                    <select class="form-control select2" style="width: 100%;" required="required">
+                                    <select class="form-control select2" style="width: 100%;"
+                                            multiple="multiple" required="required">
                                         <option th:each="category : ${categoryList}"
                                                 th:text="${category.name}"></option>
                                     </select>
@@ -87,8 +88,9 @@
 
                                 <div class="form-group">
                                     <label>Tagi</label>
-                                    <select class="form-control select2" multiple="multiple" required="required"
-                                            data-placeholder="Wybierz najlepsze tagi" style="width: 100%;">
+                                    <select class="form-control select2" style="width: 100%;"
+                                            multiple="multiple" required="required"
+                                            data-placeholder="Wybierz najlepsze tagi">
                                         <option th:each="tag : ${tagList}" th:text="${tag.name}"></option>
                                     </select>
                                 </div>

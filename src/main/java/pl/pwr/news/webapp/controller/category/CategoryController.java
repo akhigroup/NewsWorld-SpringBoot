@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import pl.pwr.news.model.article.Article;
 import pl.pwr.news.model.category.Category;
+import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.service.article.ArticleService;
 import pl.pwr.news.service.category.CategoryService;
+import pl.pwr.news.service.tag.TagService;
 
 import java.util.List;
 
@@ -28,6 +30,9 @@ public class CategoryController {
     @Autowired
     ArticleService articleService;
 
+    @Autowired
+    TagService tagService;
+
     @RequestMapping(value = "/list")
     public String listCategories(Model model) {
         List<Category> categoryList = categoryService.findAll();
@@ -38,6 +43,10 @@ public class CategoryController {
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String createNewCategory(Model model) {
+        List<Tag> tagList = tagService.findAll();
+        List<Article> articleList = articleService.findAll();
+        model.addAttribute("tagList", tagList);
+        model.addAttribute("articleList", articleList);
         model.addAttribute("newCategory", new Category());
 
         return "category/add";
