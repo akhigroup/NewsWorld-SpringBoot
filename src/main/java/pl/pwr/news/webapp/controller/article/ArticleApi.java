@@ -28,6 +28,8 @@ import static org.elasticsearch.common.lang3.StringUtils.isNotBlank;
 public class ArticleApi {
 
     private final int MAX_PAGE_SIZE = 100;
+    private final String DEFAULT_PAGE_SIZE = "20";
+    private final String DEFAULT_START_PAGE = "0";
 
     @Autowired
     ArticleService articleService;
@@ -39,12 +41,9 @@ public class ArticleApi {
     TagService tagService;
 
     @RequestMapping(value = "/article", method = RequestMethod.GET)
-    public Response<List<ArticleDTO>> getArticles(@RequestParam(required = false, defaultValue = "20") int pageSize,
-                                                  @RequestParam(required = false, defaultValue = "0") int page) {
-        if (pageSize > MAX_PAGE_SIZE) {
-            pageSize = MAX_PAGE_SIZE;
-        }
-
+    public Response<List<ArticleDTO>> getArticles(@RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) int pageSize,
+                                                  @RequestParam(required = false, defaultValue = DEFAULT_START_PAGE) int page) {
+        pageSize = getCorrectMaxPageSize(pageSize);
         Page<Article> databaseArticle = articleService.findAll(new PageRequest(page, pageSize));
         List<ArticleDTO> articleDTOList = ArticleDTO.getList(databaseArticle.getContent());
         return new Response<>(articleDTOList);
@@ -52,16 +51,31 @@ public class ArticleApi {
 
 
     @RequestMapping(value = "/article/popular", method = RequestMethod.GET)
-    public Response<List<ArticleDTO>> getPopularArticles(@RequestParam(required = false, defaultValue = "20") int pageSize,
-                                                         @RequestParam(required = false, defaultValue = "0") int page) {
-        if (pageSize > MAX_PAGE_SIZE) {
-            pageSize = MAX_PAGE_SIZE;
-        }
-
+    public Response<List<ArticleDTO>> getPopularArticles(@RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) int pageSize,
+                                                         @RequestParam(required = false, defaultValue = DEFAULT_START_PAGE) int page) {
+        pageSize = getCorrectMaxPageSize(pageSize);
         Page<Article> databaseArticle = articleService.findPopular(page, pageSize);
         List<ArticleDTO> articleDTOList = ArticleDTO.getList(databaseArticle.getContent());
         return new Response<>(articleDTOList);
     }
+
+
+    @RequestMapping(value = "/article/liked", method = RequestMethod.GET)
+    public Response<List<ArticleDTO>> getMostLikedArticles(@RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) int pageSize,
+                                                           @RequestParam(required = false, defaultValue = DEFAULT_START_PAGE) int page) {
+        pageSize = getCorrectMaxPageSize(pageSize);
+        Page<Article> databaseArticle = articleService.findMostLiked(page, pageSize);
+        List<ArticleDTO> articleDTOList = ArticleDTO.getList(databaseArticle.getContent());
+        return new Response<>(articleDTOList);
+    }
+
+    private int getCorrectMaxPageSize(int pageSize) {
+        if (pageSize > MAX_PAGE_SIZE) {
+            pageSize = MAX_PAGE_SIZE;
+        }
+        return pageSize;
+    }
+
 
     @RequestMapping(value = "/article/{articleId}", method = RequestMethod.GET)
     public Response<Article> getArticle(@PathVariable("articleId") Long articleId) {

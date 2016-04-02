@@ -65,6 +65,10 @@ public class ArticleServiceImpl implements ArticleService {
         return articleRepository.findAll(new PageRequest(page, pageSize, new Sort(Sort.Direction.DESC, "views")));
     }
 
+    @Override
+    public Page<Article> findMostLiked(int page, int pageSize) {
+        return articleRepository.findAll(new PageRequest(page, pageSize, new Sort(Sort.Direction.DESC, "likes")));
+    }
 
     @Override
     public List<Article> findByTag(String tagName) {
