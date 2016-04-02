@@ -1,17 +1,23 @@
 [![Stories in Ready](https://badge.waffle.io/w4-pwr/NewsWorldSpring.png?label=ready&title=Ready)](https://waffle.io/w4-pwr/NewsWorldSpring)
 
+[![Stories in Ready](https://badge.waffle.io/w4-pwr/NewsWorldSpring.png?label=bug&title=Bugs)](https://waffle.io/w4-pwr/NewsWorldSpring)
+
+
 [![Build Status](http://37.187.52.160:5002/job/NewsWorld/badge/icon)](http://37.187.52.160:5002/job/NewsWorld)
 
-#Model bazy
+##Model bazy
 ![model bazy](http://i.imgur.com/3Dxcj4S.png)
 
-#Architektura aplikacji
+##Architektura aplikacji
 ![baas](http://i.imgur.com/HjJxAxg.png)
 
-# NewsWorldSpring
+#NewsWorldSpring
 http://localhost:9000/admin/
 
 server.port=9000
+
+#Metrics
+[![Throughput Graph](https://graphs.waffle.io/evelan/NewsWorldSpring/throughput.svg)](https://waffle.io/evelan/NewsWorldSpring/metrics)
 
 ## Swagger
 http://localhost:9000/swagger-ui.html
