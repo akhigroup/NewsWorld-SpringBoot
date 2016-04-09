@@ -1,6 +1,7 @@
 package pl.pwr.news.service.article;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -46,16 +47,19 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    @Cacheable("findAllArticles")
     public List<Article> findAll() {
         return (List<Article>) articleRepository.findAll();
     }
 
     @Override
+    @Cacheable("countAllArticles")
     public Long countAll() {
         return articleRepository.count();
     }
 
     @Override
+    @Cacheable("findAllArticlesPageable")
     public Page<Article> findAll(Pageable pageable) {
         return articleRepository.findAll(pageable);
     }

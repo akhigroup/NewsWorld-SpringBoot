@@ -3,6 +3,7 @@ package pl.pwr.news;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -23,6 +24,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableScheduling
 @EnableAutoConfiguration
 @ComponentScan
+@EnableCaching
 public class Application {
 
     public static void main(String[] args) {
