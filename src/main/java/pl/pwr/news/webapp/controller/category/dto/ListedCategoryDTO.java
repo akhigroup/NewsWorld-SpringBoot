@@ -8,6 +8,8 @@ import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.webapp.controller.article.dto.ArticleDTO;
 import pl.pwr.news.webapp.controller.tag.dto.TagDTO;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -27,5 +29,12 @@ public class ListedCategoryDTO {
             this.imageUrl = category.getImageUrl();
             this.name = category.getName();
         }
+    }
+
+    public static List<ListedCategoryDTO> getList(List<Category> categories) {
+        List<ListedCategoryDTO> categoryDTOList = new ArrayList<>();
+        categories.forEach(category -> categoryDTOList.add(new ListedCategoryDTO(category)));
+
+        return categoryDTOList;
     }
 }

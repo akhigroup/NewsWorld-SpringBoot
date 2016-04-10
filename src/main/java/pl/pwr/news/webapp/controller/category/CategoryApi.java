@@ -9,6 +9,7 @@ import pl.pwr.news.service.category.CategoryService;
 import pl.pwr.news.webapp.controller.Response;
 import pl.pwr.news.webapp.controller.article.dto.ArticleDTO;
 import pl.pwr.news.webapp.controller.category.dto.CategoryDTO;
+import pl.pwr.news.webapp.controller.category.dto.ListedCategoryDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +30,10 @@ public class CategoryApi {
     CategoryFactory categoryFactory;
 
     @RequestMapping(value = "/category", method = RequestMethod.GET)
-    public Response<List<CategoryDTO>> getCategories() {
+    public Response<List<ListedCategoryDTO>> getCategories() {
 
         List<Category> categoryList = categoryService.findAll();
-        List<CategoryDTO> categoryDTOList = CategoryDTO.getList(categoryList);
+        List<ListedCategoryDTO> categoryDTOList = ListedCategoryDTO.getList(categoryList);
 
         return new Response<>(categoryDTOList);
     }
