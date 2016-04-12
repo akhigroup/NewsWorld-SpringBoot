@@ -9,7 +9,7 @@
 ![model bazy](http://i.imgur.com/3Dxcj4S.png)
 
 ##Architektura aplikacji
-![baas](http://i.imgur.com/HjJxAxg.png)
+![baas](http://i.imgur.com/SGVozaA.png)
 
 #NewsWorldSpring
 http://localhost:9000/admin/
