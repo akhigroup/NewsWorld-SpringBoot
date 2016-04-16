@@ -2,11 +2,13 @@ package pl.pwr.news.webapp.controller.article;
 
 import com.google.common.base.Splitter;
 import lombok.extern.log4j.Log4j;
-import org.elasticsearch.common.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import pl.pwr.news.model.article.Article;
 import pl.pwr.news.model.category.Category;
 import pl.pwr.news.model.tag.Tag;

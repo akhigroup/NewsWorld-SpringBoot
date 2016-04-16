@@ -10,7 +10,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
 
 /**
  * Created by Evelan-E6540 on 29/08/2015.

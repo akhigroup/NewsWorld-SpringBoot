@@ -35,6 +35,13 @@ public class ArticleServiceImpl implements ArticleService {
     @Autowired
     TagRepository tagRepository;
 
+    /**
+     * Should use: update {@link #update(Article)} OR create {@link #create(Article)}
+     *
+     * @param article
+     * @return
+     */
+    @Deprecated
     @Override
     public Article createOrUpdate(Article article) {
         Optional<Long> articleId = Optional.ofNullable(article.getId());
@@ -42,12 +49,56 @@ public class ArticleServiceImpl implements ArticleService {
         if (!articleRepository.exists(articleId.orElse(-1L))) {
             article.setAddedDate(new Date());
         }
+
+
+        return articleRepository.save(article);
+    }
+
+    /**
+     * Checks if article is unique according to source link
+     *
+     * @param article new article
+     * @return created article in database
+     * @throws NotUniqueArticle
+     * @author Jakub Pomykała
+     */
+    @Override
+    public Article create(Article article) throws NotUniqueArticle {
+        article.setAddedDate(new Date());
+
+        String articleSourceLink = article.getLink();
+        if (!unique(articleSourceLink)) {
+            throw new NotUniqueArticle(articleSourceLink);
+        }
+        return articleRepository.save(article);
+    }
+
+    /**
+     * @param article aricle to update
+     * @return updated article in database
+     * @throws ArticleNotExist
+     * @author Jakub Pomykała
+     */
+    @Override
+    public Article update(Article article) throws ArticleNotExist {
+
+        Optional<Long> articleId = Optional.ofNullable(article.getId());
+
+        if (!articleRepository.exists(articleId.orElse(-1L))) {
+            throw new ArticleNotExist("Article not exist");
+        }
         return articleRepository.save(article);
     }
 
     @Override
     public List<Article> findAll() {
         return (List<Article>) articleRepository.findAll();
+    }
+
+    @Override
+    public boolean unique(String sourceUrl) {
+        Optional<Article> articleOptional = Optional.ofNullable(articleRepository.findByLink(sourceUrl));
+        return !articleOptional.isPresent();
     }
 
     @Override

@@ -1,8 +1,5 @@
 package pl.pwr.news.repository.article;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -19,4 +16,5 @@ public interface ArticleRepository extends CrudRepository<Article, Long>, JpaSpe
 
     List<Article> findByTags_Name(String name);
 
+    Article findByLink(String sourceUrl);
 }
