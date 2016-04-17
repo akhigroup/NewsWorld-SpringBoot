@@ -9,7 +9,6 @@ import pl.pwr.news.model.user.User;
  */
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
-    User findById(Long id);
 
     User findByUsername(String username);
 
