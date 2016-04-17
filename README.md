@@ -5,6 +5,13 @@
 
 [![Build Status](http://37.187.52.160:5002/job/NewsWorld/badge/icon)](http://37.187.52.160:5002/job/NewsWorld)
 
+[![Code Climate](https://codeclimate.com/github/evelan/NewsWorldSpring/badges/gpa.svg)](https://codeclimate.com/github/evelan/NewsWorldSpring)
+
+# Frontend - AngularJS
+[![Code Climate](https://codeclimate.com/github/Dragoniasty/NewsWorldFront/badges/gpa.svg)](https://codeclimate.com/github/Dragoniasty/NewsWorldFront)
+
+https://github.com/Dragoniasty/NewsWorldFront
+
 # Model bazy
 ![model bazy](http://i.imgur.com/3Dxcj4S.png)
 
