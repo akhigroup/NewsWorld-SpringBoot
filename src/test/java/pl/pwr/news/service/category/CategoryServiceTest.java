@@ -57,7 +57,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void findAll_existingCategory_listOfAllCategoryReturned() {
+    public void findAll_existingCategories_listOfAllCategoriesReturned() {
         when(categoryRepository.findAll()).thenReturn(CATEGORY_LIST);
         List<Category> categoryList = categoryService.findAll();
         verify(categoryRepository, times(1)).findAll();
@@ -66,7 +66,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void findAllById_existingCategoryIds_listOfAllCategoryWithIdsReturned() {
+    public void findAllById_existingCategoryIds_listOfAllCategoriesWithIdsReturned() {
         when(categoryRepository.findAll(IDS)).thenReturn(CATEGORY_LIST);
         List<Category> categoryList = categoryService.findAll(IDS);
         verify(categoryRepository, times(1)).findAll(IDS);
@@ -91,5 +91,5 @@ public class CategoryServiceTest {
         verifyNoMoreInteractions(categoryRepository);
         assertEquals(category, foundCategory);
     }
-    //TODO: addTag test, jeśli będzie kiedykolwiek używany
+    //TODO: addTag test, jeśli będzie kiedykolwiek używany, update jak zostanie naprawiony
 }

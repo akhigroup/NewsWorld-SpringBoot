@@ -16,6 +16,7 @@ import pl.pwr.news.webapp.controller.user.form.RegisterRequestBody;
 import java.security.SecureRandom;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Rafal on 2016-02-28.
@@ -26,7 +27,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     UserRepository userRepository;
-
 
     @Override
     public User findById(Long id) {
@@ -62,20 +62,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             if (user == null)
                 throw new UsernameNotFoundException(String.format("User %s does not exist!", username));
         }
-
         return user;
-
     }
 
     @Override
     public String generateActivateAccountUniqueHash(User user) {
-        String hash;
-        do {
-            SecureRandom random = new SecureRandom();
-            hash = DigestUtils.md5Hex(user.getEmail() + random + user.getId());
+        String hash = null;
+        if (user != null) {
+            do {
+                SecureRandom random = new SecureRandom();
+                hash = DigestUtils.md5Hex(user.getEmail() + random + user.getId());
 
-        } while (findByActivationHash(hash) != null);
+            } while (userRepository.findByActivationHash(hash) != null);
 
+        }
         return hash;
     }
 

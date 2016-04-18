@@ -5,14 +5,17 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import pl.pwr.news.model.tag.Tag;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import pl.pwr.news.model.user.User;
 import pl.pwr.news.repository.user.UserRepository;
 
 import java.util.Collections;
 import java.util.List;
 
+import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.*;
 
 /**
@@ -25,7 +28,6 @@ public class UserServiceTest {
     private static final String ACTIVATION_HASH = "testActivationHash";
     private static final String TOKEN = "testToken";
     private static final Long ID = 1L;
-    private static final Long COUNT = 1L;
     private static User user = new User();
     private static final List<User> USER_LIST = Collections.singletonList(user);
 
@@ -103,13 +105,47 @@ public class UserServiceTest {
     }
 
     @Test
-    public void generateActivateAccountUniqueHash_ExistingUser_generatedActivateAccountUniqueHashForUserReturned() {
-
+    public void generateActivateAccountUniqueHash_userNull_nullReturned() {
+        String hash = userService.generateActivateAccountUniqueHash(null);
+        assertNull(hash);
     }
 
     @Test
-    public void generateActivateAccountUniqueHash_NonExistingUser_generatedActivateAccountUniqueHashForUserReturned() {
+    public void generateActivateAccountUniqueHash_userNotNull_generatedActivateAccountUniqueHashForUserReturned() {
+        String hash = userService.generateActivateAccountUniqueHash(user);
+        assertNotNull(hash);
+    }
 
+    @Test
+    public void loadUserByUsername_nonExistingEmailexistingUsername_userDetailsReturned() {
+        when(userRepository.findByEmail(USERNAME)).thenReturn(null);
+        when(userRepository.findByUsername(USERNAME)).thenReturn(user);
+        UserDetails userDetails = userService.loadUserByUsername(USERNAME);
+        verify(userRepository, times(1)).findByEmail(USERNAME);
+        verify(userRepository, times(1)).findByUsername(USERNAME);
+        verifyNoMoreInteractions(userRepository);
+        assertNotNull(userDetails);
+    }
+
+    @Test
+    public void loadUserByUsername_existingEmail_userDetailsReturned() {
+        when(userRepository.findByEmail(USERNAME)).thenReturn(user);
+        UserDetails userDetails = userService.loadUserByUsername(USERNAME);
+        verify(userRepository, times(1)).findByEmail(USERNAME);
+        verifyNoMoreInteractions(userRepository);
+        assertNotNull(userDetails);
+    }
+
+
+    @Test(expected = UsernameNotFoundException.class)
+    public void loadUserByUsername_nonExistingUserUsername_exceptionThrown() {
+        when(userRepository.findByEmail(USERNAME)).thenReturn(null);
+        when(userRepository.findByUsername(USERNAME)).thenReturn(null);
+        UserDetails userDetails = userService.loadUserByUsername(USERNAME);
+        verify(userRepository, times(1)).findByEmail(USERNAME);
+        verify(userRepository, times(1)).findByUsername(USERNAME);
+        verifyNoMoreInteractions(userRepository);
+        assertNull(userDetails);
     }
 }
-    //TODO: reszta testów po wejściu commita https://github.com/evelan/NewsWorldSpring/commit/139ee92724b2988076f545f7378ada93c47efe87
+//TODO: createUserFromForm test + nullcase
