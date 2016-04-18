@@ -1,7 +1,6 @@
 package pl.pwr.news.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -21,7 +20,7 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableWebSecurity
-@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+@Order(-1)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
