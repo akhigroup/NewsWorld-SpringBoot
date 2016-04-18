@@ -1,5 +1,6 @@
 package pl.pwr.news.webapp.controller.article;
 
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.pwr.news.model.article.Article;
 import pl.pwr.news.model.category.Category;
 import pl.pwr.news.model.tag.Tag;
+import pl.pwr.news.service.article.ArticleNotExist;
 import pl.pwr.news.service.article.ArticleService;
 import pl.pwr.news.service.category.CategoryService;
 import pl.pwr.news.service.tag.TagService;
@@ -24,6 +26,7 @@ import static org.elasticsearch.common.lang3.StringUtils.isNotBlank;
  */
 @RestController
 @RequestMapping(value = "/api", produces = "application/json;charset=UTF-8")
+@Log4j
 public class ArticleApi {
 
     private final int MAX_PAGE_SIZE = 100;
@@ -78,19 +81,36 @@ public class ArticleApi {
 
     @RequestMapping(value = "/article/{articleId}", method = RequestMethod.GET)
     public Response<ArticleDTO> getArticle(@PathVariable("articleId") Long articleId) {
-        articleService.incrementViews(articleId);
+        try {
+            articleService.incrementViews(articleId);
+        } catch (ArticleNotExist articleNotExist) {
+            log.error(articleNotExist.getMessage());
+            //TODO - zwrócenie innej odpoweidzi na REST, jakiej?
+        }
         ArticleDTO articleDTO = new ArticleDTO(articleService.findById(articleId));
         return new Response<>(articleDTO);
     }
 
     @RequestMapping(value = "/article/{articleId}/like", method = RequestMethod.GET)
     public Response<Long> likeArticle(@PathVariable("articleId") Long articleId) {
-        return new Response<>(articleService.likeArticle(articleId));
+        try {
+            return new Response<>(articleService.likeArticle(articleId));
+        } catch (ArticleNotExist articleNotExist) {
+            log.error(articleNotExist.getMessage());
+            //TODO - zwrócenie innej odpoweidzi na REST, jakiej?
+            return new Response<>(-1L);
+        }
     }
 
     @RequestMapping(value = "/article/{articleId}/dislike", method = RequestMethod.GET)
     public Response<Long> dislikeArticle(@PathVariable("articleId") Long articleId) {
-        return new Response<>(articleService.dislikeArticle(articleId));
+        try {
+            return new Response<>(articleService.dislikeArticle(articleId));
+        } catch (ArticleNotExist articleNotExist) {
+            log.error(articleNotExist.getMessage());
+            //TODO - zwrócenie innej odpoweidzi na REST, jakiej?
+            return new Response<>(-1L);
+        }
     }
 
     @RequestMapping(value = "/article/search", method = RequestMethod.GET)

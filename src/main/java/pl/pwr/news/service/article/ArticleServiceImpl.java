@@ -35,6 +35,13 @@ public class ArticleServiceImpl implements ArticleService {
     @Autowired
     TagRepository tagRepository;
 
+    /**
+     * Should use: update {@link #update(Article)} OR create {@link #create(Article)}
+     *
+     * @param article
+     * @return
+     */
+    @Deprecated
     @Override
     public Article createOrUpdate(Article article) {
         Optional<Long> articleId = Optional.ofNullable(article.getId());
@@ -42,12 +49,56 @@ public class ArticleServiceImpl implements ArticleService {
         if (!articleRepository.exists(articleId.orElse(-1L))) {
             article.setAddedDate(new Date());
         }
+
+
+        return articleRepository.save(article);
+    }
+
+    /**
+     * Checks if article is unique according to source link
+     *
+     * @param article new article
+     * @return created article in database
+     * @throws NotUniqueArticle
+     * @author Jakub Pomykała
+     */
+    @Override
+    public Article create(Article article) throws NotUniqueArticle {
+        article.setAddedDate(new Date());
+
+        String articleSourceLink = article.getLink();
+        if (!unique(articleSourceLink)) {
+            throw new NotUniqueArticle(articleSourceLink);
+        }
+        return articleRepository.save(article);
+    }
+
+    /**
+     * @param article aricle to update
+     * @return updated article in database
+     * @throws ArticleNotExist
+     * @author Jakub Pomykała
+     */
+    @Override
+    public Article update(Article article) throws ArticleNotExist {
+
+        Optional<Long> articleId = Optional.ofNullable(article.getId());
+
+        if (!articleRepository.exists(articleId.orElse(-1L))) {
+            throw new ArticleNotExist("Article not exist");
+        }
         return articleRepository.save(article);
     }
 
     @Override
     public List<Article> findAll() {
         return (List<Article>) articleRepository.findAll();
+    }
+
+    @Override
+    public boolean unique(String sourceUrl) {
+        Optional<Article> articleOptional = Optional.ofNullable(articleRepository.findByLink(sourceUrl));
+        return !articleOptional.isPresent();
     }
 
     @Override
@@ -84,26 +135,41 @@ public class ArticleServiceImpl implements ArticleService {
      * @param likeArticleId - article to like
      * @return Returns all likes of current article
      */
-    public Long likeArticle(Long likeArticleId) {
-        Article article = articleRepository.findOne(likeArticleId);
+    public Long likeArticle(Long id) throws ArticleNotExist {
+
+        if (!articleRepository.exists(id)) {
+            throw new ArticleNotExist(id);
+        }
+
+        Article article = articleRepository.findOne(id);
         article.incrementLikes();
         articleRepository.save(article);
         return article.getLikes();
     }
 
     /**
-     * @param dislikeArticleId - article to dislike
+     * @param id - article to dislike
      * @return Returns all dislikes of current article
      */
-    public Long dislikeArticle(Long dislikeArticleId) {
-        Article article = articleRepository.findOne(dislikeArticleId);
+    public Long dislikeArticle(Long id) throws ArticleNotExist {
+
+        if (!articleRepository.exists(id)) {
+            throw new ArticleNotExist(id);
+        }
+
+        Article article = articleRepository.findOne(id);
         article.incrementDislikes();
         articleRepository.save(article);
         return article.getDislikes();
     }
 
     @Override
-    public Long incrementViews(Long id) {
+    public Long incrementViews(Long id) throws ArticleNotExist {
+
+        if (!articleRepository.exists(id)) {
+            throw new ArticleNotExist(id);
+        }
+
         Article article = articleRepository.findOne(id);
         article.incrementViews();
         articleRepository.save(article);

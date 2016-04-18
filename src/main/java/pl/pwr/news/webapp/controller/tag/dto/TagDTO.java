@@ -4,9 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.pwr.news.model.article.Article;
 import pl.pwr.news.model.tag.Tag;
-import pl.pwr.news.webapp.controller.article.dto.ArticleDTO;
 import pl.pwr.news.webapp.controller.article.dto.ListedArticleDTO;
-import pl.pwr.news.webapp.controller.category.dto.CategoryDTO;
 import pl.pwr.news.webapp.controller.category.dto.ListedCategoryDTO;
 
 import java.util.ArrayList;

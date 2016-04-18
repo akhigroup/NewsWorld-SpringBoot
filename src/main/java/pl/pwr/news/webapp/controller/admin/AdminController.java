@@ -22,7 +22,7 @@ public class AdminController {
     @Autowired
     UserService userService;
 
-    @RequestMapping(value = "/list")
+    //    @RequestMapping(value = "/list")
     public String listUsers(Model model) {
 
         List<User> userList = userService.findAll();
