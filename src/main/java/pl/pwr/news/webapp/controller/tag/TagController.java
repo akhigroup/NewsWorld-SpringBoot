@@ -54,7 +54,7 @@ public class TagController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String saveNewTag(@ModelAttribute(value = "newTag") Tag tag) {
-        tagService.createTag(tag);
+        tagService.createOrGetExisting(tag);
 
         return "redirect:/admin/tag/add";
     }

@@ -12,8 +12,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import pl.pwr.news.model.article.Article;
 import pl.pwr.news.model.category.Category;
 import pl.pwr.news.model.tag.Tag;
+import pl.pwr.news.service.article.ArticleNotExist;
 import pl.pwr.news.service.article.ArticleService;
+import pl.pwr.news.service.article.NotUniqueArticle;
+import pl.pwr.news.service.category.CategoryNotExist;
 import pl.pwr.news.service.category.CategoryService;
+import pl.pwr.news.service.tag.NotUniqueTag;
+import pl.pwr.news.service.tag.TagNotExist;
 import pl.pwr.news.service.tag.TagService;
 import pl.pwr.news.webapp.controller.article.form.AddArticleForm;
 
@@ -59,13 +64,21 @@ public class ArticleController {
 
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public String editArticle(@RequestParam("id") Long articleId, Model model) {
-        Article article = articleService.findById(articleId);
+        Article article = null;
+        try {
+            article = articleService.findById(articleId);
+        } catch (ArticleNotExist articleNotExist) {
+            articleNotExist.printStackTrace();
+        }
         List<Tag> allTags = tagService.findAll();
         List<Category> categoryList = categoryService.findAll();
         AddArticleForm addArticleForm = new AddArticleForm(article);
 
-        allTags.removeAll(article.getTags());
+        if (article != null) {
+            allTags.removeAll(article.getTags());
+        }
 
+        assert article != null;
         model.addAttribute("checkedTags", article.getTags());
         model.addAttribute("tagList", allTags);
         model.addAttribute("categoryList", categoryList);
@@ -76,7 +89,18 @@ public class ArticleController {
     @RequestMapping(value = "/process", method = RequestMethod.POST)
     public String createOrUpdateArticle(@ModelAttribute(value = "addArticleForm") AddArticleForm addArticleForm) {
         Article articleToProcess = addArticleForm.getArticle();
-        articleToProcess = articleService.createOrUpdate(articleToProcess);
+
+        //TODO no i zajebiście, z kiepskiego kodu wyszedł nam chujowy :D
+        try {
+            articleToProcess = articleService.create(articleToProcess);
+        } catch (NotUniqueArticle notUniqueArticle) {
+            notUniqueArticle.printStackTrace();
+            try {
+                articleToProcess = articleService.update(articleToProcess);
+            } catch (ArticleNotExist articleNotExist) {
+                articleNotExist.printStackTrace();
+            }
+        }
         Long articleId = articleToProcess.getId();
         String tagsInString = addArticleForm.getTagsInString();
 
@@ -89,18 +113,37 @@ public class ArticleController {
             Set<Tag> articleTags = articleToProcess.getTags();
             for (Tag tag : articleTags) {
                 Long tagId = tag.getId();
-                articleService.removeTag(articleId, tagId);
+                try {
+                    articleService.removeTag(articleId, tagId);
+                } catch (ArticleNotExist | TagNotExist articleNotExist) {
+                    articleNotExist.printStackTrace();
+                }
             }
 
             for (String tag : checkedTags) {
-                Tag createdTag = tagService.createTag(new Tag(tag));
-                articleService.addTag(articleId, createdTag.getId());
+                Tag createdTag = null;
+                try {
+                    createdTag = tagService.createOrGetExisting(new Tag(tag));
+                } catch (NotUniqueTag notUniqueTag) {
+                    notUniqueTag.printStackTrace();
+                }
+                try {
+                    if (createdTag != null) {
+                        articleService.addTag(articleId, createdTag.getId());
+                    }
+                } catch (ArticleNotExist | TagNotExist articleNotExist) {
+                    articleNotExist.printStackTrace();
+                }
             }
         }
 
         Long selectedCategoryId = addArticleForm.getCategoryId();
         if (selectedCategoryId != null) {
-            articleService.addCategory(articleId, selectedCategoryId);
+            try {
+                articleService.addCategory(articleId, selectedCategoryId);
+            } catch (ArticleNotExist | CategoryNotExist articleNotExist) {
+                articleNotExist.printStackTrace();
+            }
         }
 
         return "redirect:/admin/article/list";

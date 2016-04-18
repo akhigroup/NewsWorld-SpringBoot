@@ -14,17 +14,17 @@ public interface UserService {
 
     List<User> findAll();
 
-    User findById(Long id);
+    User findById(Long id) throws UserNotExist;
 
-    User findByUsername(String username);
+    User findByUsername(String username) throws UserNotExist;
 
-    User findByEmail(String email);
+    User findByEmail(String email) throws UserNotExist;
 
-    User findByActivationHash(String activationHash);
+    User findByActivationHash(String activationHash) throws UserNotExist;
 
-    User findByToken(String token);
+    User findByToken(String token) throws UserNotExist;
 
-    String generateActivateAccountUniqueHash(User user);
+    String generateActivateAccountUniqueHash(User user) throws UserNotExist;
 
     Long countAll();
 

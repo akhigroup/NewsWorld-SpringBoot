@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.*;
 import pl.pwr.news.model.article.Article;
 import pl.pwr.news.model.category.Category;
 import pl.pwr.news.model.tag.Tag;
+import pl.pwr.news.service.article.ArticleNotExist;
 import pl.pwr.news.service.article.ArticleService;
+import pl.pwr.news.service.article.NotUniqueArticle;
+import pl.pwr.news.service.category.CategoryNotExist;
 import pl.pwr.news.service.category.CategoryService;
 import pl.pwr.news.service.tag.TagService;
 import pl.pwr.news.webapp.controller.Response;
@@ -107,11 +110,25 @@ public class ArticleApi {
             @RequestParam(value = "link") String link,
             @RequestParam Long categoryId,
             @RequestParam Long[] tagIds) {
-        Category category = categoryService.findById(categoryId);
+        Category category = null;
+        try {
+            category = categoryService.findById(categoryId);
+        } catch (CategoryNotExist categoryNotExist) {
+            categoryNotExist.printStackTrace();
+        }
         List<Tag> tags = tagService.findAll(Arrays.asList(tagIds));
         Article article = Article.builder().title(title).text(text).imageUrl(imageUrl).
                 link(link).category(category).tags(tags).addedDate(new Date()).build();
-        articleService.createOrUpdate(article);
+        try {
+            articleService.create(article);
+        } catch (NotUniqueArticle notUniqueArticle) {
+            notUniqueArticle.printStackTrace();
+            try {
+                articleService.update(article);
+            } catch (ArticleNotExist articleNotExist) {
+                articleNotExist.printStackTrace();
+            }
+        }
 
         return new Response<>(article);
     }

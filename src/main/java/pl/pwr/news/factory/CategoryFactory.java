@@ -4,10 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pl.pwr.news.converter.ValueConverter;
 import pl.pwr.news.model.category.Category;
-import pl.pwr.news.model.tag.Tag;
+import pl.pwr.news.service.category.CategoryNotExist;
 import pl.pwr.news.service.category.CategoryService;
-
-import java.util.List;
 
 /**
  * Created by jf on 4/1/16.
@@ -19,7 +17,12 @@ public class CategoryFactory {
     CategoryService categoryService;
 
     public Category getInstance(String name, String imageUrl) {
-        Category existingCategory = categoryService.findByName(name);
+        Category existingCategory = null;
+        try {
+            existingCategory = categoryService.findByName(name);
+        } catch (CategoryNotExist categoryNotExist) {
+            categoryNotExist.printStackTrace();
+        }
         if (existingCategory != null) {
             return existingCategory;
         }

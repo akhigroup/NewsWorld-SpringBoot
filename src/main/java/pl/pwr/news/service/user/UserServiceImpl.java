@@ -1,6 +1,7 @@
 package pl.pwr.news.service.user;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,6 +17,7 @@ import pl.pwr.news.webapp.controller.user.form.RegisterRequestBody;
 import java.security.SecureRandom;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Rafal on 2016-02-28.
@@ -29,28 +31,76 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
     @Override
-    public User findById(Long id) {
+    public User findById(Long id) throws UserNotExist {
+        if (!userRepository.exists(id)) {
+            throw new UserNotExist(id);
+        }
+
         return userRepository.findById(id);
     }
 
     @Override
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public User findByUsername(String username) throws IllegalArgumentException, UserNotExist {
+        if (StringUtils.isBlank(username)) {
+            throw new IllegalArgumentException("User name cannot be empty or null");
+        }
+
+        Optional<User> userOptional = Optional.ofNullable(userRepository.findByUsername(username));
+
+        if (!userOptional.isPresent()) {
+            throw new UserNotExist("User not exist by username: " + username);
+        }
+
+        return userOptional.get();
     }
 
     @Override
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public User findByEmail(String email) throws UserNotExist {
+
+        if (StringUtils.isBlank(email)) {
+            throw new IllegalArgumentException("User email cannot be empty or null");
+        }
+
+        Optional<User> userOptional = Optional.ofNullable(userRepository.findByEmail(email));
+
+        if (!userOptional.isPresent()) {
+            throw new UserNotExist("User not exist by email: " + email);
+        }
+
+        return userOptional.get();
     }
 
     @Override
-    public User findByActivationHash(String activationHash) {
-        return userRepository.findByActivationHash(activationHash);
+    public User findByActivationHash(String activationHash) throws UserNotExist {
+
+
+        if (StringUtils.isBlank(activationHash)) {
+            throw new IllegalArgumentException("User activation hash cannot be empty or null");
+        }
+
+        Optional<User> userOptional = Optional.ofNullable(userRepository.findByActivationHash(activationHash));
+
+        if (!userOptional.isPresent()) {
+            throw new UserNotExist("User not exist by activation hash: " + activationHash);
+        }
+
+        return userOptional.get();
     }
 
     @Override
-    public User findByToken(String token) {
-        return userRepository.findByToken(token);
+    public User findByToken(String token) throws UserNotExist {
+
+        if (StringUtils.isBlank(token)) {
+            throw new IllegalArgumentException("User token cannot be empty or null");
+        }
+
+        Optional<User> userOptional = Optional.ofNullable(userRepository.findByToken(token));
+
+        if (!userOptional.isPresent()) {
+            throw new UserNotExist("User not exist by token: " + token);
+        }
+
+        return userOptional.get();
     }
 
     @Override
@@ -68,7 +118,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public String generateActivateAccountUniqueHash(User user) {
+    public String generateActivateAccountUniqueHash(User user) throws UserNotExist {
         String hash;
         do {
             SecureRandom random = new SecureRandom();

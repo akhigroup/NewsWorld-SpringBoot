@@ -11,17 +11,17 @@ import java.util.List;
 @Service
 public interface TagService {
 
-    Tag createTag(Tag tag);
+    Tag createOrGetExisting(Tag tag) throws NotUniqueTag;
 
     List<Tag> findAll();
 
     List<Tag> findAll(Iterable<Long> tagIds);
 
-    Tag findById(Long id);
+    Tag findById(Long id) throws TagNotExist;
 
-    Tag findByName(String name);
+    Tag findByName(String name) throws TagNotExist;
 
-    boolean exist(Long tagId);
+    boolean exist(Long tagId) throws TagNotExist;
 
     Long countAll();
 

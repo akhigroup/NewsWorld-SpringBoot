@@ -36,25 +36,6 @@ public class ArticleServiceImpl implements ArticleService {
     TagRepository tagRepository;
 
     /**
-     * Should use: update {@link #update(Article)} OR create {@link #create(Article)}
-     *
-     * @param article
-     * @return
-     */
-    @Deprecated
-    @Override
-    public Article createOrUpdate(Article article) {
-        Optional<Long> articleId = Optional.ofNullable(article.getId());
-
-        if (!articleRepository.exists(articleId.orElse(-1L))) {
-            article.setAddedDate(new Date());
-        }
-
-
-        return articleRepository.save(article);
-    }
-
-    /**
      * Checks if article is unique according to source link
      *
      * @param article new article
@@ -66,9 +47,9 @@ public class ArticleServiceImpl implements ArticleService {
     public Article create(Article article) throws NotUniqueArticle {
         article.setAddedDate(new Date());
 
-        String articleSourceLink = article.getLink();
-        if (!unique(articleSourceLink)) {
-            throw new NotUniqueArticle(articleSourceLink);
+        String link = article.getLink();
+        if (!unique(link)) {
+            throw new NotUniqueArticle(link);
         }
         return articleRepository.save(article);
     }
@@ -96,9 +77,19 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public boolean unique(String sourceUrl) {
-        Optional<Article> articleOptional = Optional.ofNullable(articleRepository.findByLink(sourceUrl));
+    public boolean unique(String link) {
+        Optional<Article> articleOptional = Optional.ofNullable(articleRepository.findByLink(link));
         return !articleOptional.isPresent();
+    }
+
+    @Override
+    public boolean exist(Long id) throws ArticleNotExist {
+
+        if (!articleRepository.exists(id)) {
+            throw new ArticleNotExist("Article not exist: " + id);
+        }
+
+        return true;
     }
 
     @Override
@@ -127,7 +118,12 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Article findById(Long id) {
+    public Article findById(Long id) throws ArticleNotExist {
+
+        if (!articleRepository.exists(id)) {
+            throw new ArticleNotExist("Article not exist: " + id);
+        }
+
         return articleRepository.findOne(id);
     }
 
@@ -135,7 +131,12 @@ public class ArticleServiceImpl implements ArticleService {
      * @param likeArticleId - article to like
      * @return Returns all likes of current article
      */
-    public Long likeArticle(Long likeArticleId) {
+    public Long likeArticle(Long likeArticleId) throws ArticleNotExist {
+
+        if (!articleRepository.exists(likeArticleId)) {
+            throw new ArticleNotExist("Article not exist: " + likeArticleId);
+        }
+
         Article article = articleRepository.findOne(likeArticleId);
         article.incrementLikes();
         articleRepository.save(article);
@@ -146,7 +147,12 @@ public class ArticleServiceImpl implements ArticleService {
      * @param dislikeArticleId - article to dislike
      * @return Returns all dislikes of current article
      */
-    public Long dislikeArticle(Long dislikeArticleId) {
+    public Long dislikeArticle(Long dislikeArticleId) throws ArticleNotExist {
+
+        if (!articleRepository.exists(dislikeArticleId)) {
+            throw new ArticleNotExist("Article not exist: " + dislikeArticleId);
+        }
+
         Article article = articleRepository.findOne(dislikeArticleId);
         article.incrementDislikes();
         articleRepository.save(article);
@@ -154,7 +160,12 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Long incrementViews(Long id) {
+    public Long incrementViews(Long id) throws ArticleNotExist {
+
+        if (!articleRepository.exists(id)) {
+            throw new ArticleNotExist("Article not exist: " + id);
+        }
+
         Article article = articleRepository.findOne(id);
         article.incrementViews();
         articleRepository.save(article);
@@ -168,27 +179,28 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void addCategory(Long articleId, Long... categoryIds) {
+    public void addCategory(Long articleId, Long... categoryIds) throws ArticleNotExist {
         assignArticleTo(articleId, categoryRepository, Article::setCategory, categoryIds);
     }
 
     @Override
-    public void addTag(Long articleId, Long... tagIds) {
+    public void addTag(Long articleId, Long... tagIds) throws ArticleNotExist {
         assignArticleTo(articleId, tagRepository, Article::addTag, tagIds);
     }
 
     @Override
-    public void removeTag(Long articleId, Long... tagIds) {
+    public void removeTag(Long articleId, Long... tagIds) throws ArticleNotExist {
         assignArticleTo(articleId, tagRepository, Article::removeTag, tagIds);
     }
 
 
     @SuppressWarnings("unchecked")
-    private <T> void assignArticleTo(Long articleId, CrudRepository repository, AssignFunction<T> assignFunction, Long... entityIds) {
+    private <T> void assignArticleTo(Long articleId, CrudRepository repository, AssignFunction<T> assignFunction, Long... entityIds) throws ArticleNotExist {
         if (!articleRepository.exists(articleId)) {
-            return;
+            throw new ArticleNotExist("Article not exist: " + articleId);
         }
         Article article = articleRepository.findOne(articleId);
+
         for (Long entityId : entityIds) {
             if (!repository.exists(entityId)) {
                 continue;
@@ -202,4 +214,6 @@ public class ArticleServiceImpl implements ArticleService {
     private interface AssignFunction<T> {
         void assignTo(Article article, T value);
     }
+
+
 }

@@ -1,5 +1,6 @@
 package pl.pwr.news.service.tag;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.pwr.news.model.tag.Tag;
@@ -22,7 +23,7 @@ public class TagServiceImpl implements TagService {
     CategoryRepository categoryRepository;
 
     @Override
-    public Tag createTag(Tag tag) {
+    public Tag createOrGetExisting(Tag tag) {
         Optional<Tag> tagWithNotUniqueName = Optional.ofNullable(tagRepository.findByName(tag.getName()));
         if (tagWithNotUniqueName.isPresent()) {
             return tagWithNotUniqueName.get();
@@ -41,18 +42,36 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag findById(Long id) {
+    public Tag findById(Long id) throws TagNotExist {
+
+        if (!tagRepository.exists(id)) {
+            throw new TagNotExist(id);
+        }
+
         return tagRepository.findOne(id);
     }
 
     @Override
-    public Tag findByName(String name) {
+    public Tag findByName(String name) throws TagNotExist {
+
+        if (StringUtils.isBlank(name)) {
+            throw new IllegalArgumentException("Name cannot be empty or null");
+        }
+
+        Optional<Tag> tagOptional = Optional.ofNullable(tagRepository.findByName(name));
+        if (!tagOptional.isPresent()) {
+            throw new TagNotExist("Tag not exist by name: " + name);
+        }
+
         return tagRepository.findByName(name);
     }
 
     @Override
-    public boolean exist(Long tagId) {
-        return tagRepository.exists(tagId);
+    public boolean exist(Long tagId) throws TagNotExist {
+        if (!tagRepository.exists(tagId)) {
+            throw new TagNotExist(tagId);
+        }
+        return true;
     }
 
     @Override

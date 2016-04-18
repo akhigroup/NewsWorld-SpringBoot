@@ -6,6 +6,7 @@ import pl.pwr.news.model.category.Category;
 import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.repository.category.CategoryRepository;
 import pl.pwr.news.repository.tag.TagRepository;
+import pl.pwr.news.service.tag.TagNotExist;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,16 +33,16 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void addTag(Long categoryId, Long... tagIds) {
+    public void addTag(Long categoryId, Long... tagIds) throws CategoryNotExist, TagNotExist {
         if (!categoryRepository.exists(categoryId)) {
-            return;
+            throw new CategoryNotExist(categoryId);
         }
 
         Category category = categoryRepository.findOne(categoryId);
 
         for (Long tagId : tagIds) {
             if (!tagRepository.exists(tagId)) {
-                continue;
+                throw new TagNotExist(tagId);
             }
             Tag tag = tagRepository.findOne(tagId);
             category.addTag(tag);
@@ -50,13 +51,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void updateCategory(Category category) {
+    public void updateCategory(Category category) throws CategoryNotExist {
         Long categoryId = category.getId();
 
         if (!categoryRepository.exists(categoryId)) {
-            return;
+            throw new CategoryNotExist(categoryId);
         }
         //  ???
+        //TODO - a czo to :D
     }
 
     @Override
@@ -70,18 +72,32 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category findById(Long id) {
+    public Category findById(Long id) throws CategoryNotExist {
+        if (!categoryRepository.exists(id)) {
+            throw new CategoryNotExist(id);
+        }
+
         return categoryRepository.findOne(id);
     }
 
     @Override
-    public Category findByName(String name) {
-        return categoryRepository.findByName(name);
+    public Category findByName(String name) throws CategoryNotExist {
+        Optional<Category> categoryOptional = Optional.ofNullable(categoryRepository.findByName(name));
+
+        if (!categoryOptional.isPresent()) {
+            throw new CategoryNotExist("Category not exist by name: " + name);
+        }
+
+        return categoryOptional.get();
     }
 
     @Override
-    public boolean exist(Long categoryId) {
-        return categoryRepository.exists(categoryId);
+    public boolean exist(Long categoryId) throws CategoryNotExist {
+        if (!categoryRepository.exists(categoryId)) {
+            throw new CategoryNotExist(categoryId);
+        }
+
+        return true;
     }
 
     @Override
