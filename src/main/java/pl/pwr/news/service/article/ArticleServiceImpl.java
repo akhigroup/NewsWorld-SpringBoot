@@ -135,26 +135,41 @@ public class ArticleServiceImpl implements ArticleService {
      * @param likeArticleId - article to like
      * @return Returns all likes of current article
      */
-    public Long likeArticle(Long likeArticleId) {
-        Article article = articleRepository.findOne(likeArticleId);
+    public Long likeArticle(Long id) throws ArticleNotExist {
+
+        if (!articleRepository.exists(id)) {
+            throw new ArticleNotExist(id);
+        }
+
+        Article article = articleRepository.findOne(id);
         article.incrementLikes();
         articleRepository.save(article);
         return article.getLikes();
     }
 
     /**
-     * @param dislikeArticleId - article to dislike
+     * @param id - article to dislike
      * @return Returns all dislikes of current article
      */
-    public Long dislikeArticle(Long dislikeArticleId) {
-        Article article = articleRepository.findOne(dislikeArticleId);
+    public Long dislikeArticle(Long id) throws ArticleNotExist {
+
+        if (!articleRepository.exists(id)) {
+            throw new ArticleNotExist(id);
+        }
+
+        Article article = articleRepository.findOne(id);
         article.incrementDislikes();
         articleRepository.save(article);
         return article.getDislikes();
     }
 
     @Override
-    public Long incrementViews(Long id) {
+    public Long incrementViews(Long id) throws ArticleNotExist {
+
+        if (!articleRepository.exists(id)) {
+            throw new ArticleNotExist(id);
+        }
+
         Article article = articleRepository.findOne(id);
         article.incrementViews();
         articleRepository.save(article);

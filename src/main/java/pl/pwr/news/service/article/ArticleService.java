@@ -39,11 +39,11 @@ public interface ArticleService {
 
     List<Article> findByTag(String tag);
 
-    Long likeArticle(Long id);
+    Long likeArticle(Long id) throws ArticleNotExist;
 
-    Long dislikeArticle(Long id);
+    Long dislikeArticle(Long id) throws ArticleNotExist;
 
-    Long incrementViews(Long id);
+    Long incrementViews(Long id) throws ArticleNotExist;
 
     Page<Article> findPopular(int page, int pageSize);
 
