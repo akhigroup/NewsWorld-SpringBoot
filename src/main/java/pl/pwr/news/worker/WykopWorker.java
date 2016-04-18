@@ -38,19 +38,19 @@ public class WykopWorker {
             Article article = new Article();
             article.setTitle(wykopArticle.getTitle());
 
-            String sourceLink = wykopArticle.getSourceUrl();
-            if (StringUtils.isBlank(sourceLink)) {
-                sourceLink = wykopArticle.getUrl();
+            String link = wykopArticle.getSourceUrl();
+            if (StringUtils.isBlank(link)) {
+                link = wykopArticle.getUrl();
             }
 
-            article.setLink(sourceLink);
+            article.setLink(link);
             article.setText(wykopArticle.getDescription());
             article.setImageUrl(wykopArticle.getPreview());
 
             try {
                 articleService.create(article);
             } catch (NotUniqueArticle notUniqueArticle) {
-                notUniqueArticle.printStackTrace();
+                log.warn(notUniqueArticle.getMessage());
             }
 
         }

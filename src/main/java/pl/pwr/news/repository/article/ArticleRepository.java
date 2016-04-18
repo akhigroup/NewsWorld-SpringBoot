@@ -16,5 +16,5 @@ public interface ArticleRepository extends CrudRepository<Article, Long>, JpaSpe
 
     List<Article> findByTags_Name(String name);
 
-    Article findByLink(String sourceUrl);
+    Article findByLink(String link);
 }

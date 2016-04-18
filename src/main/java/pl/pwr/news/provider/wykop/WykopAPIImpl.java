@@ -28,26 +28,24 @@ public class WykopAPIImpl implements WykopAPI {
 
     public List<WykopArticleDTO> getWykopApiArticles(String resourceUrl) {
         RestTemplate restTemplate = new RestTemplate();
-
-        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-
-
-        String hashedSign = signResource(SECRET_KEY, resourceUrl);
-        body.add("apisign", hashedSign);
-        body.add("Content-Type", "application/json");
-
+        MultiValueMap<String, String> body = getRequestHeader(resourceUrl);
         HttpEntity<?> entity = new HttpEntity<>(body);
-
-        ResponseEntity<WykopArticleDTO[]> reponseDtoArr = restTemplate.exchange(resourceUrl, HttpMethod.GET, entity, WykopArticleDTO[].class);
-
+        ResponseEntity<WykopArticleDTO[]> responseEntity = restTemplate.exchange(resourceUrl, HttpMethod.GET, entity, WykopArticleDTO[].class);
 
         List<WykopArticleDTO> list = new ArrayList<>();
-        Collections.addAll(list, reponseDtoArr.getBody());
-
+        Collections.addAll(list, responseEntity.getBody());
         return list;
     }
 
-    private String signResource(String secretKey, String resourceUrl) {
+    private MultiValueMap<String, String> getRequestHeader(String resourceUrl) {
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        String hashedSign = generateApiSign(SECRET_KEY, resourceUrl);
+        body.add("apisign", hashedSign);
+        body.add("Content-Type", "application/json");
+        return body;
+    }
+
+    private String generateApiSign(String secretKey, String resourceUrl) {
 
         String original = secretKey + resourceUrl;
         MessageDigest md = null;
