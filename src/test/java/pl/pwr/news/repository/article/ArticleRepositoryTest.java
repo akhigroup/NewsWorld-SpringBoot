@@ -19,8 +19,11 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.data.jpa.domain.Specifications.where;
+import static pl.pwr.news.Constants.NAME;
+import static pl.pwr.news.Constants.LINK;
 import static pl.pwr.news.repository.article.ArticleSpecification.keywordInText;
 import static pl.pwr.news.repository.article.ArticleSpecification.keywordInTitle;
+
 
 /**
  * Created by jf on 4/14/16.
@@ -30,8 +33,6 @@ import static pl.pwr.news.repository.article.ArticleSpecification.keywordInTitle
 @Transactional
 public class ArticleRepositoryTest {
 
-    private static final String NAME = "testName";
-    private static final String LINK = "http://test.link";
     private static Tag tag = new Tag(NAME);
     private static Article article0 = new Article();
     private static Article article1 = new Article();
@@ -70,4 +71,3 @@ public class ArticleRepositoryTest {
         assertEquals(ARTICLE_LIST_FILTER, articleRepository.findAll(where(keywordInTitle(NAME)).or(where(keywordInText(NAME)))));
     }
 }
-//TODO: testy findAll zwracające Page<Article>

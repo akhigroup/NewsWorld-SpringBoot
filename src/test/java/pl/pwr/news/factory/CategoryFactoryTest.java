@@ -12,15 +12,16 @@ import pl.pwr.news.service.category.CategoryService;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
+import static pl.pwr.news.Constants.NAME;
+import static pl.pwr.news.Constants.IMAGE_URL;
 
 /**
  * Created by jf on 4/18/16.
  */
 public class CategoryFactoryTest {
 
-    private static final String NAME = "testName";
-    private static final String IMAGE_URL = "testImageUrl";
     private static Category category = new Category(NAME);
+
     @InjectMocks
     CategoryFactory categoryFactory;
 

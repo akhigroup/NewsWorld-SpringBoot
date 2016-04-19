@@ -11,14 +11,15 @@ import pl.pwr.news.service.tag.TagService;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
+import static pl.pwr.news.Constants.NAME;
 
 /**
  * Created by jf on 4/18/16.
  */
 public class TagFactoryTest {
 
-    private static final String NAME = "testName";
     private static Tag tag = new Tag(NAME);
+
     @InjectMocks
     TagFactory tagFactory;
 

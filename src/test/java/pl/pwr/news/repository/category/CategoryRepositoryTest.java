@@ -12,6 +12,7 @@ import pl.pwr.news.ApplicationTests;
 import pl.pwr.news.model.category.Category;
 
 import static org.junit.Assert.assertEquals;
+import static pl.pwr.news.Constants.NAME;
 
 /**
  * Created by jf on 4/14/16.
@@ -21,7 +22,6 @@ import static org.junit.Assert.assertEquals;
 @Transactional
 public class CategoryRepositoryTest {
 
-    private static final String NAME = "testName";
     private static final Category CATEGORY = new Category(NAME);
 
     @Autowired

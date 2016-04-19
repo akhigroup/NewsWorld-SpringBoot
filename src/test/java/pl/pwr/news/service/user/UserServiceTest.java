@@ -17,17 +17,13 @@ import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.*;
+import static pl.pwr.news.Constants.*;
 
 /**
  * Created by jf on 4/16/16.
  */
 public class UserServiceTest {
 
-    private static final String USERNAME = "testUsername";
-    private static final String EMAIL = "testEmail";
-    private static final String ACTIVATION_HASH = "testActivationHash";
-    private static final String TOKEN = "testToken";
-    private static final Long ID = 1L;
     private static User user = new User();
     private static final List<User> USER_LIST = Collections.singletonList(user);
 

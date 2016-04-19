@@ -19,19 +19,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static pl.pwr.news.webapp.controller.Constants.*;
+import static pl.pwr.news.Constants.*;
 
 /**
  * Created by jf on 4/17/16.
  */
 public class CategoryApiTest {
 
-    private static final String NAME = "name";
-    private static final String IMAGE_URL = "imageUrl";
-    private static final String CATEGORY_ID = "categoryId";
-    private static final Long ID = 1L;
-    private static final boolean EXISTS = true;
-    private static final boolean NOT_EXISTS = false;
     private static Category category = new Category(NAME);
     private MockMvc mockMvc;
 
@@ -115,8 +109,8 @@ public class CategoryApiTest {
     public void saveCategory_validCategory_categoryCreated() throws Exception {
         when(categoryFactory.getInstance(NAME, IMAGE_URL)).thenReturn(category);
         mockMvc.perform(post("/api/category")
-                .param(NAME, NAME)
-                .param(IMAGE_URL, IMAGE_URL))
+                .param(NAME_PARAM, NAME)
+                .param(IMAGE_URL_PARAM, IMAGE_URL))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(REST_CONTENT_TYPE))
                 .andExpect(jsonPath(RESULT, is(STATUS_OK)));
@@ -130,9 +124,9 @@ public class CategoryApiTest {
         when(categoryService.exist(ID)).thenReturn(EXISTS);
         when(categoryService.findById(ID)).thenReturn(category);
         mockMvc.perform(put("/api/category")
-                .param(CATEGORY_ID, String.valueOf(ID))
-                .param(NAME, NAME)
-                .param(IMAGE_URL, IMAGE_URL))
+                .param(CATEGORY_ID_PARAM, String.valueOf(ID))
+                .param(NAME_PARAM, NAME)
+                .param(IMAGE_URL_PARAM, IMAGE_URL))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(REST_CONTENT_TYPE))
                 .andExpect(jsonPath(RESULT, is(STATUS_OK)));
@@ -146,9 +140,9 @@ public class CategoryApiTest {
     public void updateCategory_nonExistingCategoryId_categoryNotFound() throws Exception {
         when(categoryService.exist(ID)).thenReturn(NOT_EXISTS);
         mockMvc.perform(put("/api/category")
-                .param(CATEGORY_ID, String.valueOf(ID))
-                .param(NAME, NAME)
-                .param(IMAGE_URL, IMAGE_URL))
+                .param(CATEGORY_ID_PARAM, String.valueOf(ID))
+                .param(NAME_PARAM, NAME)
+                .param(IMAGE_URL_PARAM, IMAGE_URL))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(REST_CONTENT_TYPE))
                 .andExpect(jsonPath(RESULT, is(STATUS_NOT_FOUND)));

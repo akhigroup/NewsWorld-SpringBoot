@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static pl.pwr.news.webapp.controller.Constants.*;
+import static pl.pwr.news.Constants.*;
 
 /**
  * Created by jf on 4/17/16.
@@ -26,10 +26,6 @@ import static pl.pwr.news.webapp.controller.Constants.*;
 
 public class TagApiTest {
 
-    private static final String NAME = "name";
-    private static final Long ID = 1L;
-    private static final boolean EXISTS = true;
-    private static final boolean NOT_EXISTS = false;
     private static Tag tag = new Tag(NAME);
     private MockMvc mockMvc;
 
@@ -85,7 +81,7 @@ public class TagApiTest {
     public void saveTag_validTag_tagCreated() throws Exception {
         when(tagFactory.getInstance(NAME)).thenReturn(tag);
         mockMvc.perform(post("/api/tag")
-                .param(NAME, NAME))
+                .param(NAME_PARAM, NAME))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(REST_CONTENT_TYPE))
                 .andExpect(jsonPath(RESULT, is(STATUS_OK)));

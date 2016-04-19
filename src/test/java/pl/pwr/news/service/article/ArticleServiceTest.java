@@ -19,18 +19,14 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+import static pl.pwr.news.Constants.*;
 
 /**
  * Created by jf on 4/16/16.
  */
 public class ArticleServiceTest {
 
-    private static final String NAME = "testName";
-    private static final String LINK = "http://test.link";
-    private static final Long ID = -1L;
-    private static final Long COUNT = 1L;
-    private static final boolean EXISTS = true;
-    private static final boolean NOT_EXISTS = false;
+    private static final Long ID_UPDATE = -1L;
     private static Article article = new Article();
     private static Category CATEGORY = new Category(NAME);
     private static Tag TAG = new Tag(NAME);
@@ -197,10 +193,10 @@ public class ArticleServiceTest {
 
     @Test
     public void update_existingArticle_updatedArticleReturned() throws ArticleNotExist {
-        when(articleRepository.exists(ID)).thenReturn(EXISTS);
+        when(articleRepository.exists(ID_UPDATE)).thenReturn(EXISTS);
         when(articleRepository.save(article)).thenReturn(article);
         Article updatedArticle = articleService.update(article);
-        verify(articleRepository, times(1)).exists(ID);
+        verify(articleRepository, times(1)).exists(ID_UPDATE);
         verify(articleRepository, times(1)).save(article);
         verifyNoMoreInteractions(articleRepository);
         assertEquals(article, updatedArticle);

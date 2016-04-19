@@ -13,19 +13,15 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
+import static pl.pwr.news.Constants.*;
 
 /**
  * Created by jf on 4/16/16.
  */
 public class TagServiceTest {
 
-    private static final String NAME = "testName";
-    private static final Long ID = 1L;
-    private static final Long COUNT = 1L;
-    private static final boolean EXISTS = true;
     private static Tag tag = new Tag(NAME);
     private static final List<Tag> TAG_LIST = Collections.singletonList(tag);
-    private static final Iterable<Long> IDS = Collections.singletonList(ID);
 
     @InjectMocks
     TagServiceImpl tagService;

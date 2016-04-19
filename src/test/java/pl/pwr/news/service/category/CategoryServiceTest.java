@@ -13,14 +13,15 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
+import static pl.pwr.news.Constants.NAME;
+import static pl.pwr.news.Constants.ID;
+
 
 /**
  * Created by jf on 4/16/16.
  */
 public class CategoryServiceTest {
 
-    private static final String NAME = "testName";
-    private static final Long ID = 1L;
     private static Category category = new Category(NAME);
     private static final List<Category> CATEGORY_LIST = Collections.singletonList(category);
     private static final Iterable<Long> IDS = Collections.singletonList(ID);
@@ -91,5 +92,5 @@ public class CategoryServiceTest {
         verifyNoMoreInteractions(categoryRepository);
         assertEquals(category, foundCategory);
     }
-    //TODO: addTag test, jeśli będzie kiedykolwiek używany, update jak zostanie naprawiony
+    //TODO: addTag test, jeśli będzie kiedykolwiek używany
 }

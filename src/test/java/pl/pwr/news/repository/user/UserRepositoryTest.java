@@ -9,9 +9,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import pl.pwr.news.ApplicationTests;
 import pl.pwr.news.model.user.User;
-import pl.pwr.news.model.user.UserRole;
 
 import static org.junit.Assert.assertEquals;
+import static pl.pwr.news.Constants.*;
 
 /**
  * Created by jf on 4/14/16.
@@ -21,12 +21,6 @@ import static org.junit.Assert.assertEquals;
 @Transactional
 public class UserRepositoryTest {
 
-    private static final Long ID = 1L;
-    private static final String USERNAME = "testUsernme";
-    private static final String EMAIL = "testEmail@test.com";
-    private static final String ACTIVATION_HASH = "testActivationHash";
-    private static final String TOKEN = "testToken";
-    private static final UserRole ROLE = UserRole.USER;
     private static User user = new User();
 
     static {
