@@ -1,7 +1,7 @@
 package pl.pwr.news.service.mail;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +16,7 @@ public class MailServiceImpl implements MailService {
 
 
     @Autowired
-    private JavaMailSenderImpl javaMailSender;
-
+    private JavaMailSender javaMailSender;
 
 
     @Override
@@ -26,15 +25,15 @@ public class MailServiceImpl implements MailService {
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mail, true);
             helper.setTo("rkpieniazek@gmail.com");
-            helper.setFrom("noreply@news@world");
+            helper.setFrom("noreply@newsAtworld");
             helper.setSubject("wiadomosc testowa");
-            helper.setText("wiadomosc testowa, tresc",true);
+            helper.setText("wiadomosc testowa, tresc", true);
         } catch (MessagingException e) {
             e.printStackTrace();
         } finally {
         }
         javaMailSender.send(mail);
-
-
     }
+
+
 }

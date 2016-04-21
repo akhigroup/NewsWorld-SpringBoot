@@ -29,7 +29,6 @@ public class HomeController {
     @Autowired
     UserService userService;
 
-
     @RequestMapping(value = "/admin")
     public String home(Model model) {
 
