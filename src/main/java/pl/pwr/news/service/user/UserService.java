@@ -1,6 +1,8 @@
 package pl.pwr.news.service.user;
 
+import pl.pwr.news.model.article.Article;
 import pl.pwr.news.model.user.User;
+import pl.pwr.news.service.article.ArticleNotExist;
 import pl.pwr.news.webapp.controller.user.form.RegisterRequestBody;
 
 import java.util.List;
@@ -17,6 +19,10 @@ public interface UserService {
     User findById(Long id);
 
     User findByUsername(String username);
+
+    void addFavouriteArticle(Long articleId, String userToken) throws UserNotExist, ArticleNotExist;
+
+    List<Article> findAllFavouriteArticles(String userToken) throws UserNotExist;
 
     User findByEmail(String email);
 

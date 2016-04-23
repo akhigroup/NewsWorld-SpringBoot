@@ -3,6 +3,7 @@ package pl.pwr.news.model.article;
 import lombok.*;
 import pl.pwr.news.model.category.Category;
 import pl.pwr.news.model.tag.Tag;
+import pl.pwr.news.model.user.User;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -52,6 +53,7 @@ public class Article implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Category category;
+
 
     private Date addedDate;
 
