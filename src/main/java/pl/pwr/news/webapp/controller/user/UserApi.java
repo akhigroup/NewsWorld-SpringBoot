@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import pl.pwr.news.model.user.User;
 import pl.pwr.news.service.user.EmailNotUnique;
 import pl.pwr.news.service.user.PasswordIncorrect;
@@ -17,7 +18,7 @@ import pl.pwr.news.webapp.controller.user.dto.UserDTO;
 /**
  * Created by Evelan on 23/04/16.
  */
-@Controller
+@RestController
 @RequestMapping("/api")
 @Log4j
 public class UserApi {

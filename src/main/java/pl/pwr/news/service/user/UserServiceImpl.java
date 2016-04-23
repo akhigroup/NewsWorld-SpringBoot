@@ -1,6 +1,7 @@
 package pl.pwr.news.service.user;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -8,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.pwr.news.model.user.Gender;
 import pl.pwr.news.model.user.User;
 import pl.pwr.news.model.user.UserRole;
 import pl.pwr.news.repository.user.UserRepository;
@@ -24,6 +26,7 @@ import java.util.Optional;
 @Service
 @Transactional
 public class UserServiceImpl implements UserService, UserDetailsService {
+
 
     @Autowired
     UserRepository userRepository;
@@ -110,12 +113,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = findByEmail(email);
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String passwordHashed = encoder.encode(password);
 
         String userPasswordHashed = user.getPassword();
-        boolean passwordCorrect = passwordHashed.equals(userPasswordHashed);
+        boolean passwordCorrect = encoder.matches(password, userPasswordHashed);
         if (!passwordCorrect) {
-            throw new PasswordIncorrect();
+            throw new PasswordIncorrect("Password not match to email: " + email);
         }
         return user;
 
@@ -128,7 +130,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public String generateToken(User user) {
-        SecureRandom random = new SecureRandom();
+        String random = RandomStringUtils.randomAlphanumeric(128);
         return DigestUtils.md5Hex(user.getEmail() + "..::news::.." + random);
     }
 
@@ -147,8 +149,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User facebookRegister(String email, String firstname, String lastname) throws EmailNotUnique {
-        String password = "123456";
-        //TODO - generator hasła
+        String password = RandomStringUtils.randomAlphanumeric(8);
         return register(email, password, firstname, lastname);
     }
 
@@ -156,6 +157,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public User register(String email, String password, String firstname, String lastname) throws EmailNotUnique {
         User user = new User();
         user.setRole(UserRole.USER);
+        user.setGender(Gender.UNKNOWN);
 
         if (emailExist(email)) {
             throw new EmailNotUnique("Email exist in database: " + email);
@@ -170,7 +172,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         do {
             String token = generateToken(user);
             user.setToken(token);
-            tokenIsUnique = tokenExist(token);
+            tokenIsUnique = !tokenExist(token);
         } while (!tokenIsUnique);
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
