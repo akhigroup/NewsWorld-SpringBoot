@@ -50,7 +50,6 @@ public class ArticleServiceImpl implements ArticleService {
             article.setAddedDate(new Date());
         }
 
-
         return articleRepository.save(article);
     }
 
@@ -132,7 +131,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     /**
-     * @param likeArticleId - article to like
+     * @param id - article to like
      * @return Returns all likes of current article
      */
     public Long likeArticle(Long id) throws ArticleNotExist {
@@ -183,8 +182,8 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void addCategory(Long articleId, Long... categoryIds) {
-        assignArticleTo(articleId, categoryRepository, Article::setCategory, categoryIds);
+    public void addCategory(Long articleId, Long categoryId) {
+        assignArticleTo(articleId, categoryRepository, Article::setCategory, categoryId);
     }
 
     @Override

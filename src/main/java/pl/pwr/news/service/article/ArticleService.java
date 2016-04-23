@@ -15,7 +15,7 @@ public interface ArticleService {
 
     List<Article> findAll(String keyword, String link);
 
-    void addCategory(Long articleId, Long... categoryIds);
+    void addCategory(Long articleId, Long categoryId);
 
     void addTag(Long articleId, Long... tagId);
 
