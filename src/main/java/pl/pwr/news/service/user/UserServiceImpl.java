@@ -68,12 +68,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public String generateActivateAccountUniqueHash(User user) {
         String hash = null;
+        boolean isHashUnique;
         if (user != null) {
             do {
                 SecureRandom random = new SecureRandom();
                 hash = DigestUtils.md5Hex(user.getEmail() + random + user.getId());
-
-            } while (userRepository.findByActivationHash(hash) != null);
+            isHashUnique = userRepository.findByActivationHash(hash) != null;
+            } while (isHashUnique);
 
         }
         return hash;
