@@ -9,7 +9,7 @@
     <packaging>jar</packaging>
 
     <name>News@World</name>
-    <description>News@World - projekt zepspoBowy</description>
+    <description>News@World - projekt zepspołowy</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

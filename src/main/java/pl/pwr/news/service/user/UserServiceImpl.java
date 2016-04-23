@@ -1,6 +1,7 @@
 package pl.pwr.news.service.user;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -8,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.pwr.news.model.user.Gender;
 import pl.pwr.news.model.user.User;
 import pl.pwr.news.model.user.UserRole;
 import pl.pwr.news.repository.user.UserRepository;
@@ -24,6 +26,7 @@ import java.util.Optional;
 @Service
 @Transactional
 public class UserServiceImpl implements UserService, UserDetailsService {
+
 
     @Autowired
     UserRepository userRepository;
@@ -80,6 +83,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return hash;
     }
 
+
     @Override
     public Long countAll() {
         return userRepository.count();
@@ -100,8 +104,83 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public User login(String email, String password) throws UserNotExist, PasswordIncorrect {
+
+        if (!emailExist(email)) {
+            throw new UserNotExist("User not exist with email: " + email);
+        }
+
+        User user = findByEmail(email);
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        String userPasswordHashed = user.getPassword();
+        boolean passwordCorrect = encoder.matches(password, userPasswordHashed);
+        if (!passwordCorrect) {
+            throw new PasswordIncorrect("Password not match to email: " + email);
+        }
+        return user;
+
+    }
+
+    @Override
     public void save(User user) {
         userRepository.save(user);
+    }
+
+    @Override
+    public String generateToken(User user) {
+        String random = RandomStringUtils.randomAlphanumeric(128);
+        return DigestUtils.md5Hex(user.getEmail() + "..::news::.." + random);
+    }
+
+    @Override
+    public boolean emailExist(String email) {
+        Optional<User> checkByEmail = Optional.ofNullable(findByEmail(email));
+        return checkByEmail.isPresent();
+    }
+
+    @Override
+    public boolean tokenExist(String token) {
+        Optional<User> checkByToken = Optional.ofNullable(findByToken(token));
+        return checkByToken.isPresent();
+    }
+
+
+    @Override
+    public User facebookRegister(String email, String firstname, String lastname) throws EmailNotUnique {
+        String password = RandomStringUtils.randomAlphanumeric(8);
+        return register(email, password, firstname, lastname);
+    }
+
+    @Override
+    public User register(String email, String password, String firstname, String lastname) throws EmailNotUnique {
+        User user = new User();
+        user.setRole(UserRole.USER);
+        user.setGender(Gender.UNKNOWN);
+
+        if (emailExist(email)) {
+            throw new EmailNotUnique("Email exist in database: " + email);
+        }
+
+        user.setEmail(email);
+        user.setFirstname(firstname);
+        user.setLastname(lastname);
+        user.setRegistered(new Date());
+
+        boolean tokenIsUnique;
+        do {
+            String token = generateToken(user);
+            user.setToken(token);
+            tokenIsUnique = !tokenExist(token);
+        } while (!tokenIsUnique);
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        user.setPassword(encoder.encode(password));
+
+        userRepository.save(user);
+
+        return user;
     }
 
     @Override
