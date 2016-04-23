@@ -1,6 +1,7 @@
 package pl.pwr.news.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
@@ -21,7 +22,7 @@ import java.util.HashSet;
 @Getter
 @Setter
 @Table(name = "users")
-public class User implements UserDetails,Serializable {
+public class User implements UserDetails, Serializable {
 
     private static final long serialVersionUID = 2427238057150579366L;
 
@@ -70,6 +71,7 @@ public class User implements UserDetails,Serializable {
         authorities.add(new SimpleGrantedAuthority(role.getAuthority()));
         return authorities;
     }
+
     @Override
     public String getUsername() {
         return username;

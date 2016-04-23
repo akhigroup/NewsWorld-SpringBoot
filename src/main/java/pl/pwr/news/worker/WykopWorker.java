@@ -27,7 +27,7 @@ public class WykopWorker {
     @Autowired
     WykopAPI wykopAPI;
 
-    @Scheduled(initialDelay = 10000, fixedRate = 60000)
+//    @Scheduled(initialDelay = 10000, fixedRate = 60000)
     public void wykopParser() {
 
         log.info("Wykop parser ----------------------------------- start");

@@ -16,6 +16,7 @@ import pl.pwr.news.webapp.controller.user.form.RegisterRequestBody;
 import java.security.SecureRandom;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Rafal on 2016-02-28.
@@ -79,6 +80,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return hash;
     }
 
+
     @Override
     public Long countAll() {
         return userRepository.count();
@@ -99,8 +101,84 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public User login(String email, String password) throws UserNotExist, PasswordIncorrect {
+
+        if (!emailExist(email)) {
+            throw new UserNotExist("User not exist with email: " + email);
+        }
+
+        User user = findByEmail(email);
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String passwordHashed = encoder.encode(password);
+
+        String userPasswordHashed = user.getPassword();
+        boolean passwordCorrect = passwordHashed.equals(userPasswordHashed);
+        if (!passwordCorrect) {
+            throw new PasswordIncorrect();
+        }
+        return user;
+
+    }
+
+    @Override
     public void save(User user) {
         userRepository.save(user);
+    }
+
+    @Override
+    public String generateToken(User user) {
+        SecureRandom random = new SecureRandom();
+        return DigestUtils.md5Hex(user.getEmail() + "..::news::.." + random);
+    }
+
+    @Override
+    public boolean emailExist(String email) {
+        Optional<User> checkByEmail = Optional.ofNullable(findByEmail(email));
+        return checkByEmail.isPresent();
+    }
+
+    @Override
+    public boolean tokenExist(String token) {
+        Optional<User> checkByToken = Optional.ofNullable(findByToken(token));
+        return checkByToken.isPresent();
+    }
+
+
+    @Override
+    public User facebookRegister(String email, String firstname, String lastname) throws EmailNotUnique {
+        String password = "123456";
+        //TODO - generator hasła
+        return register(email, password, firstname, lastname);
+    }
+
+    @Override
+    public User register(String email, String password, String firstname, String lastname) throws EmailNotUnique {
+        User user = new User();
+        user.setRole(UserRole.USER);
+
+        if (emailExist(email)) {
+            throw new EmailNotUnique("Email exist in database: " + email);
+        }
+
+        user.setEmail(email);
+        user.setFirstname(firstname);
+        user.setLastname(lastname);
+        user.setRegistered(new Date());
+
+        boolean tokenIsUnique;
+        do {
+            String token = generateToken(user);
+            user.setToken(token);
+            tokenIsUnique = tokenExist(token);
+        } while (!tokenIsUnique);
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        user.setPassword(encoder.encode(password));
+
+        userRepository.save(user);
+
+        return user;
     }
 
     @Override
