@@ -15,13 +15,12 @@ public class StereotypeFactory {
     @Autowired
     StereotypeService stereotypeService;
 
-    public Stereotype getInstance(String name, String imageUrl) {
+    public Stereotype getInstance(String name) {
         Stereotype existingStereotype = stereotypeService.findByName(name);
         if (existingStereotype != null) {
             return existingStereotype;
         }
         Stereotype newStereotype = new Stereotype(ValueConverter.convertStereotypeName(name));
-        newStereotype.setImageUrl(imageUrl);
         return newStereotype;
     }
 }
