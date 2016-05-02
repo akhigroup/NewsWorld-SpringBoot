@@ -20,7 +20,6 @@ import java.util.Set;
 public class StereotypeDTO {
 
     private Long id;
-    private String imageUrl;
     private String name;
     private List<ListedTagDTO> tags = new ArrayList<>();
     private List<ListedArticleDTO> articles = new ArrayList<>();
@@ -28,7 +27,6 @@ public class StereotypeDTO {
     public StereotypeDTO(Stereotype stereotype) {
         if (stereotype != null) {
             this.id = stereotype.getId();
-            this.imageUrl = stereotype.getImageUrl();
             this.name = stereotype.getName();
             Set<Tag> tags = stereotype.getTags();
             tags.forEach(tag -> this.tags.add(new ListedTagDTO(tag)));
@@ -37,9 +35,9 @@ public class StereotypeDTO {
         }
     }
 
-    public static List<StereotypeDTO> getList(List<Stereotype> categories) {
+    public static List<StereotypeDTO> getList(List<Stereotype> stereotypes) {
         List<StereotypeDTO> stereotypeDTOList = new ArrayList<>();
-        categories.forEach(stereotype -> stereotypeDTOList.add(new StereotypeDTO(stereotype)));
+        stereotypes.forEach(stereotype -> stereotypeDTOList.add(new StereotypeDTO(stereotype)));
 
         return stereotypeDTOList;
     }

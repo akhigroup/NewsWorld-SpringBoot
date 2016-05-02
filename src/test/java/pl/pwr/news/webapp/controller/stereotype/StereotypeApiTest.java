@@ -29,10 +29,6 @@ public class StereotypeApiTest {
     private static Stereotype stereotype = new Stereotype(NAME);
     private MockMvc mockMvc;
 
-    static {
-        stereotype.setImageUrl(IMAGE_URL);
-    }
-
     @Mock
     StereotypeService stereotypeService;
 
@@ -107,14 +103,13 @@ public class StereotypeApiTest {
 
     @Test
     public void saveStereotype_validStereotype_stereotypeCreated() throws Exception {
-        when(stereotypeFactory.getInstance(NAME, IMAGE_URL)).thenReturn(stereotype);
+        when(stereotypeFactory.getInstance(NAME)).thenReturn(stereotype);
         mockMvc.perform(post("/api/stereotype")
-                .param(NAME_PARAM, NAME)
-                .param(IMAGE_URL_PARAM, IMAGE_URL))
+                .param(NAME_PARAM, NAME))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(REST_CONTENT_TYPE))
                 .andExpect(jsonPath(RESULT, is(STATUS_OK)));
-        verify(stereotypeFactory, times(1)).getInstance(NAME, IMAGE_URL);
+        verify(stereotypeFactory, times(1)).getInstance(NAME);
         verify(stereotypeService, times(1)).createStereotype(stereotype);
         verifyNoMoreInteractions(stereotypeService, stereotypeFactory);
     }
@@ -125,8 +120,7 @@ public class StereotypeApiTest {
         when(stereotypeService.findById(ID)).thenReturn(stereotype);
         mockMvc.perform(put("/api/stereotype")
                 .param(CATEGORY_ID_PARAM, String.valueOf(ID))
-                .param(NAME_PARAM, NAME)
-                .param(IMAGE_URL_PARAM, IMAGE_URL))
+                .param(NAME_PARAM, NAME))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(REST_CONTENT_TYPE))
                 .andExpect(jsonPath(RESULT, is(STATUS_OK)));
@@ -141,8 +135,7 @@ public class StereotypeApiTest {
         when(stereotypeService.exist(ID)).thenReturn(NOT_EXISTS);
         mockMvc.perform(put("/api/stereotype")
                 .param(CATEGORY_ID_PARAM, String.valueOf(ID))
-                .param(NAME_PARAM, NAME)
-                .param(IMAGE_URL_PARAM, IMAGE_URL))
+                .param(NAME_PARAM, NAME))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(REST_CONTENT_TYPE))
                 .andExpect(jsonPath(RESULT, is(STATUS_NOT_FOUND)));

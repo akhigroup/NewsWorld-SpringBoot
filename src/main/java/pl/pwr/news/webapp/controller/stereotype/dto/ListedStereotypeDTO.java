@@ -15,20 +15,18 @@ import java.util.List;
 public class ListedStereotypeDTO {
 
     private Long id;
-    private String imageUrl;
     private String name;
 
     public ListedStereotypeDTO(Stereotype stereotype) {
         if (stereotype != null) {
             this.id = stereotype.getId();
-            this.imageUrl = stereotype.getImageUrl();
             this.name = stereotype.getName();
         }
     }
 
-    public static List<ListedStereotypeDTO> getList(List<Stereotype> categories) {
+    public static List<ListedStereotypeDTO> getList(List<Stereotype> stereotypes) {
         List<ListedStereotypeDTO> stereotypeDTOList = new ArrayList<>();
-        categories.forEach(stereotype -> stereotypeDTOList.add(new ListedStereotypeDTO(stereotype)));
+        stereotypes.forEach(stereotype -> stereotypeDTOList.add(new ListedStereotypeDTO(stereotype)));
 
         return stereotypeDTOList;
     }

@@ -30,7 +30,7 @@ public class StereotypeApi {
     StereotypeFactory stereotypeFactory;
 
     @RequestMapping(value = "/stereotype", method = RequestMethod.GET)
-    public Response<List<ListedStereotypeDTO>> getCategories() {
+    public Response<List<ListedStereotypeDTO>> getStereotypes() {
 
         List<Stereotype> stereotypeList = stereotypeService.findAll();
         List<ListedStereotypeDTO> stereotypeDTOList = ListedStereotypeDTO.getList(stereotypeList);
@@ -65,9 +65,8 @@ public class StereotypeApi {
 
     @RequestMapping(value = "/stereotype", method = RequestMethod.POST)
     public Response<Stereotype> saveStereotype(
-            @RequestParam String name,
-            @RequestParam(required = false) String imageUrl) {
-        Stereotype stereotype = stereotypeFactory.getInstance(name, imageUrl);
+            @RequestParam String name) {
+        Stereotype stereotype = stereotypeFactory.getInstance(name);
         stereotypeService.createStereotype(stereotype);
         return new Response<>(stereotype);
     }
@@ -75,8 +74,7 @@ public class StereotypeApi {
     @RequestMapping(value = "/stereotype", method = RequestMethod.PUT)
     public Response<Stereotype> updateStereotype(
             @RequestParam Long stereotypeId,
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) String imageUrl) {
+            @RequestParam(required = false) String name) {
 
         if (!stereotypeService.exist(stereotypeId)) {
             return new Response<>("-1", "Stereotype not found");
@@ -86,10 +84,6 @@ public class StereotypeApi {
 
         if (isNotBlank(name)) {
             stereotype.setName(name);
-        }
-
-        if (isNotBlank(imageUrl)) {
-            stereotype.setImageUrl(imageUrl);
         }
 
         stereotypeService.updateStereotype(stereotype);

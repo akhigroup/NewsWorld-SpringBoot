@@ -16,7 +16,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "categories")
+@Table(name = "stereotypes")
 @NoArgsConstructor
 public class Stereotype {
 
@@ -25,9 +25,6 @@ public class Stereotype {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
-
-    @Column(name = "image_url")
-    private String imageUrl;
 
     @Column(unique = true)
     private String name;
