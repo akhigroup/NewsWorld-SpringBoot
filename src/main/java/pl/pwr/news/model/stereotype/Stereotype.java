@@ -1,4 +1,4 @@
-package pl.pwr.news.model.category;
+package pl.pwr.news.model.stereotype;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +18,7 @@ import java.util.Set;
 @Entity
 @Table(name = "categories")
 @NoArgsConstructor
-public class Category {
+public class Stereotype {
 
     private static final long serialVersionUID = 2312343243243L;
 
@@ -32,13 +32,13 @@ public class Category {
     @Column(unique = true)
     private String name;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "category")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "stereotype")
     private Set<Article> articles = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "category")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "stereotype")
     private Set<Tag> tags = new HashSet<>();
 
-    public Category(String name) {
+    public Stereotype(String name) {
         this.name = name;
     }
 

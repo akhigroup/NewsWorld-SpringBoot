@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import pl.pwr.news.model.article.Article;
-import pl.pwr.news.model.category.Category;
+import pl.pwr.news.model.stereotype.Stereotype;
 import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.service.article.ArticleService;
-import pl.pwr.news.service.category.CategoryService;
+import pl.pwr.news.service.stereotype.StereotypeService;
 import pl.pwr.news.service.tag.TagService;
 import pl.pwr.news.webapp.controller.article.form.AddArticleForm;
 
@@ -37,7 +37,7 @@ public class ArticleController {
     TagService tagService;
 
     @Autowired
-    CategoryService categoryService;
+    StereotypeService stereotypeService;
 
     @RequestMapping(value = "/list")
     public String listArticles(Model model) {
@@ -49,10 +49,10 @@ public class ArticleController {
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String createNewArticle(Model model) {
         List<Tag> tagList = tagService.findAll();
-        List<Category> categoryList = categoryService.findAll();
+        List<Stereotype> stereotypeList = stereotypeService.findAll();
 
         model.addAttribute("tagList", tagList);
-        model.addAttribute("categoryList", categoryList);
+        model.addAttribute("stereotypeList", stereotypeList);
         model.addAttribute("addArticleForm", new AddArticleForm());
         return "article/add-edit";
     }
@@ -61,14 +61,14 @@ public class ArticleController {
     public String editArticle(@RequestParam("id") Long articleId, Model model) {
         Article article = articleService.findById(articleId);
         List<Tag> allTags = tagService.findAll();
-        List<Category> categoryList = categoryService.findAll();
+        List<Stereotype> stereotypeList = stereotypeService.findAll();
         AddArticleForm addArticleForm = new AddArticleForm(article);
 
         allTags.removeAll(article.getTags());
 
         model.addAttribute("checkedTags", article.getTags());
         model.addAttribute("tagList", allTags);
-        model.addAttribute("categoryList", categoryList);
+        model.addAttribute("stereotypeList", stereotypeList);
         model.addAttribute("addArticleForm", addArticleForm);
         return "article/add-edit";
     }
@@ -98,9 +98,9 @@ public class ArticleController {
             }
         }
 
-        Long selectedCategoryId = addArticleForm.getCategoryId();
-        if (selectedCategoryId != null) {
-            articleService.addCategory(articleId, selectedCategoryId);
+        Long selectedStereotypeId = addArticleForm.getStereotypeId();
+        if (selectedStereotypeId != null) {
+            articleService.addStereotype(articleId, selectedStereotypeId);
         }
 
         return "redirect:/admin/article/list";

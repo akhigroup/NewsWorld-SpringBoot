@@ -1,4 +1,4 @@
-package pl.pwr.news.webapp.controller.category;
+package pl.pwr.news.webapp.controller.stereotype;
 
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import pl.pwr.news.model.article.Article;
-import pl.pwr.news.model.category.Category;
+import pl.pwr.news.model.stereotype.Stereotype;
 import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.service.article.ArticleService;
-import pl.pwr.news.service.category.CategoryService;
+import pl.pwr.news.service.stereotype.StereotypeService;
 import pl.pwr.news.service.tag.TagService;
 
 import java.util.List;
@@ -20,12 +20,12 @@ import java.util.List;
  * Created by jakub on 3/22/16.
  */
 @Controller
-@RequestMapping(value = "/admin/category/")
+@RequestMapping(value = "/admin/stereotype/")
 @Log4j
-public class CategoryController {
+public class StereotypeController {
 
     @Autowired
-    CategoryService categoryService;
+    StereotypeService stereotypeService;
 
     @Autowired
     ArticleService articleService;
@@ -34,28 +34,28 @@ public class CategoryController {
     TagService tagService;
 
     @RequestMapping(value = "/list")
-    public String listCategories(Model model) {
-        List<Category> categoryList = categoryService.findAll();
-        model.addAttribute("categoryList", categoryList);
+    public String listStereotypes(Model model) {
+        List<Stereotype> stereotypeList = stereotypeService.findAll();
+        model.addAttribute("stereotypeList", stereotypeList);
 
-        return "category/list";
+        return "stereotype/list";
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public String createNewCategory(Model model) {
+    public String createNewStereotype(Model model) {
         List<Tag> tagList = tagService.findAll();
         List<Article> articleList = articleService.findAll();
         model.addAttribute("tagList", tagList);
         model.addAttribute("articleList", articleList);
-        model.addAttribute("newCategory", new Category());
+        model.addAttribute("newStereotype", new Stereotype());
 
-        return "category/add";
+        return "stereotype/add";
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String saveNewCategory(@ModelAttribute(value = "newCategory") Category category) {
-        categoryService.createCategory(category);
+    public String saveNewStereotype(@ModelAttribute(value = "newStereotype") Stereotype stereotype) {
+        stereotypeService.createStereotype(stereotype);
 
-        return "redirect:/admin/category/add";
+        return "redirect:/admin/stereotype/add";
     }
 }

@@ -1,16 +1,15 @@
 package pl.pwr.news.service.article;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import pl.pwr.news.model.article.Article;
-import pl.pwr.news.model.category.Category;
+import pl.pwr.news.model.stereotype.Stereotype;
 import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.repository.article.ArticleRepository;
-import pl.pwr.news.repository.category.CategoryRepository;
+import pl.pwr.news.repository.stereotype.StereotypeRepository;
 import pl.pwr.news.repository.tag.TagRepository;
 
 import java.util.Collections;
@@ -28,7 +27,7 @@ public class ArticleServiceTest {
 
     private static final Long ID_UPDATE = -1L;
     private static Article article = new Article();
-    private static Category CATEGORY = new Category(NAME);
+    private static Stereotype Stereotype = new Stereotype(NAME);
     private static Tag TAG = new Tag(NAME);
     private static final List<Article> ARTICLE_LIST = Collections.singletonList(article);
 
@@ -43,7 +42,7 @@ public class ArticleServiceTest {
     ArticleRepository articleRepository;
 
     @Mock
-    CategoryRepository categoryRepository;
+    StereotypeRepository stereotypeRepository;
 
     @Mock
     TagRepository tagRepository;
@@ -139,7 +138,7 @@ public class ArticleServiceTest {
         when(articleRepository.findByTags_Name(NAME)).thenReturn(ARTICLE_LIST);
         List<Article> articleList = articleService.findByTag(NAME);
         verify(articleRepository, times(1)).findByTags_Name(NAME);
-        verifyNoMoreInteractions(categoryRepository);
+        verifyNoMoreInteractions(stereotypeRepository);
         assertEquals(ARTICLE_LIST, articleList);
     }
 
@@ -212,47 +211,47 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void addCategory_nonExistingArticleId_returned() {
-        article.setCategory(null);
+    public void addStereotype_nonExistingArticleId_returned() {
+        article.setStereotype(null);
         when(articleRepository.exists(ID)).thenReturn(NOT_EXISTS);
-        articleService.addCategory(ID, ID);
+        articleService.addStereotype(ID, ID);
         verify(articleRepository, times(1)).exists(ID);
         verifyNoMoreInteractions(articleRepository);
-        assertNull(article.getCategory());
+        assertNull(article.getStereotype());
     }
 
     @Test
-    public void addCategory_nonExistingCategoryId_returned() {
-        article.setCategory(null);
+    public void addStereotype_nonExistingStereotypeId_returned() {
+        article.setStereotype(null);
         when(articleRepository.exists(ID)).thenReturn(EXISTS);
         when(articleRepository.findOne(ID)).thenReturn(article);
-        when(categoryRepository.exists(ID)).thenReturn(NOT_EXISTS);
+        when(stereotypeRepository.exists(ID)).thenReturn(NOT_EXISTS);
         when(articleRepository.save(article)).thenReturn(article);
-        articleService.addCategory(ID, ID);
+        articleService.addStereotype(ID, ID);
         verify(articleRepository, times(1)).exists(ID);
         verify(articleRepository, times(1)).findOne(ID);
-        verify(categoryRepository, times(1)).exists(ID);
+        verify(stereotypeRepository, times(1)).exists(ID);
         verify(articleRepository, times(1)).save(article);
-        verifyNoMoreInteractions(articleRepository, categoryRepository);
-        assertNull(article.getCategory());
+        verifyNoMoreInteractions(articleRepository, stereotypeRepository);
+        assertNull(article.getStereotype());
     }
 
     @Test
-    public void addCategory_existingArticleId_categoriesAddedToArticle() {
-        article.setCategory(null);
+    public void addStereotype_existingArticleId_categoriesAddedToArticle() {
+        article.setStereotype(null);
         when(articleRepository.exists(ID)).thenReturn(EXISTS);
         when(articleRepository.findOne(ID)).thenReturn(article);
-        when(categoryRepository.exists(ID)).thenReturn(EXISTS);
-        when(categoryRepository.findOne(ID)).thenReturn(CATEGORY);
+        when(stereotypeRepository.exists(ID)).thenReturn(EXISTS);
+        when(stereotypeRepository.findOne(ID)).thenReturn(Stereotype);
         when(articleRepository.save(article)).thenReturn(article);
-        articleService.addCategory(ID, ID);
+        articleService.addStereotype(ID, ID);
         verify(articleRepository, times(1)).exists(ID);
         verify(articleRepository, times(1)).findOne(ID);
-        verify(categoryRepository, times(1)).exists(ID);
-        verify(categoryRepository, times(1)).findOne(ID);
+        verify(stereotypeRepository, times(1)).exists(ID);
+        verify(stereotypeRepository, times(1)).findOne(ID);
         verify(articleRepository, times(1)).save(article);
-        verifyNoMoreInteractions(articleRepository, categoryRepository);
-        assertEquals(CATEGORY, article.getCategory());
+        verifyNoMoreInteractions(articleRepository, stereotypeRepository);
+        assertEquals(Stereotype, article.getStereotype());
     }
 
     @Test

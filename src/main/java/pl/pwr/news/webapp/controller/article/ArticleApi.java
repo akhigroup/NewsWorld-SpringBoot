@@ -6,11 +6,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 import pl.pwr.news.model.article.Article;
-import pl.pwr.news.model.category.Category;
+import pl.pwr.news.model.stereotype.Stereotype;
 import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.service.article.ArticleNotExist;
 import pl.pwr.news.service.article.ArticleService;
-import pl.pwr.news.service.category.CategoryService;
+import pl.pwr.news.service.stereotype.StereotypeService;
 import pl.pwr.news.service.tag.TagService;
 import pl.pwr.news.webapp.controller.Response;
 import pl.pwr.news.webapp.controller.article.dto.ArticleDTO;
@@ -37,7 +37,7 @@ public class ArticleApi {
     ArticleService articleService;
 
     @Autowired
-    CategoryService categoryService;
+    StereotypeService stereotypeService;
 
     @Autowired
     TagService tagService;
@@ -125,12 +125,12 @@ public class ArticleApi {
             @RequestParam(value = "text", required = false) String text,
             @RequestParam(value = "imageUrl", required = false) String imageUrl,
             @RequestParam(value = "link") String link,
-            @RequestParam Long categoryId,
+            @RequestParam Long stereotypeId,
             @RequestParam Long[] tagIds) {
-        Category category = categoryService.findById(categoryId);
+        Stereotype stereotype = stereotypeService.findById(stereotypeId);
         List<Tag> tags = tagService.findAll(Arrays.asList(tagIds));
         Article article = Article.builder().title(title).text(text).imageUrl(imageUrl).
-                link(link).category(category).tags(tags).addedDate(new Date()).build();
+                link(link).stereotype(stereotype).tags(tags).addedDate(new Date()).build();
         articleService.createOrUpdate(article);
 
         return new Response<>(article);
@@ -144,7 +144,7 @@ public class ArticleApi {
             @RequestParam(required = false) String text,
             @RequestParam(required = false) String imageUrl,
             @RequestParam(required = false) String link,
-            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Long stereotypeId,
             @RequestParam(required = false) Long[] tagIds) {
 
         Article article = articleService.findById(articleId);
@@ -169,9 +169,9 @@ public class ArticleApi {
             article.setLink(link);
         }
 
-        if (categoryId != null) {
-            Category category = categoryService.findById(categoryId);
-            article.setCategory(category);
+        if (stereotypeId != null) {
+            Stereotype stereotype = stereotypeService.findById(stereotypeId);
+            article.setStereotype(stereotype);
         }
 
         articleService.createOrUpdate(article);

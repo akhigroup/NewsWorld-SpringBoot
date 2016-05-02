@@ -5,7 +5,7 @@ import lombok.Setter;
 import pl.pwr.news.model.article.Article;
 import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.webapp.controller.article.dto.ListedArticleDTO;
-import pl.pwr.news.webapp.controller.category.dto.ListedCategoryDTO;
+import pl.pwr.news.webapp.controller.stereotype.dto.ListedStereotypeDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,16 +20,16 @@ public class TagDTO {
 
     private Long id;
     private String name;
-    private ListedCategoryDTO category;
+    private ListedStereotypeDTO stereotype;
     private List<ListedArticleDTO> articles = new ArrayList<>();
 
     public TagDTO(Tag tag) {
         if (tag != null) {
             this.id = tag.getId();
             this.name = tag.getName();
-            this.category = new ListedCategoryDTO(tag.getCategory());
-            if (this.category.getId() == null) {
-                this.category = null;
+            this.stereotype = new ListedStereotypeDTO(tag.getStereotype());
+            if (this.stereotype.getId() == null) {
+                this.stereotype = null;
             }
             Set<Article> articles = tag.getArticles();
             articles.forEach(article -> this.articles.add(new ListedArticleDTO(article)));

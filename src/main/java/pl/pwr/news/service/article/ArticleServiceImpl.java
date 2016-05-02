@@ -9,7 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import pl.pwr.news.model.article.Article;
 import pl.pwr.news.repository.article.ArticleRepository;
-import pl.pwr.news.repository.category.CategoryRepository;
+import pl.pwr.news.repository.stereotype.StereotypeRepository;
 import pl.pwr.news.repository.tag.TagRepository;
 
 import java.util.Date;
@@ -30,7 +30,7 @@ public class ArticleServiceImpl implements ArticleService {
     ArticleRepository articleRepository;
 
     @Autowired
-    CategoryRepository categoryRepository;
+    StereotypeRepository stereotypeRepository;
 
     @Autowired
     TagRepository tagRepository;
@@ -182,8 +182,8 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void addCategory(Long articleId, Long categoryId) {
-        assignArticleTo(articleId, categoryRepository, Article::setCategory, categoryId);
+    public void addStereotype(Long articleId, Long stereotypeId) {
+        assignArticleTo(articleId, stereotypeRepository, Article::setStereotype, stereotypeId);
     }
 
     @Override

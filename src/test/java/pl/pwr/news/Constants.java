@@ -30,7 +30,7 @@ public class Constants {
     public static final boolean NOT_EXISTS = false;
     public static final Iterable<Long> IDS = Collections.singletonList(ID);
     public static final String NAME_PARAM = "name";
-    public static final String CATEGORY_ID_PARAM = "categoryId";
+    public static final String CATEGORY_ID_PARAM = "stereotypeId";
     public static final String IMAGE_URL_PARAM = "imageUrl";
 
 
