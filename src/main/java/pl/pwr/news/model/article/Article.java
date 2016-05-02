@@ -1,8 +1,9 @@
 package pl.pwr.news.model.article;
 
 import lombok.*;
-import pl.pwr.news.model.category.Category;
+
 import pl.pwr.news.model.report.Report;
+import pl.pwr.news.model.stereotype.Stereotype;
 import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.model.user.User;
 
@@ -53,7 +54,7 @@ public class Article implements Serializable {
     private Set<Tag> tags = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
-    private Category category;
+    private Stereotype stereotype;
 
     @OneToMany(mappedBy = "article")
     private Set<Report> reports = new HashSet<>();

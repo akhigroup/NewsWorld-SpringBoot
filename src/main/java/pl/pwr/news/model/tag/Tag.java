@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.pwr.news.model.article.Article;
-import pl.pwr.news.model.category.Category;
+import pl.pwr.news.model.stereotype.Stereotype;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -33,7 +33,7 @@ public class Tag {
     private Set<Article> articles = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
-    private Category category;
+    private Stereotype stereotype;
 
     public Tag(String name) {
         this.name = name;

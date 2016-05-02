@@ -1,9 +1,9 @@
-package pl.pwr.news.webapp.controller.category.dto;
+package pl.pwr.news.webapp.controller.stereotype.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 import pl.pwr.news.model.article.Article;
-import pl.pwr.news.model.category.Category;
+import pl.pwr.news.model.stereotype.Stereotype;
 import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.webapp.controller.article.dto.ListedArticleDTO;
 import pl.pwr.news.webapp.controller.tag.dto.ListedTagDTO;
@@ -17,7 +17,7 @@ import java.util.Set;
  */
 @Getter
 @Setter
-public class CategoryDTO {
+public class StereotypeDTO {
 
     private Long id;
     private String imageUrl;
@@ -25,23 +25,23 @@ public class CategoryDTO {
     private List<ListedTagDTO> tags = new ArrayList<>();
     private List<ListedArticleDTO> articles = new ArrayList<>();
 
-    public CategoryDTO(Category category) {
-        if (category != null) {
-            this.id = category.getId();
-            this.imageUrl = category.getImageUrl();
-            this.name = category.getName();
-            Set<Tag> tags = category.getTags();
+    public StereotypeDTO(Stereotype stereotype) {
+        if (stereotype != null) {
+            this.id = stereotype.getId();
+            this.imageUrl = stereotype.getImageUrl();
+            this.name = stereotype.getName();
+            Set<Tag> tags = stereotype.getTags();
             tags.forEach(tag -> this.tags.add(new ListedTagDTO(tag)));
-            Set<Article> articles = category.getArticles();
+            Set<Article> articles = stereotype.getArticles();
             articles.forEach(article -> this.articles.add(new ListedArticleDTO(article)));
         }
     }
 
-    public static List<CategoryDTO> getList(List<Category> categories) {
-        List<CategoryDTO> categoryDTOList = new ArrayList<>();
-        categories.forEach(category -> categoryDTOList.add(new CategoryDTO(category)));
+    public static List<StereotypeDTO> getList(List<Stereotype> categories) {
+        List<StereotypeDTO> stereotypeDTOList = new ArrayList<>();
+        categories.forEach(stereotype -> stereotypeDTOList.add(new StereotypeDTO(stereotype)));
 
-        return categoryDTOList;
+        return stereotypeDTOList;
     }
 }
 

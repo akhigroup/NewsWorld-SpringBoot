@@ -56,7 +56,7 @@
                                     <th>Źródło</th>
                                     <th>Dodano</th>
                                     <th>Tagi</th>
-                                    <th>Kategoria</th>
+                                    <th>Stereotyp</th>
                                     <th>Wyświetleń</th>
                                     <th>Likes</th>
                                     <th>Dislikes</th>
@@ -74,11 +74,11 @@
                                     <td>
                                         <div th:each="tag : ${article.tags}" th:text="'#'+${tag.name}"></div>
                                     </td>
-                                    <td th:if="${article.category} != null"
-                                        th:text="${article.category.name}">
+                                    <td th:if="${article.stereotype} != null"
+                                        th:text="${article.stereotype.name}">
                                     </td>
-                                    <td th:if="${article.category} == null"
-                                        th:text="'Brak kategorii'">
+                                    <td th:if="${article.stereotype} == null"
+                                        th:text="'Brak stereotypu'">
                                     </td>
                                     <td th:text="${article.views}"></td>
                                     <td th:text="${article.likes}"></td>

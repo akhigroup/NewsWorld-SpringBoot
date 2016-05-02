@@ -3,9 +3,9 @@ package pl.pwr.news.webapp.controller.article.dto;
 import lombok.Getter;
 import lombok.Setter;
 import pl.pwr.news.model.article.Article;
-import pl.pwr.news.model.category.Category;
+import pl.pwr.news.model.stereotype.Stereotype;
 import pl.pwr.news.model.tag.Tag;
-import pl.pwr.news.webapp.controller.category.dto.ListedCategoryDTO;
+import pl.pwr.news.webapp.controller.stereotype.dto.ListedStereotypeDTO;
 import pl.pwr.news.webapp.controller.tag.dto.ListedTagDTO;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class ArticleDTO {
     private String imageUrl;
     private String link;
     private List<ListedTagDTO> tags = new ArrayList<>();
-    private ListedCategoryDTO category;
+    private ListedStereotypeDTO stereotype;
     private Date addedDate;
 
     public ArticleDTO(Article article) {
@@ -38,10 +38,10 @@ public class ArticleDTO {
             this.link = article.getLink();
             Set<Tag> tags = article.getTags();
             tags.forEach(tag -> this.tags.add(new ListedTagDTO(tag)));
-            Category category = article.getCategory();
-            this.category = new ListedCategoryDTO(category);
-            if ( this.category.getId() == null) {
-                this.category = null;
+            Stereotype stereotype = article.getStereotype();
+            this.stereotype = new ListedStereotypeDTO(stereotype);
+            if ( this.stereotype.getId() == null) {
+                this.stereotype = null;
             }
             this.addedDate = article.getAddedDate();
         }

@@ -3,7 +3,7 @@ package pl.pwr.news.service.tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.pwr.news.model.tag.Tag;
-import pl.pwr.news.repository.category.CategoryRepository;
+import pl.pwr.news.repository.stereotype.StereotypeRepository;
 import pl.pwr.news.repository.tag.TagRepository;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public class TagServiceImpl implements TagService {
     TagRepository tagRepository;
 
     @Autowired
-    CategoryRepository categoryRepository;
+    StereotypeRepository stereotypeRepository;
 
     @Override
     public Tag createTag(Tag tag) {

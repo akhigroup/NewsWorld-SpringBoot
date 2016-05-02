@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import pl.pwr.news.model.article.Article;
-import pl.pwr.news.model.category.Category;
+import pl.pwr.news.model.stereotype.Stereotype;
 import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.service.article.ArticleService;
-import pl.pwr.news.service.category.CategoryService;
+import pl.pwr.news.service.stereotype.StereotypeService;
 import pl.pwr.news.service.tag.TagService;
 
 import java.util.List;
@@ -31,7 +31,7 @@ public class TagController {
     ArticleService articleService;
 
     @Autowired
-    CategoryService categoryService;
+    StereotypeService stereotypeService;
 
     @RequestMapping(value = "/list")
     public String listTags(Model model) {
@@ -43,10 +43,10 @@ public class TagController {
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String createNewTag(Model model) {
-        List<Category> categoryList = categoryService.findAll();
+        List<Stereotype> stereotypeList = stereotypeService.findAll();
         List<Article> articleList = articleService.findAll();
         model.addAttribute("articleList", articleList);
-        model.addAttribute("categoryList", categoryList);
+        model.addAttribute("stereotypeList", stereotypeList);
         model.addAttribute("newTag", new Tag());
 
         return "tag/add";
