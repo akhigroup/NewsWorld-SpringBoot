@@ -27,7 +27,6 @@ public class ArticleServiceTest {
 
     private static final Long ID_UPDATE = -1L;
     private static Article article = new Article();
-    private static Stereotype Stereotype = new Stereotype(NAME);
     private static Tag TAG = new Tag(NAME);
     private static final List<Article> ARTICLE_LIST = Collections.singletonList(article);
 
@@ -208,50 +207,6 @@ public class ArticleServiceTest {
         verify(articleRepository, times(1)).exists(ID);
         verifyNoMoreInteractions(articleRepository);
         assertNull(updatedArticle);
-    }
-
-    @Test
-    public void addStereotype_nonExistingArticleId_returned() {
-        article.setStereotype(null);
-        when(articleRepository.exists(ID)).thenReturn(NOT_EXISTS);
-        articleService.addStereotype(ID, ID);
-        verify(articleRepository, times(1)).exists(ID);
-        verifyNoMoreInteractions(articleRepository);
-        assertNull(article.getStereotype());
-    }
-
-    @Test
-    public void addStereotype_nonExistingStereotypeId_returned() {
-        article.setStereotype(null);
-        when(articleRepository.exists(ID)).thenReturn(EXISTS);
-        when(articleRepository.findOne(ID)).thenReturn(article);
-        when(stereotypeRepository.exists(ID)).thenReturn(NOT_EXISTS);
-        when(articleRepository.save(article)).thenReturn(article);
-        articleService.addStereotype(ID, ID);
-        verify(articleRepository, times(1)).exists(ID);
-        verify(articleRepository, times(1)).findOne(ID);
-        verify(stereotypeRepository, times(1)).exists(ID);
-        verify(articleRepository, times(1)).save(article);
-        verifyNoMoreInteractions(articleRepository, stereotypeRepository);
-        assertNull(article.getStereotype());
-    }
-
-    @Test
-    public void addStereotype_existingArticleId_categoriesAddedToArticle() {
-        article.setStereotype(null);
-        when(articleRepository.exists(ID)).thenReturn(EXISTS);
-        when(articleRepository.findOne(ID)).thenReturn(article);
-        when(stereotypeRepository.exists(ID)).thenReturn(EXISTS);
-        when(stereotypeRepository.findOne(ID)).thenReturn(Stereotype);
-        when(articleRepository.save(article)).thenReturn(article);
-        articleService.addStereotype(ID, ID);
-        verify(articleRepository, times(1)).exists(ID);
-        verify(articleRepository, times(1)).findOne(ID);
-        verify(stereotypeRepository, times(1)).exists(ID);
-        verify(stereotypeRepository, times(1)).findOne(ID);
-        verify(articleRepository, times(1)).save(article);
-        verifyNoMoreInteractions(articleRepository, stereotypeRepository);
-        assertEquals(Stereotype, article.getStereotype());
     }
 
     @Test

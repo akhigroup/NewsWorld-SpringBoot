@@ -50,9 +50,6 @@ public class Article implements Serializable {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Tag> tags = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Stereotype stereotype;
-
     private Date addedDate;
 
     public void addTag(Tag tag) {

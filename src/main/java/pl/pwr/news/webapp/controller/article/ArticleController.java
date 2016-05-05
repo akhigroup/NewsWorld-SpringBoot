@@ -36,9 +36,6 @@ public class ArticleController {
     @Autowired
     TagService tagService;
 
-    @Autowired
-    StereotypeService stereotypeService;
-
     @RequestMapping(value = "/list")
     public String listArticles(Model model) {
         List<Article> articleList = articleService.findAll();
@@ -49,10 +46,8 @@ public class ArticleController {
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String createNewArticle(Model model) {
         List<Tag> tagList = tagService.findAll();
-        List<Stereotype> stereotypeList = stereotypeService.findAll();
 
         model.addAttribute("tagList", tagList);
-        model.addAttribute("stereotypeList", stereotypeList);
         model.addAttribute("addArticleForm", new AddArticleForm());
         return "article/add-edit";
     }
@@ -61,14 +56,12 @@ public class ArticleController {
     public String editArticle(@RequestParam("id") Long articleId, Model model) {
         Article article = articleService.findById(articleId);
         List<Tag> allTags = tagService.findAll();
-        List<Stereotype> stereotypeList = stereotypeService.findAll();
         AddArticleForm addArticleForm = new AddArticleForm(article);
 
         allTags.removeAll(article.getTags());
 
         model.addAttribute("checkedTags", article.getTags());
         model.addAttribute("tagList", allTags);
-        model.addAttribute("stereotypeList", stereotypeList);
         model.addAttribute("addArticleForm", addArticleForm);
         return "article/add-edit";
     }
@@ -97,12 +90,6 @@ public class ArticleController {
                 articleService.addTag(articleId, createdTag.getId());
             }
         }
-
-        Long selectedStereotypeId = addArticleForm.getStereotypeId();
-        if (selectedStereotypeId != null) {
-            articleService.addStereotype(articleId, selectedStereotypeId);
-        }
-
         return "redirect:/admin/article/list";
     }
 }

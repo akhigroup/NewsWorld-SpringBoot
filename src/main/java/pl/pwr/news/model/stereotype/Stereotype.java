@@ -30,9 +30,6 @@ public class Stereotype {
     private String name;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "stereotype")
-    private Set<Article> articles = new HashSet<>();
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "stereotype")
     private Set<Tag> tags = new HashSet<>();
 
     public Stereotype(String name) {
@@ -42,5 +39,4 @@ public class Stereotype {
     public void addTag(Tag tag) {
         this.tags.add(tag);
     }
-
 }

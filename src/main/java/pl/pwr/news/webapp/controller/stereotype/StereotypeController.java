@@ -28,9 +28,6 @@ public class StereotypeController {
     StereotypeService stereotypeService;
 
     @Autowired
-    ArticleService articleService;
-
-    @Autowired
     TagService tagService;
 
     @RequestMapping(value = "/list")
@@ -44,9 +41,7 @@ public class StereotypeController {
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String createNewStereotype(Model model) {
         List<Tag> tagList = tagService.findAll();
-        List<Article> articleList = articleService.findAll();
         model.addAttribute("tagList", tagList);
-        model.addAttribute("articleList", articleList);
         model.addAttribute("newStereotype", new Stereotype());
 
         return "stereotype/add";

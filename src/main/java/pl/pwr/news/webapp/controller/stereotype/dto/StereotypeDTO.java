@@ -22,7 +22,6 @@ public class StereotypeDTO {
     private Long id;
     private String name;
     private List<ListedTagDTO> tags = new ArrayList<>();
-    private List<ListedArticleDTO> articles = new ArrayList<>();
 
     public StereotypeDTO(Stereotype stereotype) {
         if (stereotype != null) {
@@ -30,8 +29,6 @@ public class StereotypeDTO {
             this.name = stereotype.getName();
             Set<Tag> tags = stereotype.getTags();
             tags.forEach(tag -> this.tags.add(new ListedTagDTO(tag)));
-            Set<Article> articles = stereotype.getArticles();
-            articles.forEach(article -> this.articles.add(new ListedArticleDTO(article)));
         }
     }
 
@@ -42,4 +39,3 @@ public class StereotypeDTO {
         return stereotypeDTOList;
     }
 }
-

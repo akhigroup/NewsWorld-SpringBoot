@@ -26,7 +26,6 @@ public class ArticleDTO {
     private String imageUrl;
     private String link;
     private List<ListedTagDTO> tags = new ArrayList<>();
-    private ListedStereotypeDTO stereotype;
     private Date addedDate;
 
     public ArticleDTO(Article article) {
@@ -38,11 +37,6 @@ public class ArticleDTO {
             this.link = article.getLink();
             Set<Tag> tags = article.getTags();
             tags.forEach(tag -> this.tags.add(new ListedTagDTO(tag)));
-            Stereotype stereotype = article.getStereotype();
-            this.stereotype = new ListedStereotypeDTO(stereotype);
-            if ( this.stereotype.getId() == null) {
-                this.stereotype = null;
-            }
             this.addedDate = article.getAddedDate();
         }
     }

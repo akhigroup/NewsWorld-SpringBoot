@@ -38,19 +38,6 @@ public class StereotypeApi {
         return new Response<>(stereotypeDTOList);
     }
 
-
-    @RequestMapping(value = "/stereotype/articles/{stereotypeId}", method = RequestMethod.GET)
-    public Response<List<ArticleDTO>> getArticlesFromStereotype(@PathVariable("stereotypeId") Long stereotypeId) {
-
-        if (!stereotypeService.exist(stereotypeId)) {
-            return new Response<>("-1", "Stereotype not found");
-        }
-        Stereotype stereotype = stereotypeService.findById(stereotypeId);
-        List<Article> articleList = new ArrayList<Article>(stereotype.getArticles());
-        List<ArticleDTO> articleDTOList = ArticleDTO.getList(articleList);
-        return new Response<>(articleDTOList);
-    }
-
     @RequestMapping(value = "/stereotype/{stereotypeId}", method = RequestMethod.GET)
     public Response<StereotypeDTO> getStereotype(@PathVariable("stereotypeId") Long stereotypeId) {
 

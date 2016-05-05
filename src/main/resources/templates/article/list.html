@@ -56,7 +56,6 @@
                                     <th>Źródło</th>
                                     <th>Dodano</th>
                                     <th>Tagi</th>
-                                    <th>Stereotyp</th>
                                     <th>Wyświetleń</th>
                                     <th>Likes</th>
                                     <th>Dislikes</th>
@@ -73,12 +72,6 @@
                                     <td>0</td>
                                     <td>
                                         <div th:each="tag : ${article.tags}" th:text="'#'+${tag.name}"></div>
-                                    </td>
-                                    <td th:if="${article.stereotype} != null"
-                                        th:text="${article.stereotype.name}">
-                                    </td>
-                                    <td th:if="${article.stereotype} == null"
-                                        th:text="'Brak stereotypu'">
                                     </td>
                                     <td th:text="${article.views}"></td>
                                     <td th:text="${article.likes}"></td>
