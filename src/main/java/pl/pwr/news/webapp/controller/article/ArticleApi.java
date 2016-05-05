@@ -151,12 +151,10 @@ public class ArticleApi {
             @RequestParam(value = "text", required = false) String text,
             @RequestParam(value = "imageUrl", required = false) String imageUrl,
             @RequestParam(value = "link") String link,
-            @RequestParam Long stereotypeId,
             @RequestParam Long[] tagIds) {
-        Stereotype stereotype = stereotypeService.findById(stereotypeId);
         List<Tag> tags = tagService.findAll(Arrays.asList(tagIds));
         Article article = Article.builder().title(title).text(text).imageUrl(imageUrl).
-                link(link).stereotype(stereotype).tags(tags).addedDate(new Date()).build();
+                link(link).tags(tags).addedDate(new Date()).build();
         articleService.createOrUpdate(article);
 
         return new Response<>(article);
@@ -170,7 +168,6 @@ public class ArticleApi {
             @RequestParam(required = false) String text,
             @RequestParam(required = false) String imageUrl,
             @RequestParam(required = false) String link,
-            @RequestParam(required = false) Long stereotypeId,
             @RequestParam(required = false) Long[] tagIds) {
 
         Article article = articleService.findById(articleId);
@@ -193,11 +190,6 @@ public class ArticleApi {
 
         if (isNotBlank(link)) {
             article.setLink(link);
-        }
-
-        if (stereotypeId != null) {
-            Stereotype stereotype = stereotypeService.findById(stereotypeId);
-            article.setStereotype(stereotype);
         }
 
         articleService.createOrUpdate(article);

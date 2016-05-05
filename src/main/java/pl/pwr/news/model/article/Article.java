@@ -3,9 +3,7 @@ package pl.pwr.news.model.article;
 import lombok.*;
 
 import pl.pwr.news.model.report.Report;
-import pl.pwr.news.model.stereotype.Stereotype;
 import pl.pwr.news.model.tag.Tag;
-import pl.pwr.news.model.user.User;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -52,9 +50,6 @@ public class Article implements Serializable {
     @Singular
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Tag> tags = new HashSet<>();
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Stereotype stereotype;
 
     @OneToMany(mappedBy = "article")
     private Set<Report> reports = new HashSet<>();

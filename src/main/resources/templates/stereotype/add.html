@@ -69,14 +69,6 @@
                                 </select>
                             </div>
 
-                            <div class="form-group">
-                                <label>Artykuły</label>
-                                <select class="form-control select2" multiple="multiple"
-                                        data-placeholder="Wybierz najlepsze artykuły" style="width: 100%;">
-                                    <option th:each="article : ${articleList}"
-                                            th:text="${article.title}"></option>
-                                </select>
-                            </div>
                             <!-- /.box-body -->
 
                             <div class="box-footer">

@@ -192,11 +192,6 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void addStereotype(Long articleId, Long stereotypeId) {
-        assignArticleTo(articleId, stereotypeRepository, Article::setStereotype, stereotypeId);
-    }
-
-    @Override
     public void addTag(Long articleId, Long... tagIds) {
         assignArticleTo(articleId, tagRepository, Article::addTag, tagIds);
     }

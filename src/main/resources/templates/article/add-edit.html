@@ -81,23 +81,6 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Stereotyp</label>
-                                    <select class="form-control select2" style="width: 100%;" required="required"
-                                            name="stereotypeId">
-                                        <option th:value="*{article.stereotype.id}"
-                                                th:text="*{article.stereotype.name}" th:selected="true"
-                                                th:if="*{article.stereotype} !=null"></option>
-                                        <option th:selected="true"
-                                                th:value="null"
-                                                th:if="*{article.stereotype} ==null">Brak stereotypu
-                                        </option>
-
-                                        <option th:each="stereotype : ${stereotypeList}" th:value="${stereotype.id}"
-                                                th:text="${stereotype.name}"></option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
                                     <label>Tagi</label>
                                     <select class="form-control select2" multiple="multiple" required="required"
                                             data-placeholder="Wybierz najlepsze tagi" style="width: 100%;"
