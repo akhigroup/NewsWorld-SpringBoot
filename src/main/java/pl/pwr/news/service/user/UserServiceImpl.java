@@ -2,6 +2,7 @@ package pl.pwr.news.service.user;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,16 +10,17 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.pwr.news.model.article.Article;
 import pl.pwr.news.model.user.Gender;
 import pl.pwr.news.model.user.User;
 import pl.pwr.news.model.user.UserRole;
 import pl.pwr.news.repository.user.UserRepository;
+import pl.pwr.news.service.article.ArticleNotExist;
+import pl.pwr.news.service.article.ArticleService;
 import pl.pwr.news.webapp.controller.user.form.RegisterRequestBody;
 
 import java.security.SecureRandom;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Created by Rafal on 2016-02-28.
@@ -31,6 +33,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    ArticleService articleService;
+
+
     @Override
     public User findById(Long id) {
         return userRepository.findOne(id);
@@ -39,6 +45,45 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public void addFavouriteArticle(Long articleId, String userToken) throws UserNotExist, ArticleNotExist {
+        Optional<User> userOptional = Optional.ofNullable(findByActivationHash(userToken));
+
+        if (StringUtils.isBlank(userToken))
+            throw new IllegalArgumentException("UserToken cannot be empty or null");
+
+        if (!userOptional.isPresent())
+            throw new UserNotExist("User not exist for: " + userToken);
+
+        User existingUser = userOptional.get();
+        Optional<Article> articleOptional = Optional.ofNullable(articleService.findById(articleId));
+
+        if (!articleOptional.isPresent())
+            throw new ArticleNotExist(articleId);
+
+        Article existingArticle = articleOptional.get();
+        existingUser.addFavouriteArticle(existingArticle);
+
+        userRepository.save(existingUser);
+    }
+
+    @Override
+    public List<Article> findAllFavouriteArticles(String userToken) throws UserNotExist {
+        Optional<User> userOptional = Optional.ofNullable(findByActivationHash(userToken));
+
+        if (StringUtils.isBlank(userToken))
+            throw new IllegalArgumentException("UserToken cannot be empty or null");
+
+        if (!userOptional.isPresent())
+            throw new UserNotExist("User not exist for: " + userToken);
+
+        User existingUser = userOptional.get();
+
+        Set<Article> userFavouriteArticles = existingUser.getFavouriteArticles();
+
+        return new ArrayList<>(userFavouriteArticles);
     }
 
     @Override
