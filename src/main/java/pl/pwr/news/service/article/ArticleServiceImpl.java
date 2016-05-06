@@ -121,6 +121,16 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public Page<Article> findAllSortedByDateAsc(Pageable pageable) {
+        return articleRepository.findAllByOrderByAddedDateAsc(pageable);
+    }
+
+    @Override
+    public Page<Article> findAllSortedByDateAscNewerThan(Date addedDate, Pageable pageable) {
+        return articleRepository.findAllByAddedDateBeforeOrderByAddedDateAsc(addedDate, pageable);
+    }
+
+    @Override
     public List<Article> findByTag(String tagName) {
         return articleRepository.findByTags_Name(tagName);
     }

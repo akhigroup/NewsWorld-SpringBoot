@@ -21,20 +21,21 @@ import static pl.pwr.news.Constants.*;
 @Transactional
 public class UserRepositoryTest {
 
-    private static User user = new User();
+    private static User user0 = new User();
+    private static User user1 = new User();
+    private static User user2 = new User();
+    private static User user3 = new User();
+
 
     static {
-        user.setId(ID);
-        user.setUsername(USERNAME);
-        user.setEmail(EMAIL);
-        user.setActivationHash(ACTIVATION_HASH);
-        user.setToken(TOKEN);
-        user.setRole(ROLE);
-    }
-
-    @Before
-    public void setup() {
-        userRepository.save(user);
+        user0.setUsername(USERNAME);
+        user1.setEmail(EMAIL);
+        user2.setActivationHash(ACTIVATION_HASH);
+        user3.setToken(TOKEN);
+        user0.setRole(ROLE);
+        user1.setRole(ROLE);
+        user2.setRole(ROLE);
+        user3.setRole(ROLE);
     }
 
     @Autowired
@@ -42,41 +43,31 @@ public class UserRepositoryTest {
 
     @Test
     public void findByUsername_existingUserUsername_userWithUsernameReturned() {
+        userRepository.save(user0);
         User foundUser = userRepository.findByUsername(USERNAME);
-        assertEquals(user.getUsername(), foundUser.getUsername());
-        assertEquals(user.getId(), foundUser.getId());
-        assertEquals(user.getEmail(), foundUser.getEmail());
-        assertEquals(user.getToken(), foundUser.getToken());
-        assertEquals(user.getActivationHash(), foundUser.getActivationHash());
+        assertEquals(user0, foundUser);
     }
 
     @Test
     public void findByEmail_existingUserEmail_userWithEmailReturned() {
+        userRepository.save(user1);
         User foundUser = userRepository.findByEmail(EMAIL);
-        assertEquals(user.getUsername(), foundUser.getUsername());
-        assertEquals(user.getId(), foundUser.getId());
-        assertEquals(user.getEmail(), foundUser.getEmail());
-        assertEquals(user.getToken(), foundUser.getToken());
-        assertEquals(user.getActivationHash(), foundUser.getActivationHash());
+        assertEquals(user1, foundUser);
+
     }
 
     @Test
     public void findByActivationHash_existingUserActivationHash_userWithActivationHashReturned() {
+        userRepository.save(user2);
         User foundUser = userRepository.findByActivationHash(ACTIVATION_HASH);
-        assertEquals(user.getUsername(), foundUser.getUsername());
-        assertEquals(user.getId(), foundUser.getId());
-        assertEquals(user.getEmail(), foundUser.getEmail());
-        assertEquals(user.getToken(), foundUser.getToken());
-        assertEquals(user.getActivationHash(), foundUser.getActivationHash());
+        assertEquals(user2, foundUser);
+
     }
 
     @Test
     public void findByToken_existingUserToken_userWithTokenReturned() {
+        userRepository.save(user3);
         User foundUser = userRepository.findByToken(TOKEN);
-        assertEquals(user.getUsername(), foundUser.getUsername());
-        assertEquals(user.getId(), foundUser.getId());
-        assertEquals(user.getEmail(), foundUser.getEmail());
-        assertEquals(user.getToken(), foundUser.getToken());
-        assertEquals(user.getActivationHash(), foundUser.getActivationHash());
+        assertEquals(user3, foundUser);
     }
 }
