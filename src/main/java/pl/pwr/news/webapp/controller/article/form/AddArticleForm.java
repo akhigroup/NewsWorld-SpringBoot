@@ -19,7 +19,7 @@ public class AddArticleForm implements Serializable {
 
     Article article = new Article();
     String tagsInString = new String();
-    Long categoryId = -1L;
+    Long stereotypeId = -1L;
 
     public AddArticleForm(Article article) {
         this.article = article;

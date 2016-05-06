@@ -8,7 +8,7 @@ import pl.pwr.news.model.article.Article;
 import pl.pwr.news.model.report.Report;
 import pl.pwr.news.repository.article.ArticleRepository;
 import pl.pwr.news.repository.reports.ReportRepository;
-import pl.pwr.news.service.article.ArticleNotExist;
+import pl.pwr.news.service.exception.ArticleNotExist;
 
 /**
  * Created by jakub on 2/29/16.

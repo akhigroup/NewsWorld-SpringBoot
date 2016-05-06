@@ -3,14 +3,13 @@ package pl.pwr.news.worker;
 import lombok.extern.log4j.Log4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import pl.pwr.news.model.article.Article;
 import pl.pwr.news.provider.wykop.WykopAPI;
 import pl.pwr.news.provider.wykop.WykopAPIImpl;
 import pl.pwr.news.provider.wykop.WykopArticleDTO;
 import pl.pwr.news.service.article.ArticleService;
-import pl.pwr.news.service.article.NotUniqueArticle;
+import pl.pwr.news.service.exception.NotUniqueArticle;
 
 import java.util.List;
 

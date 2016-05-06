@@ -9,8 +9,10 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import pl.pwr.news.model.article.Article;
 import pl.pwr.news.repository.article.ArticleRepository;
-import pl.pwr.news.repository.category.CategoryRepository;
+import pl.pwr.news.repository.stereotype.StereotypeRepository;
 import pl.pwr.news.repository.tag.TagRepository;
+import pl.pwr.news.service.exception.ArticleNotExist;
+import pl.pwr.news.service.exception.NotUniqueArticle;
 
 import java.util.Date;
 import java.util.List;
@@ -30,7 +32,7 @@ public class ArticleServiceImpl implements ArticleService {
     ArticleRepository articleRepository;
 
     @Autowired
-    CategoryRepository categoryRepository;
+    StereotypeRepository stereotypeRepository;
 
     @Autowired
     TagRepository tagRepository;
@@ -189,11 +191,6 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public List<Article> findAll(String keyword, String link) {
         return articleRepository.findAll(where(keywordInTitle(keyword)).or(where(keywordInText(keyword))));
-    }
-
-    @Override
-    public void addCategory(Long articleId, Long categoryId) {
-        assignArticleTo(articleId, categoryRepository, Article::setCategory, categoryId);
     }
 
     @Override

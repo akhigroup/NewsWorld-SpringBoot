@@ -4,6 +4,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.pwr.news.model.article.Article;
+import pl.pwr.news.service.exception.ArticleNotExist;
+import pl.pwr.news.service.exception.NotUniqueArticle;
 
 import java.util.Date;
 import java.util.List;
@@ -15,8 +17,6 @@ import java.util.List;
 public interface ArticleService {
 
     List<Article> findAll(String keyword, String link);
-
-    void addCategory(Long articleId, Long categoryId);
 
     void addTag(Long articleId, Long... tagId);
 
@@ -54,3 +54,4 @@ public interface ArticleService {
 
     Page<Article> findAllSortedByDateAscNewerThan(Date addedDate, Pageable pageable);
 }
+

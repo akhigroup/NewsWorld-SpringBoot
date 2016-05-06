@@ -8,7 +8,7 @@ import org.springframework.social.facebook.api.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import pl.pwr.news.service.user.EmailNotUnique;
+import pl.pwr.news.service.exception.EmailNotUnique;
 import pl.pwr.news.service.user.UserService;
 
 import javax.inject.Inject;

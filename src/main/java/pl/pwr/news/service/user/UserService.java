@@ -2,7 +2,7 @@ package pl.pwr.news.service.user;
 
 import pl.pwr.news.model.article.Article;
 import pl.pwr.news.model.user.User;
-import pl.pwr.news.service.article.ArticleNotExist;
+import pl.pwr.news.service.exception.*;
 import pl.pwr.news.webapp.controller.user.form.RegisterRequestBody;
 
 import java.util.List;
@@ -29,6 +29,8 @@ public interface UserService {
     User findById(Long id);
 
     User findByUsername(String username);
+
+    void addStereotype(Long userId, Long stereotypeId) throws UserNotExist, StereotypeNotExist;
 
     void addFavouriteArticle(Long articleId, String userToken) throws UserNotExist, ArticleNotExist;
 

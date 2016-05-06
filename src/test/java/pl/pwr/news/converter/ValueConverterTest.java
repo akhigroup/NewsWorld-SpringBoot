@@ -20,8 +20,8 @@ public class ValueConverterTest {
     }
 
     @Test
-    public void convertCategoryName_validName_convertedNameReturned() {
-        String convertedName = ValueConverter.convertCategoryName(nameToConvert);
+    public void convertStereotypeName_validName_convertedNameReturned() {
+        String convertedName = ValueConverter.convertStereotypeName(nameToConvert);
         assertEquals(CONVERTED_CATEGORY_NAME, convertedName);
     }
 }
