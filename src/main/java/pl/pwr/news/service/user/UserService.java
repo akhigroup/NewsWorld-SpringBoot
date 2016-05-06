@@ -36,6 +36,7 @@ public interface UserService {
 
     String generateActivateAccountUniqueHash(User user);
 
+
     Long countAll();
 
     User createUserFromForm(RegisterRequestBody registerRequestBody);
