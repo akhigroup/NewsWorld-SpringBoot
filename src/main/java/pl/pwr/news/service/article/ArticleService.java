@@ -52,3 +52,4 @@ public interface ArticleService {
 
     Page<Article> findAllSortedByDateAscNewerThan(Date addedDate, Pageable pageable);
 }
+
