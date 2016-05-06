@@ -1,20 +1,19 @@
 package pl.pwr.news.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import pl.pwr.news.model.article.Article;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by Evelan-E6540 on 29/08/2015.
@@ -66,21 +65,11 @@ public class User implements UserDetails, Serializable {
 
     private String hometown;
 
-    @OneToMany(
-            cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER)
-    @JoinColumn(name = "fk_fav_articles")
-    private Set<Article> favouriteArticles = new HashSet<>();
-
     @Override
     public Collection<GrantedAuthority> getAuthorities() {
         HashSet<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority(role.getAuthority()));
         return authorities;
-    }
-
-    public void addFavouriteArticle(Article article) {
-        this.favouriteArticles.add(article);
     }
 
     @Override

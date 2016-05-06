@@ -14,6 +14,16 @@ public interface UserService {
 
     void save(User user);
 
+    String generateToken(User user);
+
+    boolean emailExist(String email);
+
+    boolean tokenExist(String token);
+
+    User register(String email, String password, String firstname, String lastname) throws EmailNotUnique;
+
+    User facebookRegister(String email, String firstname, String lastname) throws EmailNotUnique;
+
     List<User> findAll();
 
     User findById(Long id);
@@ -32,7 +42,11 @@ public interface UserService {
 
     String generateActivateAccountUniqueHash(User user);
 
+
     Long countAll();
 
     User createUserFromForm(RegisterRequestBody registerRequestBody);
+
+    User login(String email, String password) throws UserNotExist, PasswordIncorrect;
+
 }

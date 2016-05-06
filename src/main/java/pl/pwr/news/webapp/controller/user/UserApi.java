@@ -2,61 +2,68 @@ package pl.pwr.news.webapp.controller.user;
 
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import pl.pwr.news.model.article.Article;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import pl.pwr.news.model.user.User;
-import pl.pwr.news.service.article.ArticleNotExist;
-import pl.pwr.news.service.article.ArticleService;
+import pl.pwr.news.service.user.EmailNotUnique;
+import pl.pwr.news.service.user.PasswordIncorrect;
 import pl.pwr.news.service.user.UserNotExist;
 import pl.pwr.news.service.user.UserService;
 import pl.pwr.news.webapp.controller.Response;
-import pl.pwr.news.webapp.controller.article.dto.ArticleDTO;
-
-import java.util.Collections;
-import java.util.List;
+import pl.pwr.news.webapp.controller.user.dto.UserDTO;
 
 /**
- * Created by jakub on 2/29/16.
+ * Created by Evelan on 23/04/16.
  */
 @RestController
-@RequestMapping(value = "/api", produces = "application/json;charset=UTF-8")
+@RequestMapping("/api")
 @Log4j
 public class UserApi {
 
     @Autowired
-    ArticleService articleService;
-
-    @Autowired
     UserService userService;
 
+    @RequestMapping(value = "register", method = RequestMethod.GET)
+    public Response<UserDTO> register(@RequestParam String email,
+                                      @RequestParam String password,
+                                      @RequestParam String firstName,
+                                      @RequestParam String lastName) {
 
-    @RequestMapping(value = "/user/favourite/{articleId}", method = RequestMethod.PUT)
-    public Response<User> addFavouriteArticle(@PathVariable Long articleId,
-                                              @RequestParam String userToken) {
-
+        User registeredUser;
         try {
-            userService.addFavouriteArticle(articleId, userToken);
-        } catch (UserNotExist | ArticleNotExist exception) {
-            String exceptionMessage = exception.getMessage();
+            registeredUser = userService.register(email, password, firstName, lastName);
+        } catch (EmailNotUnique emailNotUnique) {
+            String exceptionMessage = emailNotUnique.getMessage();
             log.warn(exceptionMessage);
             return new Response<>("-1", exceptionMessage);
         }
 
-        return new Response<>();
+        UserDTO userDTO = new UserDTO(registeredUser);
+        return new Response<>(userDTO);
     }
 
-    @RequestMapping(value = "/user/favourite", method = RequestMethod.GET)
-    public Response<List<ArticleDTO>> getFavourite(@RequestParam String userToken) {
 
-        List<Article> articleList;
+    @RequestMapping(value = "login", method = RequestMethod.GET)
+    public Response<UserDTO> login(@RequestParam String email,
+                                   @RequestParam String password) {
+
+        User loggedUser;
         try {
-            articleList = userService.findAllFavouriteArticles(userToken);
+            loggedUser = userService.login(email, password);
         } catch (UserNotExist userNotExist) {
-            log.warn(userNotExist.getMessage());
-            articleList = Collections.emptyList();
+            String exceptionMessage = userNotExist.getMessage();
+            log.warn(exceptionMessage);
+            return new Response<>("-1", exceptionMessage);
+        } catch (PasswordIncorrect passwordIncorrect) {
+            String exceptionMessage = passwordIncorrect.getMessage();
+            log.warn(exceptionMessage);
+            return new Response<>("-2", exceptionMessage);
         }
-        List<ArticleDTO> articleDTOList = ArticleDTO.getList(articleList);
-        return new Response<>(articleDTOList);
-    }
 
+        UserDTO userDTO = new UserDTO(loggedUser);
+        return new Response<>(userDTO);
+    }
 }
