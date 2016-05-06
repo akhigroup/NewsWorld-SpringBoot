@@ -4,7 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.pwr.news.model.report.Report;
-import pl.pwr.news.service.article.ArticleNotExist;
+import pl.pwr.news.service.exception.ArticleNotExist;
 
 /**
  * Created by jakub on 2/29/16.

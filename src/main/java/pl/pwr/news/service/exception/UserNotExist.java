@@ -1,4 +1,4 @@
-package pl.pwr.news.service.user;
+package pl.pwr.news.service.exception;
 
 /**
  * Created by Evelan on 23/04/16.

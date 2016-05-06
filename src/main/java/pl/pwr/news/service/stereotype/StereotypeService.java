@@ -1,6 +1,9 @@
 package pl.pwr.news.service.stereotype;
 
 import pl.pwr.news.model.stereotype.Stereotype;
+import pl.pwr.news.service.exception.StereotypeNotExist;
+import pl.pwr.news.service.exception.UserNotExist;
+import pl.pwr.news.service.exception.UserStereotypeNotExist;
 
 import java.util.List;
 
@@ -14,6 +17,8 @@ public interface StereotypeService {
     void addTag(Long stereotypeId, Long... tagId);
 
     void updateStereotype(Stereotype stereotype);
+
+    Long incrementValue(Long userId, Long stereotypeId) throws UserNotExist, StereotypeNotExist, UserStereotypeNotExist;
 
     List<Stereotype> findAll();
 

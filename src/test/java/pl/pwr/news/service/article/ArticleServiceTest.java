@@ -6,11 +6,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import pl.pwr.news.model.article.Article;
-import pl.pwr.news.model.stereotype.Stereotype;
 import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.repository.article.ArticleRepository;
 import pl.pwr.news.repository.stereotype.StereotypeRepository;
 import pl.pwr.news.repository.tag.TagRepository;
+import pl.pwr.news.service.exception.ArticleNotExist;
+import pl.pwr.news.service.exception.NotUniqueArticle;
 
 import java.util.Collections;
 import java.util.HashSet;

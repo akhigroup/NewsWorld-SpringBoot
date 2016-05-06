@@ -1,6 +1,7 @@
 package pl.pwr.news.model.userstereotype;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.pwr.news.model.stereotype.Stereotype;
 import pl.pwr.news.model.user.User;
@@ -14,6 +15,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 @Table(name = "users_stereotypes")
 @IdClass(UserStereotypeId.class)
 public class UserStereotype implements Serializable {
@@ -29,6 +31,11 @@ public class UserStereotype implements Serializable {
     private User user;
 
     private Long value = 0L;
+
+    public UserStereotype(User user, Stereotype stereotype) {
+        this.user = user;
+        this.stereotype = stereotype;
+    }
 
     public void incrementValue() {
         if (this.value == null) {

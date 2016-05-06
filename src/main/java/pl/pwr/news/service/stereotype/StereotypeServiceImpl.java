@@ -4,8 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.pwr.news.model.stereotype.Stereotype;
 import pl.pwr.news.model.tag.Tag;
+import pl.pwr.news.model.user.User;
+import pl.pwr.news.model.userstereotype.UserStereotype;
 import pl.pwr.news.repository.stereotype.StereotypeRepository;
 import pl.pwr.news.repository.tag.TagRepository;
+import pl.pwr.news.repository.user.UserRepository;
+import pl.pwr.news.repository.userstereotype.UserStereotypeRepository;
+import pl.pwr.news.service.exception.StereotypeNotExist;
+import pl.pwr.news.service.exception.UserNotExist;
+import pl.pwr.news.service.exception.UserStereotypeNotExist;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +25,12 @@ public class StereotypeServiceImpl implements StereotypeService {
 
     @Autowired
     StereotypeRepository stereotypeRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    UserStereotypeRepository userStereotypeRepository;
 
     @Autowired
     TagRepository tagRepository;
@@ -57,6 +70,25 @@ public class StereotypeServiceImpl implements StereotypeService {
             return;
         }
         //  ???
+    }
+
+    @Override
+    public Long incrementValue(Long userId, Long stereotypeId) throws UserNotExist, StereotypeNotExist, UserStereotypeNotExist {
+        Optional<User> userOptional = Optional.ofNullable(userRepository.findOne(userId));
+        if (!userOptional.isPresent())
+            throw new UserNotExist("User not exist for: " + userId);
+        Optional<Stereotype> stereotypeOptional = Optional.ofNullable(stereotypeRepository.findOne(stereotypeId));
+        if (!stereotypeOptional.isPresent())
+            throw new UserNotExist("Stereotype not exist for: " + stereotypeId);
+        Optional<UserStereotype> userStereotypeOptional = Optional.ofNullable(
+                userStereotypeRepository.findOneByUser_IdAndStereotype_Id(userId, stereotypeId));
+        if (!userStereotypeOptional.isPresent())
+            throw new UserStereotypeNotExist(
+                    "UserStereotype not exist for userId: " + userId + ", stereotypeId: " + stereotypeId);
+        UserStereotype existingUserStereotype = userStereotypeOptional.get();
+        existingUserStereotype.incrementValue();
+        userStereotypeRepository.save(existingUserStereotype);
+        return existingUserStereotype.getValue();
     }
 
     @Override

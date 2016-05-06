@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pl.pwr.news.model.report.Report;
-import pl.pwr.news.service.article.ArticleNotExist;
+import pl.pwr.news.service.exception.ArticleNotExist;
 import pl.pwr.news.service.report.ReportService;
 import pl.pwr.news.webapp.controller.Response;
 import pl.pwr.news.webapp.controller.report.dto.ReportDTO;
