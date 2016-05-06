@@ -10,6 +10,8 @@ import pl.pwr.news.model.userstereotype.UserStereotype;
 
 @Repository
 public interface UserStereotypeRepository extends CrudRepository<UserStereotype, Long> {
+
+    UserStereotype findOneByUser_IdAndStereotype_Id(Long userId, Long stereotypeId);
 }
 
 
