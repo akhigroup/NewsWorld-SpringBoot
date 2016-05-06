@@ -2,6 +2,7 @@ package pl.pwr.news.model.article;
 
 import lombok.*;
 import pl.pwr.news.model.category.Category;
+import pl.pwr.news.model.report.Report;
 import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.model.user.User;
 
@@ -54,6 +55,8 @@ public class Article implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     private Category category;
 
+    @OneToMany(mappedBy = "article")
+    private Set<Report> reports = new HashSet<>();
 
     private Date addedDate;
 
