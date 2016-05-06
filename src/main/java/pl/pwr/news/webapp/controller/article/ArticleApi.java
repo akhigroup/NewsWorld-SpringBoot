@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
+import pl.pwr.news.converter.DateConverter;
 import pl.pwr.news.model.article.Article;
 import pl.pwr.news.model.category.Category;
 import pl.pwr.news.model.tag.Tag;
@@ -15,6 +16,7 @@ import pl.pwr.news.service.tag.TagService;
 import pl.pwr.news.webapp.controller.Response;
 import pl.pwr.news.webapp.controller.article.dto.ArticleDTO;
 
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -61,6 +63,30 @@ public class ArticleApi {
         return new Response<>(articleDTOList);
     }
 
+    @RequestMapping(value = "/article/date", method = RequestMethod.GET)
+    public Response<List<ArticleDTO>> getArticlesSortedByDate(@RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) int pageSize,
+                                                              @RequestParam(required = false, defaultValue = DEFAULT_START_PAGE) int page) {
+        pageSize = getCorrectMaxPageSize(pageSize);
+        Page<Article> databaseArticle = articleService.findAllSortedByDateAsc(new PageRequest(page, pageSize));
+        List<ArticleDTO> articleDTOList = ArticleDTO.getList(databaseArticle.getContent());
+        return new Response<>(articleDTOList);
+    }
+
+    @RequestMapping(value = "/article/date/{addedDate}", method = RequestMethod.GET)
+    public Response<List<ArticleDTO>> getArticlesSortedByDateNewerThan(
+            @PathVariable("addedDate") String date,
+            @RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) int pageSize,
+            @RequestParam(required = false, defaultValue = DEFAULT_START_PAGE) int page) {
+        try {
+            Date convertedDate = DateConverter.convertFromString(date);
+            pageSize = getCorrectMaxPageSize(pageSize);
+            Page<Article> databaseArticle = articleService.findAllSortedByDateAscNewerThan(convertedDate, new PageRequest(page, pageSize));
+            List<ArticleDTO> articleDTOList = ArticleDTO.getList(databaseArticle.getContent());
+            return new Response<>(articleDTOList);
+        } catch (ParseException e) {
+            return new Response<>("-1", e.getMessage() + " Valid date format: yyyy-MM-dd");
+        }
+    }
 
     @RequestMapping(value = "/article/liked", method = RequestMethod.GET)
     public Response<List<ArticleDTO>> getMostLikedArticles(@RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) int pageSize,

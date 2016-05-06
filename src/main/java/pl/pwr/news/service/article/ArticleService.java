@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.pwr.news.model.article.Article;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,4 +49,8 @@ public interface ArticleService {
     Page<Article> findPopular(int page, int pageSize);
 
     Page<Article> findMostLiked(int page, int pageSize);
+
+    Page<Article> findAllSortedByDateAsc(Pageable pageable);
+
+    Page<Article> findAllSortedByDateAscNewerThan(Date addedDate, Pageable pageable);
 }
