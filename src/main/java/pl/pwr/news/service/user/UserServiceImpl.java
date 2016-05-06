@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void addFavouriteArticle(Long articleId, String userToken) throws UserNotExist, ArticleNotExist {
-        Optional<User> userOptional = Optional.ofNullable(findByActivationHash(userToken));
+        Optional<User> userOptional = Optional.ofNullable(findByToken(userToken));
 
         if (StringUtils.isBlank(userToken))
             throw new IllegalArgumentException("UserToken cannot be empty or null");
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public List<Article> findAllFavouriteArticles(String userToken) throws UserNotExist {
-        Optional<User> userOptional = Optional.ofNullable(findByActivationHash(userToken));
+        Optional<User> userOptional = Optional.ofNullable(findByToken(userToken));
 
         if (StringUtils.isBlank(userToken))
             throw new IllegalArgumentException("UserToken cannot be empty or null");
