@@ -55,30 +55,6 @@ public class StereotypeApiTest {
     }
 
     @Test
-    public void getArticlesFromStereotype_existingStereotypeId_listOfArticlesFromStereotypeReturned() throws Exception {
-        when(stereotypeService.exist(ID)).thenReturn(EXISTS);
-        when(stereotypeService.findById(ID)).thenReturn(stereotype);
-        mockMvc.perform(get("/api/stereotype/articles/{stereotypeId}", ID))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(REST_CONTENT_TYPE))
-                .andExpect(jsonPath(RESULT, is(STATUS_OK)));
-        verify(stereotypeService, times(1)).exist(ID);
-        verify(stereotypeService, times(1)).findById(ID);
-        verifyNoMoreInteractions(stereotypeService);
-    }
-
-    @Test
-    public void getArticlesFromStereotype_nonExistingStereotypeId_stereotypeNotFound() throws Exception {
-        when(stereotypeService.exist(ID)).thenReturn(NOT_EXISTS);
-        mockMvc.perform(get("/api/stereotype/articles/{stereotypeId}", ID))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(REST_CONTENT_TYPE))
-                .andExpect(jsonPath(RESULT, is(STATUS_NOT_FOUND)));
-        verify(stereotypeService, times(1)).exist(ID);
-        verifyNoMoreInteractions(stereotypeService);
-    }
-
-    @Test
     public void getStereotype_existingStereotypeId_stereotypeWithIdReturned() throws Exception {
         when(stereotypeService.exist(ID)).thenReturn(EXISTS);
         mockMvc.perform(get("/api/stereotype/{stereotypeId}", ID))
