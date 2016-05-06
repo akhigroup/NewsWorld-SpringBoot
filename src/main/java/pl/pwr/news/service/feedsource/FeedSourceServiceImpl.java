@@ -40,6 +40,7 @@ public class FeedSourceServiceImpl implements FeedSourceService {
             FeedSource feedSource = new FeedSource(title, link);
             feedSource.setAddedDate(new Date());
             sourceRepository.save(feedSource);
+
             log.info("FeedSource saved: " + title + " - " + link);
         }
         log.error("FeedSource not saved " + title + " - " + link);
