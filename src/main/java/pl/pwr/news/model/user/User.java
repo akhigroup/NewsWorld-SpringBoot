@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import pl.pwr.news.model.article.Article;
+import pl.pwr.news.model.usertag.UserTag;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -72,6 +73,9 @@ public class User implements UserDetails, Serializable {
     @JoinColumn(name = "fk_fav_articles")
     private Set<Article> favouriteArticles = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    private Set<UserTag> userTags = new HashSet<>();
+
     @Override
     public Collection<GrantedAuthority> getAuthorities() {
         HashSet<GrantedAuthority> authorities = new HashSet<>();
@@ -81,6 +85,10 @@ public class User implements UserDetails, Serializable {
 
     public void addFavouriteArticle(Article article) {
         this.favouriteArticles.add(article);
+    }
+
+    public void addUserTag(UserTag userTag) {
+        this.userTags.add(userTag);
     }
 
     @Override

@@ -11,10 +11,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.pwr.news.model.article.Article;
+import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.model.user.Gender;
 import pl.pwr.news.model.user.User;
 import pl.pwr.news.model.user.UserRole;
+import pl.pwr.news.model.usertag.UserTag;
+import pl.pwr.news.repository.tag.TagRepository;
 import pl.pwr.news.repository.user.UserRepository;
+import pl.pwr.news.repository.usertag.UserTagRepository;
 import pl.pwr.news.service.exception.*;
 import pl.pwr.news.service.article.ArticleService;
 import pl.pwr.news.webapp.controller.user.form.RegisterRequestBody;
@@ -35,6 +39,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     ArticleService articleService;
+
+    @Autowired
+    TagRepository tagRepository;
+
+    @Autowired
+    UserTagRepository userTagRepository;
 
 
     @Override
@@ -171,6 +181,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void save(User user) {
         userRepository.save(user);
+    }
+
+    @Override
+    public void addTag(Long userId, Long tagId) throws UserNotExist, TagNotExist {
+        Optional<User> userOptional = Optional.ofNullable(findById(userId));
+                if (!userOptional.isPresent())
+                       throw new UserNotExist("User not exist for: " + userId);
+                Optional<Tag> tagOptional = Optional.ofNullable(tagRepository.findOne(tagId));
+                if (!tagOptional.isPresent())
+                       throw new TagNotExist("Tag not exist for: " + tagId);
+                User existingUser = userOptional.get();
+                Tag  existingTag = tagOptional.get();
+                UserTag userTag = new UserTag(existingUser, existingTag);
+                userTagRepository.save(userTag);
     }
 
     @Override

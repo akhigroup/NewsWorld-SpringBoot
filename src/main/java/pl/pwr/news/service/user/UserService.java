@@ -14,6 +14,8 @@ public interface UserService {
 
     void save(User user);
 
+    void addTag(Long userId, Long tagId) throws UserNotExist, TagNotExist;
+
     String generateToken(User user);
 
     boolean emailExist(String email);
