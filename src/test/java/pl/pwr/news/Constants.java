@@ -17,6 +17,7 @@ public class Constants {
     public static final Long ID = 1L;
     public static final Long COUNT = 1L;
     public static final String NAME = "testName";
+    public static final String IMAGE_URL = "testImageUrl";
     public static final String LINK = "http://test.link";
     public static final String USERNAME = "testUsernme";
     public static final String EMAIL = "testEmail@test.com";
@@ -29,5 +30,6 @@ public class Constants {
     public static final boolean NOT_EXISTS = false;
     public static final Iterable<Long> IDS = Collections.singletonList(ID);
     public static final String NAME_PARAM = "name";
-    public static final String CATEGORY_ID_PARAM = "stereotypeId";
+    public static final String CATEGORY_ID_PARAM = "categoryId";
+    public static final String IMAGE_URL_PARAM = "imageUrl";
 }

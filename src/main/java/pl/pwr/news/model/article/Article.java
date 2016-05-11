@@ -2,6 +2,7 @@ package pl.pwr.news.model.article;
 
 import lombok.*;
 
+import pl.pwr.news.model.category.Category;
 import pl.pwr.news.model.report.Report;
 import pl.pwr.news.model.tag.Tag;
 
@@ -46,6 +47,9 @@ public class Article implements Serializable {
     private Long likes = 0L;
 
     private Long dislikes = 0L;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Category category;
 
     @Singular
     @ManyToMany(fetch = FetchType.EAGER)

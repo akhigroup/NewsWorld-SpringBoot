@@ -30,8 +30,6 @@ public interface UserService {
 
     User findByUsername(String username);
 
-    void addStereotype(Long userId, Long stereotypeId) throws UserNotExist, StereotypeNotExist;
-
     void addFavouriteArticle(Long articleId, String userToken) throws UserNotExist, ArticleNotExist;
 
     List<Article> findAllFavouriteArticles(String userToken) throws UserNotExist;

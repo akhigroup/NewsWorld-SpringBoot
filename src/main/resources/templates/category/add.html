@@ -28,11 +28,11 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                Nowy stereotyp
+                Nowa kategoria
             </h1>
             <ol class="breadcrumb">
                 <li><a th:href="@{/admin/}"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a th:href="@{/admin/stereotypes/list}">Stereotypy</a></li>
+                <li><a th:href="@{/admin/categories/list}">Kategorie</a></li>
                 <li class="active">Dodaj nowy</li>
             </ol>
         </section>
@@ -49,15 +49,22 @@
                         </div>
                         <!-- /.box-header -->
                         <!-- form start -->
-                        <form role="form" th:object="${newStereotype}" method="post" th:action="@{/admin/stereotype/add}">
+                        <form role="form" th:object="${newCategory}" method="post" th:action="@{/admin/category/add}">
                             <div class="box-body">
                                 <div class="form-group">
                                     <label for="exampleInputName">Nazwa</label>
                                     <input type="text" class="form-control" id="exampleInputName"
-                                           th:field="${newStereotype.name}"
-                                           placeholder="Nazwa stereotypu"
+                                           th:field="${newCategory.name}"
+                                           placeholder="Nazwa kategorii"
                                            required="required"/>
                                 </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleInputImage">Link do zdjęcia</label>
+                                <input type="url" class="form-control" id="exampleInputImage"
+                                       th:field="${newCategory.imageUrl}"
+                                       placeholder="Bezpośredni link do obrazka"/>
                             </div>
 
                             <div class="form-group">
@@ -69,6 +76,14 @@
                                 </select>
                             </div>
 
+                            <div class="form-group">
+                                <label>Artykuły</label>
+                                <select class="form-control select2" multiple="multiple"
+                                        data-placeholder="Wybierz najlepsze artykuły" style="width: 100%;">
+                                    <option th:each="article : ${articleList}"
+                                            th:text="${article.title}"></option>
+                                </select>
+                            </div>
                             <!-- /.box-body -->
 
                             <div class="box-footer">
@@ -111,6 +126,8 @@
             tags: true
         })
     });
+
+
 </script>
 </body>
 </html>

@@ -11,14 +11,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.pwr.news.model.article.Article;
-import pl.pwr.news.model.stereotype.Stereotype;
 import pl.pwr.news.model.user.Gender;
 import pl.pwr.news.model.user.User;
 import pl.pwr.news.model.user.UserRole;
-import pl.pwr.news.model.userstereotype.UserStereotype;
-import pl.pwr.news.repository.stereotype.StereotypeRepository;
 import pl.pwr.news.repository.user.UserRepository;
-import pl.pwr.news.repository.userstereotype.UserStereotypeRepository;
 import pl.pwr.news.service.exception.*;
 import pl.pwr.news.service.article.ArticleService;
 import pl.pwr.news.webapp.controller.user.form.RegisterRequestBody;
@@ -38,12 +34,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     UserRepository userRepository;
 
     @Autowired
-    UserStereotypeRepository userStereotypeRepository;
-
-    @Autowired
-    StereotypeRepository stereotypeRepository;
-
-    @Autowired
     ArticleService articleService;
 
 
@@ -55,20 +45,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
-    }
-
-    @Override
-    public void addStereotype(Long userId, Long stereotypeId) throws UserNotExist, StereotypeNotExist {
-        Optional<User> userOptional = Optional.ofNullable(findById(userId));
-        if (!userOptional.isPresent())
-            throw new UserNotExist("User not exist for: " + userId);
-        Optional<Stereotype> stereotypeOptional = Optional.ofNullable(stereotypeRepository.findOne(stereotypeId));
-        if (!stereotypeOptional.isPresent())
-            throw new UserNotExist("Stereotype not exist for: " + stereotypeId);
-        User existingUser = userOptional.get();
-        Stereotype existingStereotype = stereotypeOptional.get();
-        UserStereotype userStereotype = new UserStereotype(existingUser, existingStereotype);
-        userStereotypeRepository.save(userStereotype);
     }
 
     @Override

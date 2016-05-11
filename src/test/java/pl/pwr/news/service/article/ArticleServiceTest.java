@@ -6,9 +6,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import pl.pwr.news.model.article.Article;
+import pl.pwr.news.model.category.Category;
 import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.repository.article.ArticleRepository;
-import pl.pwr.news.repository.stereotype.StereotypeRepository;
+import pl.pwr.news.repository.category.CategoryRepository;
 import pl.pwr.news.repository.tag.TagRepository;
 import pl.pwr.news.service.exception.ArticleNotExist;
 import pl.pwr.news.service.exception.NotUniqueArticle;
@@ -28,6 +29,7 @@ public class ArticleServiceTest {
 
     private static final Long ID_UPDATE = -1L;
     private static Article article = new Article();
+    private static Category CATEGORY = new Category(NAME);
     private static Tag TAG = new Tag(NAME);
     private static final List<Article> ARTICLE_LIST = Collections.singletonList(article);
 
@@ -42,7 +44,7 @@ public class ArticleServiceTest {
     ArticleRepository articleRepository;
 
     @Mock
-    StereotypeRepository stereotypeRepository;
+    CategoryRepository categoryRepository;
 
     @Mock
     TagRepository tagRepository;
@@ -138,7 +140,7 @@ public class ArticleServiceTest {
         when(articleRepository.findByTags_Name(NAME)).thenReturn(ARTICLE_LIST);
         List<Article> articleList = articleService.findByTag(NAME);
         verify(articleRepository, times(1)).findByTags_Name(NAME);
-        verifyNoMoreInteractions(stereotypeRepository);
+        verifyNoMoreInteractions(categoryRepository);
         assertEquals(ARTICLE_LIST, articleList);
     }
 
@@ -208,6 +210,50 @@ public class ArticleServiceTest {
         verify(articleRepository, times(1)).exists(ID);
         verifyNoMoreInteractions(articleRepository);
         assertNull(updatedArticle);
+    }
+
+    @Test
+    public void addCategory_nonExistingArticleId_returned() {
+        article.setCategory(null);
+        when(articleRepository.exists(ID)).thenReturn(NOT_EXISTS);
+        articleService.addCategory(ID, ID);
+        verify(articleRepository, times(1)).exists(ID);
+        verifyNoMoreInteractions(articleRepository);
+        assertNull(article.getCategory());
+    }
+
+    @Test
+    public void addCategory_nonExistingCategoryId_returned() {
+        article.setCategory(null);
+        when(articleRepository.exists(ID)).thenReturn(EXISTS);
+        when(articleRepository.findOne(ID)).thenReturn(article);
+        when(categoryRepository.exists(ID)).thenReturn(NOT_EXISTS);
+        when(articleRepository.save(article)).thenReturn(article);
+        articleService.addCategory(ID, ID);
+        verify(articleRepository, times(1)).exists(ID);
+        verify(articleRepository, times(1)).findOne(ID);
+        verify(categoryRepository, times(1)).exists(ID);
+        verify(articleRepository, times(1)).save(article);
+        verifyNoMoreInteractions(articleRepository, categoryRepository);
+        assertNull(article.getCategory());
+    }
+
+    @Test
+    public void addCategory_existingArticleId_categoriesAddedToArticle() {
+        article.setCategory(null);
+        when(articleRepository.exists(ID)).thenReturn(EXISTS);
+        when(articleRepository.findOne(ID)).thenReturn(article);
+        when(categoryRepository.exists(ID)).thenReturn(EXISTS);
+        when(categoryRepository.findOne(ID)).thenReturn(CATEGORY);
+        when(articleRepository.save(article)).thenReturn(article);
+        articleService.addCategory(ID, ID);
+        verify(articleRepository, times(1)).exists(ID);
+        verify(articleRepository, times(1)).findOne(ID);
+        verify(categoryRepository, times(1)).exists(ID);
+        verify(categoryRepository, times(1)).findOne(ID);
+        verify(articleRepository, times(1)).save(article);
+        verifyNoMoreInteractions(articleRepository, categoryRepository);
+        assertEquals(CATEGORY, article.getCategory());
     }
 
     @Test

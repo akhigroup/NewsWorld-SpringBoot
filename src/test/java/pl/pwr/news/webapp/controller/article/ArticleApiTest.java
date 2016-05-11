@@ -9,7 +9,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import pl.pwr.news.model.article.Article;
 import pl.pwr.news.service.article.ArticleService;
-import pl.pwr.news.service.stereotype.StereotypeService;
+import pl.pwr.news.service.category.CategoryService;
 import pl.pwr.news.service.tag.TagService;
 
 import static org.hamcrest.Matchers.is;
@@ -36,7 +36,7 @@ public class ArticleApiTest {
     ArticleService articleService;
 
     @Mock
-    StereotypeService stereotypeService;
+    CategoryService categoryService;
 
     @Mock
     TagService tagService;

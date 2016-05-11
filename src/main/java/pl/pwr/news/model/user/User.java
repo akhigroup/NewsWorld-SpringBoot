@@ -3,12 +3,10 @@ package pl.pwr.news.model.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.Singular;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import pl.pwr.news.model.userstereotype.UserStereotype;
 import pl.pwr.news.model.article.Article;
 
 import javax.persistence.*;
@@ -68,9 +66,6 @@ public class User implements UserDetails, Serializable {
 
     private String hometown;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    private Set<UserStereotype> userStereotypes = new HashSet<>();
-
     @OneToMany(
             cascade = CascadeType.ALL,
             fetch = FetchType.EAGER)
@@ -111,10 +106,6 @@ public class User implements UserDetails, Serializable {
     @Override
     public boolean isEnabled() {
         return enabled;
-    }
-
-    public void addUserStereotype(UserStereotype userStereotype) {
-        this.userStereotypes.add(userStereotype);
     }
 }
 

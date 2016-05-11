@@ -44,11 +44,11 @@
 
                     <div class="box">
                         <div class="box-header">
-                            <h3 class="box-title">Wszystkie stereotypy</h3>
+                            <h3 class="box-title">Wszystkie kategorie</h3>
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
-                            <table id="stereotypesTable" class="table table-bordered table-striped">
+                            <table id="categoriesTable" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
                                     <th>Id</th>
@@ -56,9 +56,9 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="stereotype : ${stereotypeList}">
-                                    <td th:text="${stereotype.id}"></td>
-                                    <td th:text="${stereotype.name}"></td>
+                                <tr th:each="category : ${categoryList}">
+                                    <td th:text="${category.id}"></td>
+                                    <td th:text="${category.name}"></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -96,7 +96,7 @@
 <!-- page script -->
 <script>
     $(function () {
-        $("#stereotypesTable").DataTable();
+        $("#categoriesTable").DataTable();
     });
 </script>
 

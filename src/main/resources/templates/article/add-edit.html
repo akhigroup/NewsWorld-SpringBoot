@@ -81,6 +81,23 @@
                                 </div>
 
                                 <div class="form-group">
+                                    <label>Kategoria</label>
+                                    <select class="form-control select2" style="width: 100%;" required="required"
+                                            name="categoryId">
+                                        <option th:value="*{article.category.id}"
+                                                th:text="*{article.category.name}" th:selected="true"
+                                                th:if="*{article.category} !=null"></option>
+                                        <option th:selected="true"
+                                                th:value="null"
+                                                th:if="*{article.category} ==null">Brak kategorii
+                                        </option>
+
+                                        <option th:each="category : ${categoryList}" th:value="${category.id}"
+                                                th:text="${category.name}"></option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
                                     <label>Tagi</label>
                                     <select class="form-control select2" multiple="multiple" required="required"
                                             data-placeholder="Wybierz najlepsze tagi" style="width: 100%;"
@@ -142,6 +159,7 @@
             tags: true
         })
     });
+
 </script>
 
 </body>

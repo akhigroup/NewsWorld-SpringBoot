@@ -1,10 +1,9 @@
-package pl.pwr.news.model.stereotype;
+package pl.pwr.news.model.category;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.Singular;
-import pl.pwr.news.model.userstereotype.UserStereotype;
+import pl.pwr.news.model.article.Article;
 import pl.pwr.news.model.tag.Tag;
 
 import javax.persistence.*;
@@ -17,9 +16,9 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "stereotypes")
+@Table(name = "categories")
 @NoArgsConstructor
-public class Stereotype {
+public class Category {
 
     private static final long serialVersionUID = 2312343243243L;
 
@@ -27,24 +26,23 @@ public class Stereotype {
     @Id
     private Long id;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @Column(unique = true)
     private String name;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "stereotype")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "category")
     private Set<Tag> tags = new HashSet<>();
 
-    @OneToMany(mappedBy = "stereotype", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    private Set<UserStereotype> userStereotypes = new HashSet<>();
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "category")
+    private Set<Article> articles = new HashSet<>();
 
-    public Stereotype(String name) {
+    public Category(String name) {
         this.name = name;
     }
 
     public void addTag(Tag tag) {
         this.tags.add(tag);
-    }
-
-    public void addUserStereotype(UserStereotype userStereotype) {
-        this.userStereotypes.add(userStereotype);
     }
 }

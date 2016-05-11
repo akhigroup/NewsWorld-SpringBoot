@@ -1,4 +1,4 @@
-package pl.pwr.news.repository.stereotype;
+package pl.pwr.news.repository.category;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -9,7 +9,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import pl.pwr.news.ApplicationTests;
-import pl.pwr.news.model.stereotype.Stereotype;
+import pl.pwr.news.model.category.Category;
 
 import static org.junit.Assert.assertEquals;
 import static pl.pwr.news.Constants.NAME;
@@ -20,20 +20,20 @@ import static pl.pwr.news.Constants.NAME;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ApplicationTests.class)
 @Transactional
-public class StereotypeRepositoryTest {
+public class CategoryRepositoryTest {
 
-    private static final Stereotype STEREOTYPE = new Stereotype(NAME);
+    private static final Category CATEGORY = new Category(NAME);
 
     @Autowired
-    StereotypeRepository stereotypeRepository;
+    CategoryRepository categoryRepository;
 
     @Before
     public void setup() {
-        stereotypeRepository.save(STEREOTYPE);
+        categoryRepository.save(CATEGORY);
     }
 
     @Test
-    public void findByName_existingStereotypeName_stereotypeWithNameReturned() {
-        assertEquals(STEREOTYPE.getId(), stereotypeRepository.findByName(NAME).getId());
+    public void findByName_existingCategoryName_categoryWithNameReturned() {
+        assertEquals(CATEGORY.getId(), categoryRepository.findByName(NAME).getId());
     }
 }

@@ -3,13 +3,13 @@ package pl.pwr.news.service.exception;
 /**
  * Created by jf on 5/7/16.
  */
-public class StereotypeNotExist extends Exception {
+public class CategoryNotExist extends Exception {
 
-    public StereotypeNotExist(String message) {
+    public CategoryNotExist(String message) {
         super(message);
     }
 
-    public StereotypeNotExist(Long id) {
+    public CategoryNotExist(Long id) {
         super(String.valueOf(id));
     }
 }
