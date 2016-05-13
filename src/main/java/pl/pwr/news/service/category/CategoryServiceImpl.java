@@ -4,12 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.pwr.news.model.category.Category;
 import pl.pwr.news.model.tag.Tag;
-import pl.pwr.news.model.user.User;
 import pl.pwr.news.repository.category.CategoryRepository;
 import pl.pwr.news.repository.tag.TagRepository;
-import pl.pwr.news.repository.user.UserRepository;
-import pl.pwr.news.service.exception.CategoryNotExist;
-import pl.pwr.news.service.exception.UserNotExist;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,9 +18,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     CategoryRepository categoryRepository;
-
-    @Autowired
-    UserRepository userRepository;
 
     @Autowired
     TagRepository tagRepository;

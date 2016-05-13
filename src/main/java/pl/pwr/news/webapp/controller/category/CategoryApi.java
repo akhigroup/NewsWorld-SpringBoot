@@ -63,16 +63,17 @@ public class CategoryApi {
     }
 
     @RequestMapping(value = "/category", method = RequestMethod.POST)
-    public Response<Category> saveCategory(
+    public Response<CategoryDTO> saveCategory(
             @RequestParam String name,
             @RequestParam(required = false) String imageUrl) {
         Category category = categoryFactory.getInstance(name, imageUrl);
         categoryService.createCategory(category);
-        return new Response<>(category);
+        CategoryDTO categoryDTO = new CategoryDTO(category);
+        return new Response<>(categoryDTO);
     }
 
     @RequestMapping(value = "/category", method = RequestMethod.PUT)
-    public Response<Category> updateCategory(
+    public Response<CategoryDTO> updateCategory(
             @RequestParam Long categoryId,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String imageUrl) {
@@ -92,6 +93,7 @@ public class CategoryApi {
         }
 
         categoryService.updateCategory(category);
-        return new Response<>(category);
+        CategoryDTO categoryDTO = new CategoryDTO(category);
+        return new Response<>(categoryDTO);
     }
 }

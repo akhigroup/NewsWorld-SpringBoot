@@ -14,7 +14,9 @@ public interface UserService {
 
     void save(User user);
 
-    void addTag(Long userId, Long tagId) throws UserNotExist, TagNotExist;
+    Long incrementTagValue(String userToken, Long tagId) throws UserNotExist, TagNotExist;
+
+    Long getTagValue(String userToken, Long tagId) throws UserTagNotExist;
 
     String generateToken(User user);
 

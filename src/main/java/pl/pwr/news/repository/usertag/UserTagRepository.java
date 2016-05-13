@@ -8,21 +8,5 @@ import pl.pwr.news.model.usertag.UserTag;
  */
 public interface UserTagRepository extends CrudRepository<UserTag, Long> {
 
-    UserTag findOneByUser_IdAndTag_Id(Long userId, Long tagId);
+    UserTag findOneByUser_TokenAndTag_Id(String token, Long tagId);
 }
-
-
-/*
-example of usage:
-User user = new User();
-user.setRole(UserRole.USER);
-Tag tag = new Tag("test");
-UserTag userTag = new UserTag();
-userRepository.save(user);
-tagRepository.save(tag);
-userTag.setUser(user);
-userTag.setTag(tag);
-user.addUserTag(userTag);
-tag.addUserTag(tag);
-userTagRepository.save(userTag);
- */

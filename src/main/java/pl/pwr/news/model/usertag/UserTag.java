@@ -23,12 +23,12 @@ public class UserTag {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @PrimaryKeyJoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "tag_id", referencedColumnName = "id")
+    @PrimaryKeyJoinColumn(name = "tag_id", referencedColumnName = "id")
     private Tag tag;
 
     private Long tagValue = 0L;

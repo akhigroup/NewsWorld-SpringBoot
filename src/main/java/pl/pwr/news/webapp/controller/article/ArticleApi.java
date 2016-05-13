@@ -146,7 +146,7 @@ public class ArticleApi {
     }
 
     @RequestMapping(value = "/article", method = RequestMethod.POST)
-    public Response<Article> saveArticle(
+    public Response<ArticleDTO> saveArticle(
             @RequestParam("title") String title,
             @RequestParam(value = "text", required = false) String text,
             @RequestParam(value = "imageUrl", required = false) String imageUrl,
@@ -158,13 +158,14 @@ public class ArticleApi {
         Article article = Article.builder().title(title).text(text).imageUrl(imageUrl).
                 link(link).category(category).tags(tags).addedDate(new Date()).build();
         articleService.createOrUpdate(article);
+        ArticleDTO articleDTO = new ArticleDTO(article);
 
-        return new Response<>(article);
+        return new Response<>(articleDTO);
     }
 
 
     @RequestMapping(value = "/article", method = RequestMethod.PUT)
-    public Response<Article> updateArticle(
+    public Response<ArticleDTO> updateArticle(
             @RequestParam Long articleId,
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String text,
@@ -207,7 +208,8 @@ public class ArticleApi {
         }
 
         article = articleService.findById(articleId);
-        return new Response<>(article);
+        ArticleDTO articleDTO = new ArticleDTO(article);
+        return new Response<>(articleDTO);
     }
 
     @RequestMapping(value = "/article/search/", method = RequestMethod.GET)

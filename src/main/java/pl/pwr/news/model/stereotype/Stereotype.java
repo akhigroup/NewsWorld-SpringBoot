@@ -6,6 +6,7 @@ import lombok.Setter;
 import pl.pwr.news.model.tag.Tag;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,23 +20,25 @@ import java.util.Set;
 @NoArgsConstructor
 public class Stereotype {
 
+    private static final long serialVersionUID = 2312393423243L;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
 
-    @Column(name = "image_url")
-    private String imageUrl;
-
     @Column(unique = true)
     private String name;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "Stereotype_Tags",
+            name = "stereotypes_tags",
             joinColumns = @JoinColumn(name = "stereotype_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<Tag> tags = new HashSet<>();
+
+    public Stereotype(String name) {
+        this.name = name;
+    }
 
     public void addTag(Tag tag) {
         this.tags.add(tag);

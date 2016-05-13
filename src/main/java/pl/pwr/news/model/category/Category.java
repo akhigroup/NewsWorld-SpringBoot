@@ -20,7 +20,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class Category {
 
-    private static final long serialVersionUID = 2312343243243L;
+    private static final long serialVersionUID = 2312343043243L;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id

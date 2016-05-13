@@ -43,9 +43,10 @@ public class TagApi {
     }
 
     @RequestMapping(value = "/tag", method = RequestMethod.POST)
-    public Response<Tag> saveTag(@RequestParam String name) {
+    public Response<TagDTO> saveTag(@RequestParam String name) {
         Tag tag = tagFactory.getInstance(name);
         tagService.createTag(tag);
-        return new Response<>(tag);
+        TagDTO tagDTO = new TagDTO(tag);
+        return new Response<>(tagDTO);
     }
 }

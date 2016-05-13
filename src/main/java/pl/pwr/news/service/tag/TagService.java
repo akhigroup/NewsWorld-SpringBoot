@@ -2,9 +2,6 @@ package pl.pwr.news.service.tag;
 
 import org.springframework.stereotype.Service;
 import pl.pwr.news.model.tag.Tag;
-import pl.pwr.news.service.exception.TagNotExist;
-import pl.pwr.news.service.exception.UserNotExist;
-import pl.pwr.news.service.exception.UserTagNotExist;
 
 import java.util.List;
 
@@ -15,8 +12,6 @@ import java.util.List;
 public interface TagService {
 
     Tag createTag(Tag tag);
-
-    Long incrementTagValue(Long userId, Long stereotypeId) throws UserNotExist, TagNotExist, UserTagNotExist;
 
     List<Tag> findAll();
 
