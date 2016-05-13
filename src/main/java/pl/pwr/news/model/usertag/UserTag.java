@@ -34,7 +34,7 @@ public class UserTag {
     private Long tagValue = 0L;
 
     public UserTag(User user, Tag tag) {
-        this.user = user;
+        this.user =
         this.tag = tag;
     }
 

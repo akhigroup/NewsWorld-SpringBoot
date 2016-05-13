@@ -250,7 +250,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User register(String email, String password, String firstname, String lastname) throws EmailNotUnique {
         User user = new User();
-        user.setRole(UserRole.USER);
+        user.setRole(UserRole.ADMIN);
         user.setGender(Gender.UNKNOWN);
 
         if (emailExist(email)) {

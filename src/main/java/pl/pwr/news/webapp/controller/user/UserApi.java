@@ -114,7 +114,7 @@ public class UserApi {
     }
 
     @RequestMapping(value = "/user/tag", method = RequestMethod.GET)
-    public Response<Long> getTagVBalue(@RequestParam Long tagId, @RequestParam String token) {
+    public Response<Long> getTagValue(@RequestParam Long tagId, @RequestParam String token) {
         try {
             Long tagValue = userService.getTagValue(token, tagId);
             return new Response<>(tagValue);

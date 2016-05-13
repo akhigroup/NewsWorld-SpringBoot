@@ -1,19 +1,13 @@
 package pl.pwr.news.webapp.controller.stereotype;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 import pl.pwr.news.factory.StereotypeFactory;
-import pl.pwr.news.factory.TagFactory;
 import pl.pwr.news.model.stereotype.Stereotype;
-import pl.pwr.news.model.tag.Tag;
-import pl.pwr.news.service.exception.NotUniqueStereotype;
 import pl.pwr.news.service.exception.StereotypeNotExist;
 import pl.pwr.news.service.stereotype.StereotypeService;
-import pl.pwr.news.service.tag.TagService;
 import pl.pwr.news.webapp.controller.Response;
 import pl.pwr.news.webapp.controller.stereotype.dto.StereotypeDTO;
-import pl.pwr.news.webapp.controller.tag.dto.TagDTO;
 
 import java.util.List;
 
@@ -53,14 +47,10 @@ public class StereotypeApi {
 
     @RequestMapping(value = "/stereotype", method = RequestMethod.POST)
     public Response<StereotypeDTO> saveStereotype(@RequestParam String name) {
-        try {
             Stereotype stereotype = stereotypeFactory.getInstance(name);
             stereotypeService.create(stereotype);
             StereotypeDTO stereotypeDTO = new StereotypeDTO(stereotype);
             return new Response<>(stereotypeDTO);
-        } catch (NotUniqueStereotype notUniqueStereotype) {
-            return new Response<>("-1", notUniqueStereotype.getMessage());
-        }
     }
 
     @RequestMapping(value = "/stereotype", method = RequestMethod.PUT)

@@ -2,7 +2,6 @@ package pl.pwr.news.service.stereotype;
 
 import org.springframework.stereotype.Service;
 import pl.pwr.news.model.stereotype.Stereotype;
-import pl.pwr.news.service.exception.NotUniqueStereotype;
 import pl.pwr.news.service.exception.StereotypeNotExist;
 
 import java.util.List;
@@ -19,7 +18,7 @@ public interface StereotypeService {
 
     Stereotype findById(Long stereotypeId);
 
-    Stereotype create(Stereotype stereotype) throws NotUniqueStereotype;
+    Stereotype create(Stereotype stereotype);
 
     Stereotype update(Stereotype stereotype) throws StereotypeNotExist;
 

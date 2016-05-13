@@ -6,7 +6,6 @@ import pl.pwr.news.model.stereotype.Stereotype;
 import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.repository.stereotype.StereotypeRepository;
 import pl.pwr.news.repository.tag.TagRepository;
-import pl.pwr.news.service.exception.NotUniqueStereotype;
 import pl.pwr.news.service.exception.StereotypeNotExist;
 
 import java.util.List;
@@ -40,10 +39,10 @@ public class StereotypeServiceImpl implements StereotypeService {
     }
 
     @Override
-    public Stereotype create(Stereotype stereotype) throws NotUniqueStereotype {
+    public Stereotype create(Stereotype stereotype) {
         Optional<Stereotype> stereotypeOptional = Optional.ofNullable(stereotypeRepository.findByName(stereotype.getName()));
         if (stereotypeOptional.isPresent()) {
-            throw new NotUniqueStereotype(stereotype.getName());
+            return stereotypeOptional.get();
         }
         return stereotypeRepository.save(stereotype);
     }
