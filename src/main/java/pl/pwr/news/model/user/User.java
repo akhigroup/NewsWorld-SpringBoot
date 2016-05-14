@@ -3,13 +3,13 @@ package pl.pwr.news.model.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.Singular;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import pl.pwr.news.model.userstereotype.UserStereotype;
 import pl.pwr.news.model.article.Article;
+import pl.pwr.news.model.tag.Tag;
+import pl.pwr.news.model.usertag.UserTag;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -68,14 +68,14 @@ public class User implements UserDetails, Serializable {
 
     private String hometown;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    private Set<UserStereotype> userStereotypes = new HashSet<>();
-
     @OneToMany(
             cascade = CascadeType.ALL,
             fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_fav_articles")
     private Set<Article> favouriteArticles = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<UserTag> tags = new HashSet<>();
 
     @Override
     public Collection<GrantedAuthority> getAuthorities() {
@@ -86,6 +86,11 @@ public class User implements UserDetails, Serializable {
 
     public void addFavouriteArticle(Article article) {
         this.favouriteArticles.add(article);
+    }
+
+    public void addTag(Tag tag) {
+        UserTag userTag = new UserTag(this, tag);
+        this.tags.add(userTag);
     }
 
     @Override
@@ -111,10 +116,6 @@ public class User implements UserDetails, Serializable {
     @Override
     public boolean isEnabled() {
         return enabled;
-    }
-
-    public void addUserStereotype(UserStereotype userStereotype) {
-        this.userStereotypes.add(userStereotype);
     }
 }
 

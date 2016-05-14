@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.pwr.news.factory.TagFactory;
 import pl.pwr.news.model.tag.Tag;
-import pl.pwr.news.service.stereotype.StereotypeService;
 import pl.pwr.news.service.tag.TagService;
-import pl.pwr.news.service.user.UserService;
 import pl.pwr.news.webapp.controller.Response;
 import pl.pwr.news.webapp.controller.tag.dto.TagDTO;
 
@@ -24,12 +22,6 @@ public class TagApi {
 
     @Autowired
     TagFactory tagFactory;
-
-    @Autowired
-    UserService userService;
-
-    @Autowired
-    StereotypeService stereotypeService;
 
     @RequestMapping(value = "/tag", method = RequestMethod.GET)
     public Response<List<TagDTO>> getTags() {
@@ -51,9 +43,10 @@ public class TagApi {
     }
 
     @RequestMapping(value = "/tag", method = RequestMethod.POST)
-    public Response<Tag> saveTag(@RequestParam String name) {
+    public Response<TagDTO> saveTag(@RequestParam String name) {
         Tag tag = tagFactory.getInstance(name);
         tagService.createTag(tag);
-        return new Response<>(tag);
+        TagDTO tagDTO = new TagDTO(tag);
+        return new Response<>(tagDTO);
     }
 }

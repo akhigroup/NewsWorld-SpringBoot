@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.pwr.news.service.article.ArticleService;
-import pl.pwr.news.service.stereotype.StereotypeService;
+import pl.pwr.news.service.category.CategoryService;
 import pl.pwr.news.service.tag.TagService;
 import pl.pwr.news.service.user.UserService;
 
@@ -24,7 +24,7 @@ public class HomeController {
     TagService tagService;
 
     @Autowired
-    StereotypeService stereotypeService;
+    CategoryService categoryService;
 
     @Autowired
     UserService userService;
@@ -40,7 +40,7 @@ public class HomeController {
         Long allTags = tagService.countAll();
         model.addAttribute("allTags", allTags);
 
-        Long allCategories = stereotypeService.countAll();
+        Long allCategories = categoryService.countAll();
         model.addAttribute("allCategories", allCategories);
 
         Long allUsers = userService.countAll();

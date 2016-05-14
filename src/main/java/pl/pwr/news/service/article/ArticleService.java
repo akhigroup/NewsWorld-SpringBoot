@@ -20,6 +20,8 @@ public interface ArticleService {
 
     void addTag(Long articleId, Long... tagId);
 
+    void addCategory(Long articleId, Long categoryId);
+
     void removeTag(Long articleId, Long... tagId);
 
     Article createOrUpdate(Article article);

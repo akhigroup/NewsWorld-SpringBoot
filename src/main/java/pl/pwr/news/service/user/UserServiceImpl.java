@@ -11,14 +11,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.pwr.news.model.article.Article;
-import pl.pwr.news.model.stereotype.Stereotype;
+import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.model.user.Gender;
 import pl.pwr.news.model.user.User;
 import pl.pwr.news.model.user.UserRole;
-import pl.pwr.news.model.userstereotype.UserStereotype;
-import pl.pwr.news.repository.stereotype.StereotypeRepository;
+import pl.pwr.news.model.usertag.UserTag;
+import pl.pwr.news.repository.tag.TagRepository;
 import pl.pwr.news.repository.user.UserRepository;
-import pl.pwr.news.repository.userstereotype.UserStereotypeRepository;
+import pl.pwr.news.repository.usertag.UserTagRepository;
 import pl.pwr.news.service.exception.*;
 import pl.pwr.news.service.article.ArticleService;
 import pl.pwr.news.webapp.controller.user.form.RegisterRequestBody;
@@ -38,13 +38,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     UserRepository userRepository;
 
     @Autowired
-    UserStereotypeRepository userStereotypeRepository;
-
-    @Autowired
-    StereotypeRepository stereotypeRepository;
-
-    @Autowired
     ArticleService articleService;
+
+    @Autowired
+    TagRepository tagRepository;
+
+    @Autowired
+    UserTagRepository userTagRepository;
 
 
     @Override
@@ -55,20 +55,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
-    }
-
-    @Override
-    public void addStereotype(Long userId, Long stereotypeId) throws UserNotExist, StereotypeNotExist {
-        Optional<User> userOptional = Optional.ofNullable(findById(userId));
-        if (!userOptional.isPresent())
-            throw new UserNotExist("User not exist for: " + userId);
-        Optional<Stereotype> stereotypeOptional = Optional.ofNullable(stereotypeRepository.findOne(stereotypeId));
-        if (!stereotypeOptional.isPresent())
-            throw new UserNotExist("Stereotype not exist for: " + stereotypeId);
-        User existingUser = userOptional.get();
-        Stereotype existingStereotype = stereotypeOptional.get();
-        UserStereotype userStereotype = new UserStereotype(existingUser, existingStereotype);
-        userStereotypeRepository.save(userStereotype);
     }
 
     @Override
@@ -145,7 +131,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             do {
                 SecureRandom random = new SecureRandom();
                 hash = DigestUtils.md5Hex(user.getEmail() + random + user.getId());
-            isHashUnique = userRepository.findByActivationHash(hash) != null;
+                isHashUnique = userRepository.findByActivationHash(hash) != null;
             } while (isHashUnique);
 
         }
@@ -198,6 +184,45 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public Long incrementTagValue(String userToken, Long tagId) throws UserNotExist, TagNotExist {
+        Optional<UserTag> userTagOptional =
+                Optional.ofNullable(userTagRepository.findOneByUser_TokenAndTag_Id(userToken, tagId));
+        if (!userTagOptional.isPresent()) {
+            addTag(userToken, tagId);
+        }
+        UserTag userTag = userTagRepository.findOneByUser_TokenAndTag_Id(userToken, tagId);
+        userTag.incrementTagValue();
+        userTagRepository.save(userTag);
+        return userTag.getTagValue();
+    }
+
+    @Override
+    public Long getTagValue(String userToken, Long tagId) throws UserTagNotExist {
+        Optional<UserTag> userTagOptional =
+                Optional.ofNullable(userTagRepository.findOneByUser_TokenAndTag_Id(userToken, tagId));
+        if (!userTagOptional.isPresent()) {
+            throw new UserTagNotExist("UserTag not exist for user token: " + userToken + " and tag id: " + tagId);
+        }
+        return userTagOptional.get().getTagValue();
+    }
+
+    private void addTag(String userToken, Long tagId) throws UserNotExist, TagNotExist {
+        Optional<User> userOptional = Optional.ofNullable(findByToken(userToken));
+        if (StringUtils.isBlank(userToken))
+            throw new IllegalArgumentException("UserToken cannot be empty or null");
+        if (!userOptional.isPresent())
+            throw new UserNotExist("User not exist for: " + userToken);
+        Optional<Tag> tagOptional = Optional.ofNullable(tagRepository.findOne(tagId));
+        if (!tagOptional.isPresent())
+            throw new TagNotExist("Tag not exist for: " + tagId);
+        User existingUser = userOptional.get();
+        Tag existingTag = tagOptional.get();
+        existingUser.addTag(existingTag);
+        userTagRepository.save(new UserTag(existingUser, existingTag));
+        userRepository.save(existingUser);
+    }
+
+    @Override
     public String generateToken(User user) {
         String random = RandomStringUtils.randomAlphanumeric(128);
         return DigestUtils.md5Hex(user.getEmail() + "..::news::.." + random);
@@ -225,7 +250,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User register(String email, String password, String firstname, String lastname) throws EmailNotUnique {
         User user = new User();
-        user.setRole(UserRole.USER);
+        user.setRole(UserRole.ADMIN);
         user.setGender(Gender.UNKNOWN);
 
         if (emailExist(email)) {
@@ -256,5 +281,4 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public List<User> findAll() {
         return (List<User>) userRepository.findAll();
     }
-
 }

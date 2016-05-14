@@ -1,35 +1,28 @@
 package pl.pwr.news.service.stereotype;
 
+import org.springframework.stereotype.Service;
 import pl.pwr.news.model.stereotype.Stereotype;
 import pl.pwr.news.service.exception.StereotypeNotExist;
-import pl.pwr.news.service.exception.UserNotExist;
-import pl.pwr.news.service.exception.UserStereotypeNotExist;
 
 import java.util.List;
 
 /**
- * Created by jakub on 3/9/16.
+ * Created by falfasin on 5/12/16.
  */
+@Service
 public interface StereotypeService {
-
-    Stereotype createStereotype(Stereotype stereotype);
-
-    void addTag(Long stereotypeId, Long... tagId);
-
-    void updateStereotype(Stereotype stereotype);
-
-    Long incrementValue(Long userId, Long stereotypeId) throws UserNotExist, StereotypeNotExist, UserStereotypeNotExist;
 
     List<Stereotype> findAll();
 
-    List<Stereotype> findAll(Iterable<Long> stereotypeIds);
+    boolean exist(Long stereotypeId);
 
-    Stereotype findById(Long id);
+    Stereotype findById(Long stereotypeId);
+
+    Stereotype create(Stereotype stereotype);
+
+    Stereotype update(Stereotype stereotype) throws StereotypeNotExist;
 
     Stereotype findByName(String name);
 
-    boolean exist(Long stereotypeId);
-
-    Long countAll();
-
+    void addTag(Long stereotypeId, Long... tagIds);
 }

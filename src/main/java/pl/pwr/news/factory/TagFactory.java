@@ -20,8 +20,6 @@ public class TagFactory {
         if (existingTag != null) {
             return existingTag;
         }
-        name = ValueConverter.convertTagName(name);
-        Tag newTag = new Tag(name);
-        return newTag;
+        return new Tag(ValueConverter.convertTagName(name));
     }
 }

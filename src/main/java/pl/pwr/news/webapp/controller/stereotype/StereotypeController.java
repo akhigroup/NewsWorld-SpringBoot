@@ -8,16 +8,18 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import pl.pwr.news.model.article.Article;
+import pl.pwr.news.model.category.Category;
 import pl.pwr.news.model.stereotype.Stereotype;
 import pl.pwr.news.model.tag.Tag;
 import pl.pwr.news.service.article.ArticleService;
+import pl.pwr.news.service.category.CategoryService;
 import pl.pwr.news.service.stereotype.StereotypeService;
 import pl.pwr.news.service.tag.TagService;
 
 import java.util.List;
 
 /**
- * Created by jakub on 3/22/16.
+ * Created by jf on 3/22/16.
  */
 @Controller
 @RequestMapping(value = "/admin/stereotype/")
@@ -25,13 +27,13 @@ import java.util.List;
 public class StereotypeController {
 
     @Autowired
-    StereotypeService stereotypeService;
-
-    @Autowired
     TagService tagService;
 
+    @Autowired
+    StereotypeService stereotypeService;
+
     @RequestMapping(value = "/list")
-    public String listStereotypes(Model model) {
+    public String listCategories(Model model) {
         List<Stereotype> stereotypeList = stereotypeService.findAll();
         model.addAttribute("stereotypeList", stereotypeList);
 
@@ -49,8 +51,7 @@ public class StereotypeController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String saveNewStereotype(@ModelAttribute(value = "newStereotype") Stereotype stereotype) {
-        stereotypeService.createStereotype(stereotype);
-
+        stereotypeService.create(stereotype);
         return "redirect:/admin/stereotype/add";
     }
 }

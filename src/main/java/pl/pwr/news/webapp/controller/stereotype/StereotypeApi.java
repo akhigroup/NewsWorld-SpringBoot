@@ -3,21 +3,18 @@ package pl.pwr.news.webapp.controller.stereotype;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.pwr.news.factory.StereotypeFactory;
-import pl.pwr.news.model.article.Article;
 import pl.pwr.news.model.stereotype.Stereotype;
+import pl.pwr.news.service.exception.StereotypeNotExist;
 import pl.pwr.news.service.stereotype.StereotypeService;
 import pl.pwr.news.webapp.controller.Response;
-import pl.pwr.news.webapp.controller.article.dto.ArticleDTO;
 import pl.pwr.news.webapp.controller.stereotype.dto.StereotypeDTO;
-import pl.pwr.news.webapp.controller.stereotype.dto.ListedStereotypeDTO;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static org.apache.commons.lang.StringUtils.isNotBlank;
+import static org.elasticsearch.common.lang3.StringUtils.isNotBlank;
 
 /**
- * Created by jakub on 3/9/16.
+ * Created by jf on 5/12/16.
  */
 @RestController
 @RequestMapping(value = "/api", produces = "application/json;charset=UTF-8")
@@ -30,12 +27,11 @@ public class StereotypeApi {
     StereotypeFactory stereotypeFactory;
 
     @RequestMapping(value = "/stereotype", method = RequestMethod.GET)
-    public Response<List<ListedStereotypeDTO>> getStereotypes() {
+    public Response<List<StereotypeDTO>> getStereotypes() {
+        List<Stereotype> stereotypes = stereotypeService.findAll();
+        List<StereotypeDTO> stereotypeDTOs = StereotypeDTO.getList(stereotypes);
 
-        List<Stereotype> stereotypeList = stereotypeService.findAll();
-        List<ListedStereotypeDTO> stereotypeDTOList = ListedStereotypeDTO.getList(stereotypeList);
-
-        return new Response<>(stereotypeDTOList);
+        return new Response<>(stereotypeDTOs);
     }
 
     @RequestMapping(value = "/stereotype/{stereotypeId}", method = RequestMethod.GET)
@@ -44,36 +40,40 @@ public class StereotypeApi {
         if (!stereotypeService.exist(stereotypeId)) {
             return new Response<>("-1", "Stereotype not found");
         }
-
         StereotypeDTO stereotypeDTO = new StereotypeDTO(stereotypeService.findById(stereotypeId));
 
         return new Response<>(stereotypeDTO);
     }
 
     @RequestMapping(value = "/stereotype", method = RequestMethod.POST)
-    public Response<Stereotype> saveStereotype(
-            @RequestParam String name) {
-        Stereotype stereotype = stereotypeFactory.getInstance(name);
-        stereotypeService.createStereotype(stereotype);
-        return new Response<>(stereotype);
+    public Response<StereotypeDTO> saveStereotype(@RequestParam String name) {
+            Stereotype stereotype = stereotypeFactory.getInstance(name);
+            stereotypeService.create(stereotype);
+            StereotypeDTO stereotypeDTO = new StereotypeDTO(stereotype);
+            return new Response<>(stereotypeDTO);
     }
 
     @RequestMapping(value = "/stereotype", method = RequestMethod.PUT)
-    public Response<Stereotype> updateStereotype(
-            @RequestParam Long stereotypeId,
-            @RequestParam(required = false) String name) {
-
-        if (!stereotypeService.exist(stereotypeId)) {
-            return new Response<>("-1", "Stereotype not found");
-        }
-
+    public Response<StereotypeDTO> updateStereotype(@RequestParam Long stereotypeId,
+                                                    @RequestParam(required = false) String name,
+                                                    @RequestParam(required = false) Long[] tagIds) {
         Stereotype stereotype = stereotypeService.findById(stereotypeId);
-
-        if (isNotBlank(name)) {
-            stereotype.setName(name);
+        try {
+            if (stereotype == null) {
+                throw new StereotypeNotExist("Stereotype not exist");
+            }
+            if (isNotBlank(name)) {
+                stereotype.setName(name);
+            }
+            stereotypeService.update(stereotype);
+            if (tagIds != null) {
+                stereotypeService.addTag(stereotypeId, tagIds);
+            }
+            stereotype = stereotypeService.findById(stereotypeId);
+            StereotypeDTO stereotypeDTO = new StereotypeDTO(stereotype);
+            return new Response<>(stereotypeDTO);
+        } catch (StereotypeNotExist ex) {
+            return new Response<>("-1", ex.getMessage());
         }
-
-        stereotypeService.updateStereotype(stereotype);
-        return new Response<>(stereotype);
     }
 }

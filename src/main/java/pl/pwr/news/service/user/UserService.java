@@ -14,6 +14,10 @@ public interface UserService {
 
     void save(User user);
 
+    Long incrementTagValue(String userToken, Long tagId) throws UserNotExist, TagNotExist;
+
+    Long getTagValue(String userToken, Long tagId) throws UserTagNotExist;
+
     String generateToken(User user);
 
     boolean emailExist(String email);
@@ -29,8 +33,6 @@ public interface UserService {
     User findById(Long id);
 
     User findByUsername(String username);
-
-    void addStereotype(Long userId, Long stereotypeId) throws UserNotExist, StereotypeNotExist;
 
     void addFavouriteArticle(Long articleId, String userToken) throws UserNotExist, ArticleNotExist;
 

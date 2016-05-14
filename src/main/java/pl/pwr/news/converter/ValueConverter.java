@@ -23,7 +23,7 @@ public class ValueConverter {
         return name;
     }
 
-    public static String convertStereotypeName(String name) {
+    public static String convertCategoryName(String name) {
         name = name.trim();
         name = ALNUM.retainFrom(name);
         return name;

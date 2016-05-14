@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import pl.pwr.news.model.stereotype.Stereotype;
 
 /**
- * Created by jakub on 2/29/16.
+ * Created by falfasin on 5/12/16.
  */
 @Repository
 public interface StereotypeRepository extends CrudRepository<Stereotype, Long> {

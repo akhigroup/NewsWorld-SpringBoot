@@ -1,7 +1,7 @@
 package pl.pwr.news.service.exception;
 
 /**
- * Created by jf on 5/7/16.
+ * Created by jf on 5/11/16.
  */
 public class StereotypeNotExist extends Exception {
 
@@ -13,4 +13,3 @@ public class StereotypeNotExist extends Exception {
         super(String.valueOf(id));
     }
 }
-

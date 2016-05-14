@@ -7,7 +7,7 @@ import pl.pwr.news.model.stereotype.Stereotype;
 import pl.pwr.news.service.stereotype.StereotypeService;
 
 /**
- * Created by jf on 4/1/16.
+ * Created by falfasin on 5/12/16.
  */
 @Component
 public class StereotypeFactory {
@@ -20,7 +20,6 @@ public class StereotypeFactory {
         if (existingStereotype != null) {
             return existingStereotype;
         }
-        Stereotype newStereotype = new Stereotype(ValueConverter.convertStereotypeName(name));
-        return newStereotype;
+        return new Stereotype(ValueConverter.convertTagName(name));
     }
 }

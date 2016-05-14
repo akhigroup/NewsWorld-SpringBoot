@@ -8,10 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pl.pwr.news.model.article.Article;
 import pl.pwr.news.model.user.User;
-import pl.pwr.news.service.exception.ArticleNotExist;
-import pl.pwr.news.service.exception.EmailNotUnique;
-import pl.pwr.news.service.exception.PasswordIncorrect;
-import pl.pwr.news.service.exception.UserNotExist;
+import pl.pwr.news.service.exception.*;
 import pl.pwr.news.service.user.UserService;
 import pl.pwr.news.webapp.controller.Response;
 import pl.pwr.news.webapp.controller.article.dto.ArticleDTO;
@@ -30,7 +27,7 @@ public class UserApi {
     @Autowired
     UserService userService;
 
-    @RequestMapping(value = "register", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/register", method = RequestMethod.GET)
     public Response<UserDTO> register(@RequestParam String email,
                                       @RequestParam String password,
                                       @RequestParam String firstName,
@@ -50,7 +47,7 @@ public class UserApi {
     }
 
 
-    @RequestMapping(value = "login", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/login", method = RequestMethod.GET)
     public Response<UserDTO> login(@RequestParam String email,
                                    @RequestParam String password) {
 
@@ -71,7 +68,7 @@ public class UserApi {
         return new Response<>(userDTO);
     }
 
-    @RequestMapping(value = "favourite", method = RequestMethod.POST)
+    @RequestMapping(value = "/user/favourite", method = RequestMethod.POST)
     public Response<UserDTO> addFavourite(@RequestParam Long articleId,
                                           @RequestParam String token) {
 
@@ -89,7 +86,7 @@ public class UserApi {
         return new Response<>("000", "OK");
     }
 
-    @RequestMapping(value = "favourite", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/favourite", method = RequestMethod.GET)
     public Response<List<ArticleDTO>> getFavourites(@RequestParam String token) {
 
 
@@ -104,5 +101,25 @@ public class UserApi {
         List<ArticleDTO> articleDTOList = ArticleDTO.getList(articleList);
 
         return new Response<>(articleDTOList);
+    }
+
+    @RequestMapping(value = "/user/tag", method = RequestMethod.POST)
+    public Response<Long> incrementTagValue(@RequestParam Long tagId, @RequestParam String token) {
+        try {
+            Long tagValue = userService.incrementTagValue(token, tagId);
+            return new Response<>(tagValue);
+        } catch (UserNotExist | TagNotExist ex) {
+            return new Response<>("-1", ex.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/user/tag", method = RequestMethod.GET)
+    public Response<Long> getTagValue(@RequestParam Long tagId, @RequestParam String token) {
+        try {
+            Long tagValue = userService.getTagValue(token, tagId);
+            return new Response<>(tagValue);
+        } catch (UserTagNotExist userTagNotExist) {
+            return new Response<>("-1", userTagNotExist.getMessage());
+        }
     }
 }

@@ -104,12 +104,12 @@ public class WykopArticleDTO {
     @SerializedName("is_hot")
     @Expose
     public Boolean isHot;
-    @SerializedName("stereotype")
+    @SerializedName("category")
     @Expose
-    public String stereotype;
-    @SerializedName("stereotype_name")
+    public String category;
+    @SerializedName("category_name")
     @Expose
-    public String stereotypeName;
+    public String categoryName;
     @SerializedName("violation_url")
     @Expose
     public String violationUrl;
