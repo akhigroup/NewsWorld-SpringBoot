@@ -55,5 +55,15 @@ public interface ArticleService {
     Page<Article> findAllSortedByDateAsc(Pageable pageable);
 
     Page<Article> findAllSortedByDateAscNewerThan(Date addedDate, Pageable pageable);
+
+    Page<Article> findByCategory(Long category, Pageable pageable);
+
+    Page<Article> findPopularFromCategory(Long category, int page, int pageSize);
+
+    Page<Article> findMostLikedFromCategory(Long category, int page, int pageSize);
+
+    Page<Article> findAllFromCategorySortedByDateAsc(Long category, Pageable pageable);
+
+    Page<Article> findAllFromCategorySortedByDateAscNewerThan(Date addedDate, Long category, Pageable pageable);
 }
 

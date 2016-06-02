@@ -19,9 +19,15 @@ public interface ArticleRepository extends CrudRepository<Article, Long>, JpaSpe
 
     List<Article> findByTags_Name(String name);
 
+    Page<Article> findAllByCategory_Id(Long categoryId, Pageable pageable);
+
     Article findByLink(String link);
 
     Page<Article> findAllByOrderByAddedDateAsc(Pageable pageable);
 
     Page<Article> findAllByAddedDateBeforeOrderByAddedDateAsc(Date addedDate, Pageable pageable);
+
+    Page<Article> findAllByCategory_IdOrderByAddedDateAsc(Long categoryId, Pageable pageable);
+
+    Page<Article> findAllByAddedDateBeforeAndCategory_IdOrderByAddedDateAsc(Date addedDate, Long categoryId, Pageable pageable);
 }

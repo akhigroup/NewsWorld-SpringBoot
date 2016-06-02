@@ -221,4 +221,63 @@ public class ArticleApi {
 
         return new Response<>(articleDTOList);
     }
+
+    @RequestMapping(value = "/article/category/search", method = RequestMethod.GET)
+    public Response<List<ArticleDTO>> searchArticlesFromCategory(@RequestParam(value = "category") Long categoryId,
+                                                                 @RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) int pageSize,
+                                                                 @RequestParam(required = false, defaultValue = DEFAULT_START_PAGE) int page) {
+        pageSize = getCorrectMaxPageSize(pageSize);
+        Page<Article> databaseArticle = articleService.findByCategory(categoryId, new PageRequest(page, pageSize));
+        List<ArticleDTO> articleDTOList = ArticleDTO.getList(databaseArticle.getContent());
+        return new Response<>(articleDTOList);
+    }
+
+    @RequestMapping(value = "/article/category/popular", method = RequestMethod.GET)
+    public Response<List<ArticleDTO>> getPopularArticlesFromCategory(@RequestParam(value = "category") Long categoryId,
+                                                                 @RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) int pageSize,
+                                                                 @RequestParam(required = false, defaultValue = DEFAULT_START_PAGE) int page) {
+        pageSize = getCorrectMaxPageSize(pageSize);
+        Page<Article> databaseArticle = articleService.findPopularFromCategory(categoryId, page, pageSize);
+        List<ArticleDTO> articleDTOList = ArticleDTO.getList(databaseArticle.getContent());
+        return new Response<>(articleDTOList);
+    }
+
+    @RequestMapping(value = "/article/category/liked", method = RequestMethod.GET)
+    public Response<List<ArticleDTO>> getMostLikedArticlesFromCategory(@RequestParam(value = "category") Long categoryId,
+                                                                     @RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) int pageSize,
+                                                                     @RequestParam(required = false, defaultValue = DEFAULT_START_PAGE) int page) {
+        pageSize = getCorrectMaxPageSize(pageSize);
+        Page<Article> databaseArticle = articleService.findPopularFromCategory(categoryId, page, pageSize);
+        List<ArticleDTO> articleDTOList = ArticleDTO.getList(databaseArticle.getContent());
+        return new Response<>(articleDTOList);
+    }
+
+
+    @RequestMapping(value = "/article/category/date", method = RequestMethod.GET)
+    public Response<List<ArticleDTO>> getArticlesSortedByDateFromCategory(@RequestParam(value = "category") Long categoryId,
+                                                                          @RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) int pageSize,
+                                                                          @RequestParam(required = false, defaultValue = DEFAULT_START_PAGE) int page) {
+        pageSize = getCorrectMaxPageSize(pageSize);
+        Page<Article> databaseArticle = articleService.findAllFromCategorySortedByDateAsc(categoryId, new PageRequest(page, pageSize));
+        List<ArticleDTO> articleDTOList = ArticleDTO.getList(databaseArticle.getContent());
+        return new Response<>(articleDTOList);
+    }
+
+    @RequestMapping(value = "/article/category/date/{addedDate}", method = RequestMethod.GET)
+    public Response<List<ArticleDTO>> getArticlesFromCategorySortedByDateNewerThan(
+            @PathVariable("addedDate") String date,
+            @RequestParam(value = "category") Long categoryId,
+            @RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) int pageSize,
+            @RequestParam(required = false, defaultValue = DEFAULT_START_PAGE) int page) {
+        try {
+            Date convertedDate = DateConverter.convertFromString(date);
+            pageSize = getCorrectMaxPageSize(pageSize);
+            Page<Article> databaseArticle = articleService.findAllFromCategorySortedByDateAscNewerThan(convertedDate, categoryId, new PageRequest(page, pageSize));
+            List<ArticleDTO> articleDTOList = ArticleDTO.getList(databaseArticle.getContent());
+            return new Response<>(articleDTOList);
+        } catch (ParseException e) {
+            return new Response<>("-1", e.getMessage() + " Valid date format: yyyy-MM-dd");
+        }
+    }
+
 }

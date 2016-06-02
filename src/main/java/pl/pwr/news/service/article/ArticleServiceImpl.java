@@ -133,6 +133,31 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public Page<Article> findByCategory(Long category, Pageable pageable) {
+        return articleRepository.findAllByCategory_Id(category, pageable);
+    }
+
+    @Override
+    public Page<Article> findPopularFromCategory(Long category, int page, int pageSize) {
+        return articleRepository.findAllByCategory_Id(category, new PageRequest(page, pageSize, new Sort(Sort.Direction.DESC, "views")));
+    }
+
+    @Override
+    public Page<Article> findMostLikedFromCategory(Long category, int page, int pageSize) {
+        return articleRepository.findAllByCategory_Id(category, new PageRequest(page, pageSize, new Sort(Sort.Direction.DESC, "likes")));
+    }
+
+    @Override
+    public Page<Article> findAllFromCategorySortedByDateAsc(Long category, Pageable pageable) {
+        return articleRepository.findAllByCategory_IdOrderByAddedDateAsc(category, pageable);
+    }
+
+    @Override
+    public Page<Article> findAllFromCategorySortedByDateAscNewerThan(Date addedDate, Long category, Pageable pageable) {
+        return articleRepository.findAllByAddedDateBeforeAndCategory_IdOrderByAddedDateAsc(addedDate, category, pageable);
+    }
+
+    @Override
     public List<Article> findByTag(String tagName) {
         return articleRepository.findByTags_Name(tagName);
     }
